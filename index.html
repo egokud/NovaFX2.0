@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaFX — Автоматический торговый алгоритм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f1117; --bg-card:#161b26; --bg-input:#1e2535;
+  --border:#2a3245; --border-light:#1e2535;
+  --text:#e8eaf0; --text-2:#8892a4; --text-3:#5a6478;
+  --green:#22c55e; --green-bg:rgba(34,197,94,0.1); --green-border:rgba(34,197,94,0.25);
+  --blue:#3b82f6; --blue-bg:rgba(59,130,246,0.1); --blue-border:rgba(59,130,246,0.25);
+  --orange:#f59e0b; --orange-bg:rgba(245,158,11,0.1); --orange-border:rgba(245,158,11,0.25);
+  --red:#ef4444; --red-bg:rgba(239,68,68,0.1); --red-border:rgba(239,68,68,0.25);
+  --r:12px; --r-sm:8px;
+  --font-d:'Syne',sans-serif; --font-b:'Inter',sans-serif;
+}
+[data-theme="light"] {
+  --bg:#f4f6fb; --bg-card:#ffffff; --bg-input:#eef1f8;
+  --border:#d1d9e8; --border-light:#e4e9f2;
+  --text:#111827; --text-2:#4b5563; --text-3:#9ca3af;
+  --green-bg:rgba(34,197,94,0.08); --green-border:rgba(34,197,94,0.3);
+  --blue-bg:rgba(59,130,246,0.08); --blue-border:rgba(59,130,246,0.3);
+  --orange-bg:rgba(245,158,11,0.08); --orange-border:rgba(245,158,11,0.3);
+  --red-bg:rgba(239,68,68,0.08); --red-border:rgba(239,68,68,0.3);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-b);background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);background:rgba(15,17,23,0.88);backdrop-filter:blur(12px);transition:background .3s;}
+[data-theme="light"] nav{background:rgba(244,246,251,0.92);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+.nav-name{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--text);letter-spacing:.04em;}
+.nav-dashboard{font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:var(--r-sm);border:.5px solid var(--border);transition:all .15s;}
+.nav-dashboard:hover{color:var(--text);border-color:var(--text-3);}
+@media(max-width:400px){.nav-dashboard{font-size:12px;padding:3px 8px;}}
+.nav-right{display:flex;align-items:center;gap:8px;}
+/* Desktop links */
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-a{padding:6px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;transition:all .15s;}
+.nav-a:hover{color:var(--text);background:var(--bg-input);}
+.nav-cta{background:var(--green-bg);color:var(--green)!important;border:.5px solid var(--green-border);}
+.nav-cta:hover{opacity:.85;background:var(--green-bg)!important;}
+/* Theme btn */
+.theme-btn{width:34px;height:34px;border-radius:50%;background:var(--bg-input);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .2s;flex-shrink:0;}
+.theme-btn:hover{background:var(--bg-card);}
+/* Hamburger btn */
+.burger-btn{display:none;width:34px;height:34px;border-radius:var(--r-sm);background:var(--bg-input);border:.5px solid var(--border);flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .2s;flex-shrink:0;padding:0;}
+.burger-btn:hover{background:var(--bg-card);}
+.burger-line{width:16px;height:1.5px;background:var(--text);border-radius:2px;transition:all .25s;}
+/* Dropdown menu */
+.nav-dropdown{display:none;position:absolute;top:60px;right:16px;min-width:200px;background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);box-shadow:0 8px 32px rgba(0,0,0,.25);padding:6px;z-index:100;}
+.nav-dropdown.open{display:block;}
+.nav-dropdown a{display:flex;align-items:center;padding:10px 14px;border-radius:var(--r-sm);font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;transition:all .15s;gap:8px;}
+.nav-dropdown a:hover{color:var(--text);background:var(--bg-input);}
+.nav-dropdown .dd-tg{color:var(--green);background:var(--green-bg);border:.5px solid var(--green-border);margin-top:4px;}
+.nav-dropdown .dd-tg:hover{opacity:.85;}
+.nav-dropdown hr{border:none;border-top:.5px solid var(--border);margin:4px 0;}
+/* Mobile: hide desktop links, show burger */
+@media(max-width:768px){
+  nav{padding:0 16px;}
+  .nav-links{display:none;}
+  .burger-btn{display:flex;}
+}
+
+/* HERO */
+.hero{max-width:1400px;margin:0 auto;padding:108px 32px 72px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+@media(max-width:768px){.hero{grid-template-columns:1fr;padding:88px 20px 56px;}}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:var(--green-bg);border:.5px solid var(--green-border);color:var(--green);font-size:12px;font-weight:500;margin-bottom:20px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:var(--font-d);font-size:clamp(38px,5vw,60px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:16px;}
+.hero h1 span{color:var(--green);}
+.hero-sub{font-size:16px;color:var(--text-2);line-height:1.65;margin-bottom:32px;max-width:480px;}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-green{padding:13px 24px;border-radius:var(--r-sm);background:var(--green);color:#fff;font-size:14px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:opacity .15s;}
+.btn-green:hover{opacity:.88;}
+.btn-outline{padding:13px 24px;border-radius:var(--r-sm);background:var(--bg-card);color:var(--text);font-size:14px;font-weight:500;text-decoration:none;border:.5px solid var(--border);display:inline-flex;align-items:center;gap:8px;transition:all .15s;}
+.btn-outline:hover{border-color:var(--text-2);}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:16px 18px;}
+.stat-val{font-family:var(--font-d);font-size:22px;font-weight:700;margin-bottom:4px;}
+.stat-label{font-size:12px;color:var(--text-3);}
+.s-green .stat-val{color:var(--green);}
+.s-blue .stat-val{color:var(--blue);}
+.s-orange .stat-val{color:var(--orange);}
+
+/* SECTIONS */
+.section{max-width:1400px;margin:0 auto;padding:0 32px 56px;}
+@media(max-width:768px){.section{padding:0 20px 40px;}}
+.section-title{font-family:var(--font-d);font-size:28px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px;}
+.section-sub{font-size:15px;color:var(--text-2);line-height:1.6;margin-bottom:32px;}
+.divider{border:none;border-top:.5px solid var(--border);margin:0 32px 48px;max-width:1400px;margin-left:auto;margin-right:auto;}
+@media(max-width:768px){.divider{margin:0 20px 32px;}}
+
+/* FEATURES */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:40px;}
+.feat{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:20px;}
+.feat-icon{font-size:24px;margin-bottom:12px;}
+.feat-title{font-size:14px;font-weight:600;margin-bottom:6px;}
+.feat-body{font-size:13px;color:var(--text-2);line-height:1.6;}
+
+/* STRATEGIES */
+.strat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+@media(max-width:600px){.strat-grid{grid-template-columns:1fr;}}
+.strat{border-radius:var(--r);padding:20px;border:.5px solid var(--border);background:var(--bg-card);}
+.strat.s-cons{border-color:var(--green-border);}
+.strat.s-mod{border-color:var(--blue-border);}
+.strat.s-agg{border-color:var(--red-border);}
+.strat-name{font-size:13px;font-weight:600;margin-bottom:6px;}
+.strat.s-cons .strat-name{color:var(--green);}
+.strat.s-mod .strat-name{color:var(--blue);}
+.strat.s-agg .strat-name{color:var(--red);}
+.strat-yield{font-family:var(--font-d);font-size:24px;font-weight:700;margin-bottom:4px;}
+.strat.s-cons .strat-yield{color:var(--green);}
+.strat.s-mod .strat-yield{color:var(--blue);}
+.strat.s-agg .strat-yield{color:var(--red);}
+.strat-desc{font-size:12px;color:var(--text-2);line-height:1.6;margin-bottom:12px;}
+.strat-entry{font-size:12px;color:var(--text-3);padding-top:10px;border-top:.5px solid var(--border);}
+.strat-entry strong{color:var(--text-2);}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:0;margin-bottom:16px;}
+.step{display:flex;gap:16px;padding-bottom:20px;}
+.step-wrap{display:flex;flex-direction:column;align-items:center;}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--blue-bg);border:.5px solid var(--blue-border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--blue);flex-shrink:0;}
+.step-line{width:1px;background:var(--border);flex:1;margin:4px 0;min-height:12px;}
+.step-content{padding-top:4px;}
+.step-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--text-2);line-height:1.6;}
+
+/* COMPARE */
+.compare-wrap{overflow-x:auto;border-radius:var(--r);border:.5px solid var(--border-light);margin-bottom:32px;}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;}
+.compare-table th{padding:10px 14px;text-align:left;font-size:11px;font-weight:500;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;background:var(--bg-card);border-bottom:.5px solid var(--border);white-space:nowrap;}
+.compare-table th.col-nova{color:var(--blue);background:rgba(59,130,246,0.05);}
+.compare-table td{padding:9px 14px;border-bottom:.5px solid var(--border-light);color:var(--text-2);}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table td:first-child{color:var(--text);}
+.compare-table td.col-nova{color:var(--green);font-weight:500;background:rgba(34,197,94,0.04);}
+
+/* RISKS */
+.risks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+@media(max-width:600px){.risks{grid-template-columns:1fr;}}
+.risk{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;border-radius:var(--r-sm);background:var(--bg-card);border:.5px solid var(--border);}
+.risk-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.risk-text{font-size:13px;color:var(--text-2);line-height:1.55;}
+
+/* CALC CARDS */
+.calc-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:40px;}
+@media(max-width:600px){.calc-cards{grid-template-columns:1fr;}}
+.calc-card{background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);padding:24px;text-decoration:none;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:16px;transition:all .15s;}
+.calc-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15);}
+.calc-card.profit:hover{border-color:var(--green);}
+.calc-card.drawdown:hover{border-color:var(--orange);}
+.calc-card-left{display:flex;align-items:center;gap:16px;}
+.calc-card-icon{width:48px;height:48px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.calc-card.profit .calc-card-icon{background:var(--green-bg);}
+.calc-card.drawdown .calc-card-icon{background:var(--orange-bg);}
+.calc-card-title{font-size:16px;font-weight:600;margin-bottom:4px;}
+.calc-card-sub{font-size:13px;color:var(--text-2);}
+.calc-card-arrow{font-size:20px;color:var(--text-3);}
+
+/* MONITOR */
+.monitor{background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.monitor-left{display:flex;align-items:center;gap:14px;}
+.monitor-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+.monitor-title{font-size:16px;font-weight:600;margin-bottom:4px;}
+.monitor-sub{font-size:13px;color:var(--text-2);}
+
+/* CONTACTS */
+.contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+.contact{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:20px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:14px;transition:all .15s;}
+.contact:hover{border-color:var(--blue);transform:translateY(-1px);}
+.contact-icon{width:42px;height:42px;border-radius:var(--r-sm);background:var(--bg-input);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.contact-title{font-size:14px;font-weight:600;margin-bottom:3px;}
+.contact-sub{font-size:12px;color:var(--text-2);}
+
+/* SUPPORT */
+.support-block{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;background:linear-gradient(135deg,rgba(34,197,94,0.06) 0%,rgba(59,130,246,0.04) 100%);border:.5px solid var(--green-border);border-radius:var(--r);padding:48px;}
+@media(max-width:768px){.support-block{grid-template-columns:1fr;gap:32px;padding:28px;}}
+.support-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:var(--green-bg);border:.5px solid var(--green-border);color:var(--green);font-size:12px;font-weight:500;margin-bottom:20px;}
+.support-title{font-family:var(--font-d);font-size:clamp(28px,6vw,48px);font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:16px;color:var(--text);}
+.support-title span{color:var(--green);}
+.support-desc{font-size:15px;color:var(--text-2);line-height:1.7;margin-bottom:28px;max-width:420px;}
+.support-btn{display:inline-flex;align-items:center;padding:13px 24px;border-radius:var(--r-sm);background:var(--green);color:#fff;font-size:14px;font-weight:700;text-decoration:none;transition:all .15s;}
+.support-btn:hover{opacity:.88;transform:translateY(-1px);}
+.support-right{display:flex;flex-direction:column;gap:16px;}
+.support-item{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r-sm);}
+.support-item-icon{font-size:22px;flex-shrink:0;}
+.support-item-title{font-size:14px;font-weight:600;margin-bottom:3px;}
+.support-item-sub{font-size:12px;color:var(--text-2);}
+
+/* FOOTER */
+footer{border-top:.5px solid var(--border);padding:32px;text-align:center;font-size:12px;color:var(--text-3);}
+footer a{color:var(--text-2);text-decoration:none;}
+footer a:hover{color:var(--text);}
+
+/* BACKTEST */
+.bt-params{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:24px;}
+.bt-param{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r-sm);padding:12px 14px;}
+.bt-param-label{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.bt-param-val{font-size:14px;font-weight:600;color:var(--text);}
+.bt-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px;}
+@media(max-width:700px){.bt-cards{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.bt-cards{grid-template-columns:1fr;}}
+.bt-card{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:16px;}
+.bt-card-label{font-size:11px;color:var(--text-3);margin-bottom:6px;}
+.bt-card-val{font-size:22px;font-weight:700;font-family:var(--font-d);margin-bottom:3px;}
+.bt-card-sub{font-size:11px;color:var(--text-3);line-height:1.5;}
+.bt-green .bt-card-val{color:var(--green);}
+.bt-blue .bt-card-val{color:var(--blue);}
+.bt-orange .bt-card-val{color:var(--orange);}
+.bt-red .bt-card-val{color:var(--red);}
+.bt-purple .bt-card-val{color:#a855f7;}
+.bt-chart-wrap{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:20px;margin-bottom:16px;}
+.bt-chart-label{font-size:13px;font-weight:600;margin-bottom:4px;}
+.bt-chart-desc{font-size:12px;color:var(--text-3);margin-bottom:16px;line-height:1.5;}
+.bt-chart-inner{width:100%;height:200px;border-radius:var(--r-sm);overflow:visible;}
+.bt-chart-legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--text-2);}
+.bt-leg{display:flex;align-items:center;gap:5px;}
+.bt-leg-dot{width:10px;height:10px;border-radius:2px;display:inline-block;}
+
+/* CTA BUTTON */
+.btn-cta{display:inline-flex;align-items:center;padding:14px 28px;border-radius:var(--r-sm);background:var(--green);color:#fff;font-size:15px;font-weight:700;text-decoration:none;transition:all .15s;font-family:var(--font-b);letter-spacing:.01em;}
+.btn-cta:hover{opacity:.88;transform:translateY(-1px);}
+.cta-block{background:linear-gradient(135deg,rgba(34,197,94,0.08) 0%,rgba(59,130,246,0.06) 100%);border:.5px solid var(--green-border);border-radius:var(--r);padding:32px;margin-top:32px;margin-bottom:8px;}
+.cta-block-inner{display:flex;flex-direction:column;align-items:flex-start;gap:10px;}
+.cta-block-title{font-family:var(--font-d);font-size:22px;font-weight:700;color:var(--text);}
+.cta-block-sub{font-size:14px;color:var(--text-2);line-height:1.6;}
+
+/* NOTE BOX */
+.note{background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);padding:14px 18px;font-size:12px;color:var(--text-3);line-height:1.7;margin-top:16px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="#" class="nav-logo">
+      <div class="nav-dot"></div>
+      <span class="nav-name">NovaFX</span>
+    </a>
+    <a href="/dashboard" class="nav-a nav-dashboard">Дашборд</a>
+  </div>
+  <div class="nav-right">
+    <!-- Desktop links -->
+    <div class="nav-links">
+      <a href="#about" class="nav-a">О продукте</a>
+      <a href="#contacts" class="nav-a">Контакты</a>
+      <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a">Техподдержка</a>
+      <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a nav-cta">Telegram</a>
+    </div>
+    <!-- Theme toggle -->
+    <button class="theme-btn" id="theme-btn">🌙</button>
+    <!-- Hamburger (mobile only) -->
+    <button class="burger-btn" id="burger-btn" aria-label="Меню">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
+  </div>
+  <!-- Dropdown menu -->
+  <div class="nav-dropdown" id="nav-dropdown">
+    <a href="#about" onclick="closeMenu()">О продукте</a>
+    <a href="#contacts" onclick="closeMenu()">Контакты</a>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" onclick="closeMenu()">Техподдержка</a>
+    <hr>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="dd-tg" onclick="closeMenu()">✈️ Telegram</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="badge"><div class="badge-dot"></div>Форекс · Алготрейдинг · EUR/USD · M5</div>
+    <h1>Торгует<br>вместо <span>вас</span></h1>
+    <p class="hero-sub">NovaFX — автоматический советник для торговли на рынке Форекс (EUR/USD) через MetaTrader 5. Работает 24/5 на VPS без вашего участия в каждой сделке.</p>
+    <div class="hero-btns">
+      <a href="https://nova-fx-calc-profit.vercel.app" target="_blank" class="btn-green">📈 Калькулятор доходности</a>
+      <a href="https://novafx-calculator.vercel.app" target="_blank" class="btn-outline">🛡 Калькулятор просадки</a>
+    </div>
+    <div style="margin-top:16px;">
+      <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">Попробовать советник бесплатно →</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat s-green"><div class="stat-val">24/5</div><div class="stat-label">Работает без остановок</div></div>
+    <div class="stat s-blue"><div class="stat-val">EUR/USD</div><div class="stat-label">Самая ликвидная пара</div></div>
+    <div class="stat s-orange"><div class="stat-val">3</div><div class="stat-label">Стратегии на выбор</div></div>
+    <div class="stat"><div class="stat-val">MT5</div><div class="stat-label">MetaTrader 5 · RoboForex</div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-title">Что такое NovaFX</div>
+  <p class="section-sub">Автоматический торговый алгоритм — советник работает самостоятельно, без вашего участия в каждой сделке.</p>
+
+  <div class="features">
+    <div class="feat"><div class="feat-icon">⏰</div><div class="feat-title">Свободное время</div><div class="feat-body">Советник работает на VPS-сервере круглосуточно. Не нужно сидеть у графиков или принимать решения по каждой сделке.</div></div>
+    <div class="feat"><div class="feat-icon">🧠</div><div class="feat-title">Торговля без эмоций</div><div class="feat-body">Алгоритм не паникует при просадке и не жадничает при прибыли. Строгая система вместо импульсивных решений.</div></div>
+    <div class="feat"><div class="feat-icon">📊</div><div class="feat-title">Автоматический рост</div><div class="feat-body">Советник сам пересчитывает объём при росте баланса — запускает сложный процент и ускоряет капитализацию.</div></div>
+    <div class="feat"><div class="feat-icon">🔍</div><div class="feat-title">Полная прозрачность</div><div class="feat-body">Мониторинг FX Monitor в реальном времени — каждая сделка, баланс и статистика открыты. Ничего скрытого.</div></div>
+  </div>
+
+  <div class="strat-grid">
+    <div class="strat s-cons">
+      <div class="strat-name">Консервативная</div>
+      <div class="strat-yield">20–100%</div>
+      <div class="strat-desc">годовых ориентир*<br>Минимальный риск. Контроль 1–2 раза в месяц. Идеально для роста большого капитала.</div>
+      <div class="strat-entry">Резервный капитал: <strong>+100% к депозиту</strong></div>
+    </div>
+    <div class="strat s-mod">
+      <div class="strat-name">Умеренная</div>
+      <div class="strat-yield">50–150%</div>
+      <div class="strat-desc">годовых ориентир*<br>Баланс риска и доходности. Контроль 1–3 раза в неделю.</div>
+      <div class="strat-entry">Резервный капитал: <strong>+200% к депозиту</strong></div>
+    </div>
+    <div class="strat s-agg">
+      <div class="strat-name">Агрессивная</div>
+      <div class="strat-yield">100% – ∞</div>
+      <div class="strat-desc">годовых ориентир*<br>Максимальный потенциал. Ежедневный контроль. Для опытных.</div>
+      <div class="strat-entry">Резервный капитал: <strong>+400% к депозиту</strong></div>
+    </div>
+  </div>
+  <p style="font-size:12px;color:var(--text-3);margin-bottom:24px;">* Ориентиры основаны на исторических данных и не являются гарантией доходности.</p>
+  <div class="cta-block">
+  <div class="cta-block-inner">
+    <div class="cta-block-title">Хотите попробовать?</div>
+    <div class="cta-block-sub">Напишите нам — расскажем как начать и ответим на все вопросы</div>
+    <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">Попробовать советник бесплатно →</a>
+  </div>
+</div>
+
+  <div class="section-title" style="margin-bottom:8px;">Как работает алгоритм</div>
+  <p class="section-sub">Стратегия сетки с усреднением — каждая серия ордеров закрывается с положительным суммарным результатом.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-wrap"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Умное усреднение вместо стоп-лосса</div><div class="step-desc">Если цена идёт против позиции — советник открывает следующий ордер по более выгодной цене, снижая среднюю цену входа по всей серии.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-wrap"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Нарастающий объём — быстрый выход</div><div class="step-desc">Каждый последующий ордер в серии позволяет вывести суммарные позиции в плюс значительно быстрее при развороте цены.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-wrap"><div class="step-num">3</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Закрытие всегда в прибыль</div><div class="step-desc">Вся серия закрывается единым тейкпрофитом — только когда суммарный результат положительный. TP адаптируется к глубине сетки.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-wrap"><div class="step-num">4</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Автоматический компаундинг</div><div class="step-desc">После каждого закрытия серии советник пересчитывает объём под текущий баланс. Прибыль автоматически начинает работать на вас.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-wrap"><div class="step-num">5</div></div>
+      <div class="step-content"><div class="step-title">Полный контроль</div><div class="step-desc">Панель управления на графике MT5 — Trade Stop, Stop All, Close Buy/Sell. Остановить торговлю можно в любой момент одной кнопкой.</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WHY NOVAFX -->
+<section class="section">
+  <div class="section-title">Почему NovaFX</div>
+  <p class="section-sub">Сравнение с другими подходами к торговле на форекс.</p>
+  <div class="compare-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Критерий</th>
+          <th class="col-nova">NovaFX</th>
+          <th>Другие Grid EA</th>
+          <th>Ручная торговля</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Серия закрывается в плюс</td><td class="col-nova">Всегда</td><td>Всегда</td><td>Зависит от навыков</td></tr>
+        <tr><td>Сигнальный фильтр входа</td><td class="col-nova">Встроен</td><td>Слабый или нет</td><td>На усмотрение трейдера</td></tr>
+        <tr><td>Торговля в обе стороны</td><td class="col-nova">Да</td><td>Редко</td><td>Требует опыта</td></tr>
+        <tr><td>Автоматический компаундинг</td><td class="col-nova">Встроен</td><td>Нет</td><td>Ручная настройка</td></tr>
+        <tr><td>Инструменты выхода из просадки</td><td class="col-nova">Force режим</td><td>Нет</td><td>Нет</td></tr>
+        <tr><td>Эмоциональный фактор</td><td class="col-nova">Отсутствует</td><td>Отсутствует</td><td>Высокий</td></tr>
+        <tr><td>Требует присутствия</td><td class="col-nova">1–2 раза/мес</td><td>Периодически</td><td>Постоянно</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- RISKS -->
+<section class="section">
+  <div class="section-title">Честно о рисках</div>
+  <p class="section-sub">Мы говорим о рисках первыми — понимание рисков делает работу с алгоритмом осознанной.</p>
+  <div class="risks">
+    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">При однонаправленном тренде против набранных позиций просадка будет увеличиваться — это главная особенность стратегии.</div></div>
+    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">Стратегия требует резервного капитала отдельно от торгового депозита — это обязательное условие работы.</div></div>
+    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">Пока серия открыта — на счёте есть плавающий убыток. Это нормальная часть работы алгоритма, не ошибка.</div></div>
+    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">Не рекомендуется использовать заёмный или кредитный капитал. Торгуйте только своими средствами.</div></div>
+  </div>
+  <div class="note">NovaFX — инструмент автоматизированной торговли. Прошлые результаты не гарантируют будущих. Никто не может гарантировать прибыль на финансовых рынках.</div>
+</section>
+
+<hr class="divider">
+
+<!-- MONITORING -->
+<section class="section">
+  <div class="section-title">Мониторинг в реальном времени</div>
+  <p class="section-sub">Открытая статистика торгового счёта — без выборочной подачи, включая просадки.</p>
+  <div class="monitor">
+    <div class="monitor-left">
+      <div class="monitor-dot"></div>
+      <div>
+        <div class="monitor-title">FX Monitor · Счёт NovaFX</div>
+        <div class="monitor-sub">Баланс, сделки, просадка и аналитика в реальном времени</div>
+      </div>
+    </div>
+    <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank" class="btn-green">Открыть мониторинг 🕯</a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BACKTEST -->
+<section class="section" id="backtest">
+  <div class="section-title">Результаты бэктеста</div>
+  <p class="section-sub">Тест консервативной стратегии на реальных тиках MT5 — январь 2023 по апрель 2026. Качество истории 100%.</p>
+
+  <div class="bt-params">
+    <div class="bt-param">
+      <div class="bt-param-label">Стратегия</div>
+      <div class="bt-param-val">Консервативная</div>
+    </div>
+    <div class="bt-param">
+      <div class="bt-param-label">Lot Volume</div>
+      <div class="bt-param-val">0.05</div>
+    </div>
+    <div class="bt-param">
+      <div class="bt-param-label">Шаг усреднения</div>
+      <div class="bt-param-val">205 пунктов</div>
+    </div>
+    <div class="bt-param">
+      <div class="bt-param-label">Депозит + резерв</div>
+      <div class="bt-param-val">25 000 $</div>
+    </div>
+    <div class="bt-param">
+      <div class="bt-param-label">Период</div>
+      <div class="bt-param-val">3.5 года</div>
+    </div>
+    <div class="bt-param">
+      <div class="bt-param-label">Инструмент</div>
+      <div class="bt-param-val">EUR/USD M5</div>
+    </div>
+  </div>
+
+  <div class="bt-cards">
+    <div class="bt-card bt-green">
+      <div class="bt-card-label">Чистая прибыль</div>
+      <div class="bt-card-val">+53 758 $</div>
+      <div class="bt-card-sub">+430% на торговый депозит</div>
+    </div>
+    <div class="bt-card bt-blue">
+      <div class="bt-card-label">Годовых (среднее)</div>
+      <div class="bt-card-val">+123%</div>
+      <div class="bt-card-sub">за 3.5 года непрерывной работы</div>
+    </div>
+    <div class="bt-card bt-orange">
+      <div class="bt-card-label">Win Rate</div>
+      <div class="bt-card-val">71.69%</div>
+      <div class="bt-card-sub">4 940 прибыльных сделок из 6 891</div>
+    </div>
+    <div class="bt-card bt-purple">
+      <div class="bt-card-label">Фактор восстановления</div>
+      <div class="bt-card-val">2.60</div>
+      <div class="bt-card-sub">доход превышает макс. просадку в 2.6×</div>
+    </div>
+    <div class="bt-card bt-red">
+      <div class="bt-card-label">Макс. просадка (средства)</div>
+      <div class="bt-card-val">38%</div>
+      <div class="bt-card-sub">~9 500 $ — резерв покрыл с запасом</div>
+    </div>
+    <div class="bt-card">
+      <div class="bt-card-label">Прибыльность</div>
+      <div class="bt-card-val">1.61</div>
+      <div class="bt-card-sub">на каждый $ убытка — 1.61 $ прибыли</div>
+    </div>
+  </div>
+
+  <div class="bt-chart-wrap">
+    <div class="bt-chart-label">График баланса / средств — 3.5 года</div>
+    <div class="bt-chart-desc">Синяя линия — баланс (постоянно растёт). Зелёная — средства (просадки при открытых сериях). Нижняя панель — загрузка депозита.</div>
+    <div class="bt-chart-placeholder">
+      <div class="bt-chart-inner">
+        <svg viewBox="0 0 860 205" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <!-- Grid lines -->
+          <line x1="0" y1="10" x2="760" y2="10" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="0" y1="55" x2="760" y2="55" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="0" y1="100" x2="760" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="0" y1="145" x2="760" y2="145" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="0" y1="181" x2="760" y2="181" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <!-- Fill under equity (exponential) -->
+          <polygon points="0.0,181.0 18.1,178.9 36.2,176.8 54.3,177.8 72.4,172.3 90.5,170.0 108.6,167.6 126.7,165.2 144.8,168.3 162.9,160.1 181.0,157.4 199.0,154.7 217.1,151.9 235.2,149.0 253.3,153.8 271.4,143.0 289.5,139.9 307.6,136.7 325.7,133.4 343.8,130.0 361.9,139.4 380.0,122.9 398.1,119.2 416.2,115.4 434.3,127.4 452.4,107.5 470.5,103.4 488.6,99.2 506.7,107.7 524.8,90.4 542.9,85.8 561.0,81.1 579.0,99.6 597.1,71.2 615.2,66.1 633.3,60.9 651.4,73.5 669.5,49.9 687.6,76.0 705.7,38.3 723.8,56.9 741.9,26.1 760.0,38.6 760.0,190 0.0,190" fill="rgba(34,197,94,0.07)"/>
+          <!-- Equity line (with drawdowns, exponential base) -->
+          <polyline points="0.0,181.0 18.1,178.9 36.2,176.8 54.3,177.8 72.4,172.3 90.5,170.0 108.6,167.6 126.7,165.2 144.8,168.3 162.9,160.1 181.0,157.4 199.0,154.7 217.1,151.9 235.2,149.0 253.3,153.8 271.4,143.0 289.5,139.9 307.6,136.7 325.7,133.4 343.8,130.0 361.9,139.4 380.0,122.9 398.1,119.2 416.2,115.4 434.3,127.4 452.4,107.5 470.5,103.4 488.6,99.2 506.7,107.7 524.8,90.4 542.9,85.8 561.0,81.1 579.0,99.6 597.1,71.2 615.2,66.1 633.3,60.9 651.4,73.5 669.5,49.9 687.6,76.0 705.7,38.3 723.8,56.9 741.9,26.1 760.0,38.6"
+            fill="none" stroke="#22c55e" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Balance line (pure exponential) -->
+          <polyline points="0.0,181.0 18.1,178.9 36.2,176.8 54.3,174.6 72.4,172.3 90.5,170.0 108.6,167.6 126.7,165.2 144.8,162.7 162.9,160.1 181.0,157.4 199.0,154.7 217.1,151.9 235.2,149.0 253.3,146.1 271.4,143.0 289.5,139.9 307.6,136.7 325.7,133.4 343.8,130.0 361.9,126.5 380.0,122.9 398.1,119.2 416.2,115.4 434.3,111.5 452.4,107.5 470.5,103.4 488.6,99.2 506.7,94.8 524.8,90.4 542.9,85.8 561.0,81.1 579.0,76.2 597.1,71.2 615.2,66.1 633.3,60.9 651.4,55.5 669.5,49.9 687.6,44.2 705.7,38.3 723.8,32.3 741.9,26.1 760.0,19.7"
+            fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Date labels -->
+          <text x="0" y="200" fill="#5a6478" font-size="9" font-family="Inter,sans-serif">янв 2023</text>
+          <text x="168" y="200" fill="#5a6478" font-size="9" font-family="Inter,sans-serif">янв 2024</text>
+          <text x="349" y="200" fill="#5a6478" font-size="9" font-family="Inter,sans-serif">янв 2025</text>
+          <text x="527" y="200" fill="#5a6478" font-size="9" font-family="Inter,sans-serif">янв 2026</text>
+          <text x="700" y="200" fill="#5a6478" font-size="9" font-family="Inter,sans-serif">апр 2026</text>
+          <!-- Value labels -->
+          <text x="768" y="14" fill="#3b82f6" font-size="9" font-family="Inter,sans-serif">79K</text>
+          <text x="768" y="100" fill="#8892a4" font-size="9" font-family="Inter,sans-serif">52K</text>
+          <text x="768" y="185" fill="#8892a4" font-size="9" font-family="Inter,sans-serif">25K</text>
+        </svg>
+      </div>
+    </div>
+    <div class="bt-chart-legend">
+      <span class="bt-leg"><span class="bt-leg-dot" style="background:#3b82f6;"></span>Баланс</span>
+      <span class="bt-leg"><span class="bt-leg-dot" style="background:#22c55e;"></span>Средства (Equity)</span>
+    </div>
+  </div>
+
+  <div class="note" style="border-color:var(--orange-border);background:var(--orange-bg);">
+    <strong style="color:var(--orange);">⚠ Важно:</strong> Бэктест проводится на исторических данных. Прошлые результаты не гарантируют аналогичной доходности в будущем. Реальная торговля может отличаться от тестовых условий.
+  </div>
+  <div style="margin-top:24px;"><div class="cta-block">
+  <div class="cta-block-inner">
+    <div class="cta-block-title">Хотите попробовать?</div>
+    <div class="cta-block-sub">Напишите нам — расскажем как начать и ответим на все вопросы</div>
+    <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">Попробовать советник бесплатно →</a>
+  </div>
+</div></div>
+</section>
+
+<hr class="divider">
+
+<!-- SUPPORT -->
+<section class="section">
+  <div class="support-block">
+    <div class="support-left">
+      <div class="support-badge">● Онлайн</div>
+      <div class="support-title">Техподдержка<br><span>24 / 7</span></div>
+      <div class="support-desc">Купив советник NovaFX, вы не остаётесь с ним наедине. Мы всегда на связи — ответим на вопросы по настройке, поможем разобраться с ситуацией на счёте и проконсультируем в любое время суток.</div>
+      <a href="https://t.me/digitalnovafx" target="_blank" class="support-btn">Написать в поддержку →</a>
+    </div>
+    <div class="support-right">
+      <div class="support-item"><div class="support-item-icon">⚡</div><div><div class="support-item-title">Быстрый ответ</div><div class="support-item-sub">Отвечаем в течение нескольких минут</div></div></div>
+      <div class="support-item"><div class="support-item-icon">🛠</div><div><div class="support-item-title">Помощь с настройкой</div><div class="support-item-sub">Помогаем запустить советника с нуля</div></div></div>
+      <div class="support-item"><div class="support-item-icon">📊</div><div><div class="support-item-title">Разбор ситуаций</div><div class="support-item-sub">Объясняем что происходит на счёте</div></div></div>
+      <div class="support-item"><div class="support-item-icon">🔄</div><div><div class="support-item-title">Обновления</div><div class="support-item-sub">Уведомляем о новых версиях советника</div></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACTS -->
+<section class="section" id="contacts">
+  <div class="section-title">Связь и сообщество</div>
+  <p class="section-sub">Присоединяйтесь — публикуем реальные результаты, разборы периодов и обновления алгоритма.</p>
+  <div class="contacts">
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="contact"><div class="contact-icon">✈️</div><div><div class="contact-title">Telegram канал</div><div class="contact-sub">@DigitalNovaLabs</div></div></a>
+    <a href="https://www.youtube.com/@digitalnovalabs" target="_blank" class="contact"><div class="contact-icon">▶️</div><div><div class="contact-title">YouTube</div><div class="contact-sub">@digitalnovalabs</div></div></a>
+    <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank" class="contact"><div class="contact-icon">🕯</div><div><div class="contact-title">Мониторинг FX Monitor</div><div class="contact-sub">Реальная статистика счёта</div></div></a>
+    <a href="https://t.me/digitalnovafx" target="_blank" class="contact"><div class="contact-icon">💬</div><div><div class="contact-title">Задать вопрос</div><div class="contact-sub">@digitalnovafx</div></div></a>
+  </div>
+</section>
+
+<footer>
+  <p>NovaFX · DigitalNovaLabs · <a href="https://t.me/DigitalNovaLabs">t.me/DigitalNovaLabs</a> · <a href="https://www.youtube.com/@digitalnovalabs">YouTube</a></p>
+  <p style="margin-top:8px;">Торговля на форекс сопряжена с рисками. Не является инвестиционной рекомендацией.</p>
+</footer>
+
+<script>
+var btn = document.getElementById('theme-btn');
+var theme = localStorage.getItem('nova-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', theme);
+btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+btn.addEventListener('click', function() {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('nova-theme', theme);
+  btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+});
+
+// Hamburger menu
+var burgerBtn = document.getElementById('burger-btn');
+var dropdown = document.getElementById('nav-dropdown');
+burgerBtn.addEventListener('click', function(e) {
+  e.stopPropagation();
+  dropdown.classList.toggle('open');
+});
+document.addEventListener('click', function() {
+  dropdown.classList.remove('open');
+});
+dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+function closeMenu() { dropdown.classList.remove('open'); }
+</script>
+</body>
+</html>
