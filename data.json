@@ -1,6 +1,6 @@
 {
   "updated": "2026-06-12T21:00:00Z",
-  "updated_ru": "12 июня 2026, 21:00 GMT",
+  "updated_ru": "12 June 2026, 21:00 GMT",
   "price": {
     "rate": "1.1553",
     "change": "+0.0018",
@@ -10,144 +10,144 @@
     "high": "1.1555",
     "low": "1.1526",
     "range_pp": 29,
-    "source": "LongForecast/ECB"
+    "source": "ECB/LongForecast"
   },
   "volatility": {
     "range_pp": 29,
-    "level": "Низкая",
+    "level": "Low",
     "atr_pct": 41,
     "color": "green"
   },
   "sentiment": {
     "bull": 45,
     "bear": 55,
-    "note": "Осторожный оптимизм — EUR отскочил от минимумов, но геополитика сдерживает"
+    "note": "Cautious optimism - EUR bounced from lows but geopolitics caps upside"
   },
   "news": [
     {
       "src": "LongForecast",
-      "time": "Пятница",
+      "time": "Friday",
       "impact": "HIGH",
-      "title": "EUR/USD отскочил от минимумов до 1.1553 (+0.16%). Пара нашла поддержку на макро-уровне 1.1520.",
-      "move": "↑ EUR отскок от 2-мес. минимумов",
+      "title": "EUR/USD bounced to 1.1553 (+0.16%). Pair found support at macro floor 1.1520.",
+      "move": "EUR bounce from 2-month lows",
       "dir": "up"
     },
     {
       "src": "UofM",
       "time": "14:00 GMT",
       "impact": "HIGH",
-      "title": "Michigan Consumer Sentiment предв. июнь. Май = 44.8 — рекордный минимум. 57% потребителей жалуются на цены.",
-      "move": "↓ слабый сентимент может давить на USD",
+      "title": "Michigan Consumer Sentiment prelim June. May = 44.8 record low. 57% consumers complain about prices.",
+      "move": "Weak sentiment may pressure USD",
       "dir": "up"
     },
     {
       "src": "Kiplinger",
-      "time": "Сегодня",
+      "time": "Today",
       "impact": "MED",
-      "title": "ФРС Уорш: снижение ставок off the table, но и повышение маловероятно до выборов.",
-      "move": "→ нейтрально для EUR/USD",
+      "title": "Fed Warsh: rate cuts off the table, but hike unlikely before elections.",
+      "move": "Neutral for EUR/USD",
       "dir": "neutral"
     },
     {
       "src": "ForexFactory",
-      "time": "След. неделя",
+      "time": "Next week",
       "impact": "HIGH",
-      "title": "Супер-неделя ЦБ: BoJ 16/06, Fed 17/06, BoE 18/06. Главный триггер — решение ФРС 17 июня.",
-      "move": "↑ если ФРС довиш, EUR/USD к 1.16+",
+      "title": "CB Super-week: BoJ Jun 16, Fed Jun 17, BoE Jun 18. Fed decision = key trigger.",
+      "move": "If Fed dovish -> EUR/USD to 1.16+",
       "dir": "up"
     },
     {
       "src": "TradingView",
-      "time": "Тех. анализ",
+      "time": "Technical",
       "impact": "MED",
-      "title": "EUR/USD на макро-полу 1.1520. RSI=37 — перепроданность. Поддержка 1.1560, сопрот. 1.1820.",
-      "move": "↑ отскок вероятен при RSI<40",
+      "title": "EUR/USD on macro floor 1.1520. RSI=37 oversold. Support 1.1560, resistance 1.1820.",
+      "move": "Bounce likely at RSI<40",
       "dir": "up"
     }
   ],
   "drivers": [
     {
-      "label": "📈 ЕЦБ 2.25%, 2-й хайк вероятен",
+      "label": "ECB 2.25%, 2nd hike likely",
       "type": "bull"
     },
     {
-      "label": "📈 RSI=37 перепроданность",
+      "label": "RSI=37 oversold",
       "type": "bull"
     },
     {
-      "label": "📈 Супер-неделя ЦБ: BoJ+Fed+BoE",
+      "label": "CB Super-week: BoJ+Fed+BoE",
       "type": "bull"
     },
     {
-      "label": "📉 Ормуз закрыт, нефть высоко",
+      "label": "Hormuz closed, oil high",
       "type": "bear"
     },
     {
-      "label": "📉 Потреб. сентимент США на дне",
+      "label": "US Consumer sentiment at bottom",
       "type": "bear"
     },
     {
-      "label": "⚖ ФРС on hold до выборов",
+      "label": "Fed on hold until elections",
       "type": "neutral"
     }
   ],
   "calendar": [
     {
       "time": "14:00",
-      "flag": "🇺🇸",
-      "name": "Michigan Consumer Sentiment (предв. июнь)",
-      "sub": "Май=44.8 рекордный мин. Прогноз: ~46",
+      "flag": "US",
+      "name": "Michigan Consumer Sentiment (prelim Jun)",
+      "sub": "May=44.8 record low. Forecast: ~46",
       "importance": "high",
       "hot": true
     },
     {
-      "time": "16 июня",
-      "flag": "🇯🇵",
-      "name": "Bank of Japan решение",
-      "sub": "Понедельник — влияет на USD/JPY и косвенно EUR",
+      "time": "Jun 16",
+      "flag": "JP",
+      "name": "Bank of Japan decision",
+      "sub": "Monday - affects USD/JPY and EUR",
       "importance": "high",
       "hot": true
     },
     {
-      "time": "17 июня",
-      "flag": "🇺🇸",
-      "name": "Fed решение по ставке",
-      "sub": "ГЛАВНОЕ событие недели",
+      "time": "Jun 17",
+      "flag": "US",
+      "name": "Fed rate decision",
+      "sub": "KEY EVENT of the week",
       "importance": "high",
       "hot": true
     },
     {
-      "time": "18 июня",
-      "flag": "🇬🇧",
-      "name": "Bank of England решение",
-      "sub": "Влияет на GBP/USD и EUR/GBP",
+      "time": "Jun 18",
+      "flag": "GB",
+      "name": "Bank of England decision",
+      "sub": "Affects GBP/USD and EUR/GBP",
       "importance": "med",
       "hot": false
     }
   ],
   "geo": [
     {
-      "label": "США · Иран",
-      "status": "ТУПИК",
+      "label": "US-Iran",
+      "status": "DEADLOCK",
       "level": "red",
-      "title": "🔴 Ормузский пролив закрыт",
-      "desc": "Переговоры в тупике. Бензин дорогой — 57% американцев жалуются на цены. Любой прорыв в переговорах = EUR/USD +200 пп.",
+      "title": "Hormuz Strait closed",
+      "desc": "Talks stalled. Gas prices high - 57% Americans complain. Any breakthrough = EUR/USD +200 pips.",
       "dir": "down"
     },
     {
-      "label": "ЦБ супер-неделя",
-      "status": "ОЖИДАНИЕ",
+      "label": "CB Super-week",
+      "status": "WAITING",
       "level": "orange",
-      "title": "🟡 BoJ + Fed + BoE: три решения за 3 дня",
-      "desc": "16-18 июня — 3 центробанка подряд. Если ФРС намекнёт на снижение — EUR/USD к 1.16+. Если ястребиный — к 1.14.",
+      "title": "BoJ + Fed + BoE: 3 decisions in 3 days",
+      "desc": "Jun 16-18. If Fed hints at cuts -> EUR/USD to 1.16+. If hawkish -> to 1.14.",
       "dir": "neutral"
     },
     {
-      "label": "ЕЦБ · ФРС",
-      "status": "СУЖЕНИЕ",
+      "label": "ECB-Fed",
+      "status": "NARROWING",
       "level": "gray",
-      "title": "⚪ Дифференциал сужается",
-      "desc": "ЕЦБ 2.25% и растёт, ФРС 5.25% и держит. Долгосрочно поддерживает EUR.",
+      "title": "Rate differential narrowing",
+      "desc": "ECB 2.25% and rising, Fed 5.25% holding. Long-term EUR support.",
       "dir": "up"
     }
   ],
@@ -155,29 +155,29 @@
     {
       "tag": "R2",
       "price": "1.1660-1.1680",
-      "note": "Сильное сопрот."
+      "note": "Strong resistance"
     },
     {
       "tag": "R1",
       "price": "1.1560-1.1580",
-      "note": "Ближ. сопрот."
+      "note": "Near resistance"
     },
     {
       "tag": "NOW",
       "price": "1.1553",
-      "note": "Текущая",
+      "note": "Current",
       "current": true
     },
     {
       "tag": "S1",
       "price": "1.1520-1.1526",
-      "note": "Макро-пол"
+      "note": "Macro floor"
     },
     {
       "tag": "S2",
       "price": "1.1425-1.1450",
-      "note": "Цель медведей"
+      "note": "Bear target"
     }
   ],
-  "ai_summary": "EUR/USD закрывает пятницу у 1.1553 (+0.16%), отскочив от макро-пола 1.1520. Волатильность снизилась после вчерашнего шторма вокруг ЕЦБ. Главное на след. неделе — супер-неделя ЦБ: BoJ (пн), Fed (вт), BoE (ср). Решение ФРС 17 июня — ключевой триггер. Michigan Sentiment на дне (44.8) — потребители давят на ФРС."
+  "ai_summary": "EUR/USD closes Friday at 1.1553 (+0.16%), bouncing from macro floor 1.1520. Volatility dropped after yesterday's ECB storm. Key next week: CB super-week - BoJ (Mon), Fed (Tue), BoE (Wed). Fed decision Jun 17 is the main trigger. Michigan Sentiment at record low 44.8 - consumers pressuring Fed."
 }
