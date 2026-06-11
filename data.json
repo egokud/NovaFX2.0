@@ -1,8 +1,8 @@
 {
-  "updated": "2026-06-12T22:00:00Z",
-  "updated_ru": "12 июня 2026, 22:00 GMT",
+  "updated": "2026-06-11T21:55:19Z",
+  "updated_ru": "11 Jun 2026, 21:55 GMT",
   "price": {
-    "rate": "1.1553",
+    "rate": "1.15370",
     "change": "+0.0018",
     "change_pct": "+0.16",
     "direction": "up",
@@ -10,7 +10,7 @@
     "high": "1.1555",
     "low": "1.1526",
     "range_pp": 29,
-    "source": "ECB"
+    "source": "ECB/Frankfurter"
   },
   "volatility": {
     "range_pp": 29,
