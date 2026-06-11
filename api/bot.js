@@ -71,11 +71,11 @@ export default async function handler(req) {
   // Handle /start
   if (text === '/start') {
     await sendMessage(chat_id,
-      `👋 <b>NovaFX Dashboard Bot</b>\n\nЯ обновляю данные EUR/USD на твоём дашборде.\n\n📊 <a href="https://nova-fx-2-0.vercel.app/dashboard">Открыть дашборд</a>`,
+      `👋 <b>NovaFX Dashboard Bot</b>\n\nЯ обновляю данные EUR/USD на твоём дашборде.\n\n📊 <a href="https://novafx20-alpha.vercel.app/dashboard">Открыть дашборд</a>`,
       {
         inline_keyboard: [[
           { text: '🔄 Обновить сейчас', callback_data: 'update' },
-          { text: '📊 Дашборд', url: 'https://nova-fx-2-0.vercel.app/dashboard' }
+          { text: '📊 Дашборд', url: 'https://novafx20-alpha.vercel.app/dashboard' }
         ]]
       }
     );
@@ -94,7 +94,7 @@ export default async function handler(req) {
     await sendMessage(cid, result, {
       inline_keyboard: [[
         { text: '🔄 Обновить ещё', callback_data: 'update' },
-        { text: '📊 Дашборд', url: 'https://nova-fx-2-0.vercel.app/dashboard' }
+        { text: '📊 Дашборд', url: 'https://novafx20-alpha.vercel.app/dashboard' }
       ]]
     });
   }

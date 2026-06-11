@@ -29,7 +29,7 @@ export default async function handler(req) {
       reply_markup: {
         inline_keyboard: [[
           { text: '🔄 Обновить', callback_data: 'update' },
-          { text: '📊 Дашборд', url: 'https://nova-fx-2-0.vercel.app/dashboard' }
+          { text: '📊 Дашборд', url: 'https://novafx20-alpha.vercel.app/dashboard' }
         ]]
       }
     })
