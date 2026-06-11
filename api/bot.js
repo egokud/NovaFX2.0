@@ -17,7 +17,7 @@ async function sendMessage(chat_id, text, reply_markup) {
 
 async function updateDashboard() {
   // Fetch current data.json SHA
-  const r = await fetch('https://api.github.com/repos/egokud/Nova-FX-2.0/contents/data.json', {
+  const r = await fetch('https://api.github.com/repos/egokud/NovaFX2.0/contents/data.json', {
     headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
   });
   const d = await r.json();
@@ -48,7 +48,7 @@ async function updateDashboard() {
   bytes.forEach(b => binary += String.fromCharCode(b));
   const b64 = btoa(binary);
 
-  const r2 = await fetch('https://api.github.com/repos/egokud/Nova-FX-2.0/contents/data.json', {
+  const r2 = await fetch('https://api.github.com/repos/egokud/NovaFX2.0/contents/data.json', {
     method: 'PUT',
     headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ message: `Auto-update via Telegram bot ${now_iso}`, content: b64, sha: d.sha })
