@@ -1,1 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EUR/USD Дашборд — NovaFX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1117;--bg-card:#161b26;--bg-input:#1e2535;--border:#2a3245;--bl:#252d3d;--text:#f0f2f8;--t2:#a8b3c8;--t3:#7a8aa0;--green:#22c55e;--gbg:rgba(34,197,94,0.1);--gbr:rgba(34,197,94,0.25);--blue:#3b82f6;--bbg:rgba(59,130,246,0.1);--bbr:rgba(59,130,246,0.25);--orange:#f59e0b;--obg:rgba(245,158,11,0.1);--obr:rgba(245,158,11,0.25);--red:#ef4444;--rbg:rgba(239,68,68,0.1);--rbr:rgba(239,68,68,0.25);--r:12px;--rs:8px;--fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace}
+[data-theme="light"]{--bg:#f0f4fa;--bg-card:#fff;--bg-input:#e4eaf5;--border:#c4cedf;--bl:#d8e0ee;--text:#0d1117;--t2:#2d3a4f;--t3:#5a6a80;--gbg:rgba(34,197,94,0.08);--gbr:rgba(34,197,94,0.3);--bbg:rgba(59,130,246,0.08);--bbr:rgba(59,130,246,0.3);--obg:rgba(245,158,11,0.08);--obr:rgba(245,158,11,0.25);--rbg:rgba(239,68,68,0.08);--rbr:rgba(239,68,68,0.3)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);background:rgba(15,17,23,0.92);backdrop-filter:blur(12px);transition:background .3s}
+[data-theme="light"] nav{background:rgba(244,246,251,0.95)}
+.nlogo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.ndot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.nname{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--text);letter-spacing:.04em}
+.ndash{font-size:13px;font-weight:500;color:var(--green);text-decoration:none;padding:4px 10px;border-radius:var(--rs);border:.5px solid var(--gbr);background:var(--gbg)}
+.nright{display:flex;align-items:center;gap:8px}
+.nlinks{display:flex;align-items:center;gap:2px}
+.na{padding:6px 12px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--t2);text-decoration:none;transition:all .15s}
+.na:hover{color:var(--text);background:var(--bg-input)}
+.ncta{background:var(--gbg);color:var(--green)!important;border:.5px solid var(--gbr)}
+.tbtn{width:34px;height:34px;border-radius:50%;background:var(--bg-input);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0}
+.bbtn{display:none;width:34px;height:34px;border-radius:var(--rs);background:var(--bg-input);border:.5px solid var(--border);flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;padding:0}
+.bl{width:16px;height:1.5px;background:var(--text);border-radius:2px}
+.ndd{display:none;position:absolute;top:60px;right:16px;min-width:200px;background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);box-shadow:0 8px 32px rgba(0,0,0,.3);padding:6px;z-index:100}
+.ndd.open{display:block}
+.ndd a{display:flex;align-items:center;padding:10px 14px;border-radius:var(--rs);font-size:14px;font-weight:500;color:var(--t2);text-decoration:none;transition:all .15s}
+.ndd a:hover{color:var(--text);background:var(--bg-input)}
+.ndd .tg{color:var(--green);background:var(--gbg);border:.5px solid var(--gbr);margin-top:4px}
+.ndd hr{border:none;border-top:.5px solid var(--border);margin:4px 0}
+@media(max-width:768px){nav{padding:0 16px}.nlinks{display:none}.bbtn{display:flex}}
+.page{max-width:1200px;margin:0 auto;padding:68px 20px 48px}
+@media(max-width:600px){.page{padding:68px 12px 40px}}
+.phdr{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:.5px solid var(--border);margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.pbadge{font-family:var(--fm);font-size:12px;font-weight:700;letter-spacing:2px;color:#fff;background:var(--green);padding:5px 12px;border-radius:var(--rs)}
+.ptitle{font-family:var(--fd);font-size:18px;font-weight:700}
+.lrow{display:flex;align-items:center;gap:8px}
+.ldot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ltime{font-family:var(--fm);font-size:12px;color:var(--t3)}
+.rb{background:none;border:.5px solid var(--border);color:var(--t2);padding:5px 14px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--fm);transition:all .15s}
+.rb:hover{color:var(--text);border-color:var(--blue)}
+.rb:disabled{opacity:.4;cursor:not-allowed}
+/* UPDATED BADGE */
+.upd-bar{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--rs);padding:8px 14px;margin-bottom:14px;flex-wrap:wrap}
+.upd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.upd-txt{font-family:var(--fm);font-size:12px;color:var(--t2)}
+.upd-note{font-size:12px;color:var(--t3);margin-left:auto}
+/* PRICE */
+.pstrip{background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--r);padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;flex-wrap:wrap;gap:16px}
+.plbl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fm);margin-bottom:3px}
+.pval{font-family:var(--fm);font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1}
+.pval.up{color:var(--green)}.pval.dn{color:var(--red)}
+.pchg{font-family:var(--fm);font-size:13px;font-weight:600;padding:5px 12px;border-radius:var(--rs)}
+.pchg.up{color:var(--green);background:var(--gbg);border:.5px solid var(--gbr)}
+.pchg.dn{color:var(--red);background:var(--rbg);border:.5px solid var(--rbr)}
+.pstats{display:flex;gap:18px;flex-wrap:wrap}
+.psi .psl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;font-family:var(--fm);margin-bottom:3px}
+.psi .psv{font-family:var(--fm);font-size:14px;font-weight:600}
+.psrc{font-size:11px;color:var(--t3);font-family:var(--fm);margin-left:auto}
+/* AI SUMMARY */
+.ai-bar{background:var(--bg-card);border:.5px solid var(--gbr);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
+.ai-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.ai-txt{font-size:14px;color:var(--t2);line-height:1.6}
+/* TWO COL */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+.mc{background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--r);padding:14px 18px}
+.mct{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fm);margin-bottom:10px}
+.vbig{font-family:var(--fm);font-size:22px;font-weight:700;margin-bottom:3px}
+.vsub{font-size:13px;color:var(--t2);margin-bottom:8px}
+.bw{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.bf{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--orange),var(--red));transition:width .8s}
+.br{display:flex;justify-content:space-between;font-family:var(--fm);font-size:11px;color:var(--t3)}
+.srow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.slbl{font-size:13px;font-family:var(--fm);width:44px}
+.slbl.long{color:var(--green)}.slbl.short{color:var(--red)}
+.sbw{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.sbf{height:100%;border-radius:4px;transition:width .8s}
+.sbf.long{background:var(--green)}.sbf.short{background:var(--red)}
+.spct{font-family:var(--fm);font-size:13px;font-weight:700;width:36px;text-align:right}
+.spct.long{color:var(--green)}.spct.short{color:var(--red)}
+.snote{font-size:12px;color:var(--t2);margin-top:3px}
+/* TABS */
+.tabs{display:flex;gap:2px;margin-bottom:14px;background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--rs);padding:4px;width:fit-content}
+.tab{padding:8px 20px;font-size:14px;font-weight:500;border-radius:6px;cursor:pointer;border:none;color:var(--t2);background:transparent;transition:all .15s;font-family:var(--fb)}
+.tab:hover{color:var(--text)}.tab.active{color:var(--text);background:var(--bg-input)}
+/* PANEL */
+.panel{background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--r);overflow:hidden}
+.ph{padding:12px 16px;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pt{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);font-family:var(--fm)}
+.pbg{font-size:11px;padding:3px 9px;border-radius:999px;font-family:var(--fm);font-weight:600}
+.pb-g{color:var(--green);background:var(--gbg);border:.5px solid var(--gbr)}
+.pb-r{color:var(--red);background:var(--rbg);border:.5px solid var(--rbr)}
+.pb-o{color:var(--orange);background:var(--obg);border:.5px solid var(--obr)}
+/* NEWS */
+.ni{padding:14px 16px;border-bottom:.5px solid var(--bl);transition:background .1s}
+.ni:last-child{border-bottom:none}.ni:hover{background:var(--bg-input)}
+.nm{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.ns{font-size:12px;font-family:var(--fm);font-weight:700;color:var(--blue);text-transform:uppercase}
+.nt2{font-size:12px;color:var(--t2);font-family:var(--fm)}
+.nimp{font-size:11px;padding:3px 8px;border-radius:999px;font-family:var(--fm);font-weight:700}
+.ni-h{background:var(--rbg);color:var(--red);border:.5px solid var(--rbr)}
+.ni-m{background:var(--obg);color:var(--orange);border:.5px solid var(--obr)}
+.ni-l{background:var(--bg-input);color:var(--t2);border:.5px solid var(--border)}
+.ntitle{font-size:15px;color:var(--text);line-height:1.55;margin-bottom:5px}
+.nmove{font-family:var(--fm);font-size:12px}
+.mv-up{color:var(--green)}.mv-dn{color:var(--red)}.mv-n{color:var(--t3)}
+.drivers{padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px;border-top:.5px solid var(--bl)}
+.dt{font-size:12px;padding:4px 12px;border-radius:999px;font-family:var(--fm);border:.5px solid}
+.dt-bear{border-color:var(--rbr);color:var(--red);background:var(--rbg)}
+.dt-bull{border-color:var(--gbr);color:var(--green);background:var(--gbg)}
+.dt-n{border-color:var(--border);color:var(--t2)}
+/* CALENDAR */
+.ci{padding:12px 16px;border-bottom:.5px solid var(--bl);display:grid;grid-template-columns:64px 1fr auto;gap:0 10px;align-items:center}
+.ci:last-child{border-bottom:none}
+.ci.c-hot{background:rgba(34,197,94,0.03);border-left:2px solid var(--green)}
+.ci.c-warn{background:rgba(245,158,11,0.03);border-left:2px solid var(--orange)}
+.ctime{font-family:var(--fm);font-size:13px;color:var(--t2)}
+.cflag{font-size:11px;color:var(--t2);margin-bottom:2px}
+.cname{font-size:14px;color:var(--text);margin-bottom:2px}
+.cname.hot{color:var(--green);font-weight:600}
+.csub{font-size:12px;color:var(--t2)}
+.cdots{display:flex;gap:3px}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--border)}
+.cdot.m{background:var(--orange)}.cdot.h{background:var(--red)}
+/* GEO */
+.gi{padding:16px;border-bottom:.5px solid var(--bl)}
+.gi:last-child{border-bottom:none}
+.ghdr{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.gst{font-size:10px;padding:3px 9px;border-radius:999px;font-family:var(--fm);font-weight:700}
+.gs-r{background:var(--rbg);color:var(--red);border:.5px solid var(--rbr)}
+.gs-o{background:var(--obg);color:var(--orange);border:.5px solid var(--obr)}
+.gs-g{background:var(--bg-input);color:var(--t2);border:.5px solid var(--border)}
+.glbl{font-size:13px;font-weight:600;color:var(--t2);font-family:var(--fm)}
+.gtitle{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px}
+.gdesc{font-size:14px;color:var(--t2);line-height:1.6}
+/* LEVELS */
+.lv{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:.5px solid var(--bl)}
+.lv:last-child{border-bottom:none}
+.lv.now{background:rgba(34,197,94,0.04);border-left:2px solid var(--green)}
+.lvtag{font-size:11px;font-family:var(--fm);color:var(--t2);width:44px}
+.lvtag.now{color:var(--green);font-weight:700}
+.lvprice{font-family:var(--fm);font-size:14px;font-weight:600;color:var(--text)}
+.lvprice.now{color:var(--green);font-size:15px}
+.lvnote{font-size:12px;color:var(--t2);text-align:right}
+/* LOADING */
+.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.lmsg{padding:32px;text-align:center;font-size:14px;color:var(--t3);font-family:var(--fm)}
+footer{border-top:.5px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--t3)}
+footer a{color:var(--t2);text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="/" class="nlogo"><div class="ndot"></div><span class="nname">NovaFX</span></a>
+    <a href="/dashboard" class="ndash">Дашборд</a>
+  </div>
+  <div class="nright">
+    <div class="nlinks">
+      <a href="/#about" class="na">О продукте</a>
+      <a href="/#contacts" class="na">Контакты</a>
+      <a href="https://t.me/DigitalNovaLabs" target="_blank" class="na ncta">Telegram</a>
+    </div>
+    <button class="tbtn" id="tbtn">🌙</button>
+    <button class="bbtn" id="bbtn"><span class="bl"></span><span class="bl"></span><span class="bl"></span></button>
+  </div>
+  <div class="ndd" id="ndd">
+    <a href="/#about" onclick="cm()">О продукте</a>
+    <a href="/#contacts" onclick="cm()">Контакты</a>
+    <hr>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="tg" onclick="cm()">✈️ Telegram</a>
+  </div>
+</nav>
 
+<div class="page">
+  <div class="phdr">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="pbadge">EUR/USD</span>
+      <span class="ptitle">Новостной дашборд</span>
+    </div>
+    <div class="lrow">
+      <div class="ldot"></div>
+      <span class="ltime" id="clock">--:--:--</span>
+      <button class="rb" id="rbtn" onclick="loadData()">↻ Обновить</button>
+    </div>
+  </div>
+
+  <!-- LOADING STATE -->
+  <div id="loading-state" class="lmsg"><span class="spin"></span>Загружаем данные...</div>
+
+  <!-- CONTENT (hidden until loaded) -->
+  <div id="content" style="display:none">
+
+    <!-- UPDATED BAR -->
+    <div class="upd-bar">
+      <div class="upd-dot"></div>
+      <span class="upd-txt">Данные обновлены: <strong id="upd-time">—</strong></span>
+      <span class="upd-note">Обновляется вручную · следующее обновление по запросу</span>
+    </div>
+
+    <!-- PRICE -->
+    <div class="pstrip">
+      <div>
+        <div class="plbl">EUR/USD · Цена на момент анализа</div>
+        <div class="pval" id="pval">—</div>
+      </div>
+      <div id="pchg" class="pchg" style="display:none"></div>
+      <div id="pstats" class="pstats"></div>
+      <div id="psrc" class="psrc"></div>
+    </div>
+
+    <!-- AI SUMMARY -->
+    <div class="ai-bar" id="ai-bar" style="display:none">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-txt" id="ai-txt"></div>
+    </div>
+
+    <!-- VOL + SENT -->
+    <div class="two">
+      <div class="mc"><div class="mct">Волатильность дня</div><div id="vol-body"></div></div>
+      <div class="mc"><div class="mct">Новостной сентимент</div><div id="sent-body"></div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="st('news',this)">📰 Новости</button>
+      <button class="tab" onclick="st('calendar',this)">📅 Календарь</button>
+      <button class="tab" onclick="st('geo',this)">🌍 Геополитика</button>
+      <button class="tab" onclick="st('levels',this)">📊 Уровни</button>
+    </div>
+
+    <div id="tab-news">
+      <div class="panel">
+        <div class="ph"><span class="pt" id="news-ttl">Новости · EUR/USD</span><span class="pbg pb-r" id="news-badge"></span></div>
+        <div id="news-body"></div>
+        <div id="drivers-body"></div>
+      </div>
+    </div>
+
+    <div id="tab-calendar" style="display:none">
+      <div class="panel">
+        <div class="ph"><span class="pt" id="cal-ttl">Экономический календарь</span><span class="pbg pb-o" id="cal-badge"></span></div>
+        <div id="cal-body"></div>
+      </div>
+    </div>
+
+    <div id="tab-geo" style="display:none">
+      <div class="panel">
+        <div class="ph"><span class="pt">Геополитика · Влияние на EUR/USD</span><span class="pbg pb-r" id="geo-badge"></span></div>
+        <div id="geo-body"></div>
+      </div>
+    </div>
+
+    <div id="tab-levels" style="display:none">
+      <div class="panel">
+        <div class="ph"><span class="pt">Ключевые уровни · EUR/USD</span></div>
+        <div id="levels-body"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div>
+
+<footer>
+  <p>NovaFX · DigitalNovaLabs · <a href="https://t.me/DigitalNovaLabs">Telegram</a></p>
+  <p style="margin-top:5px;">Данные: ручной анализ EUR/USD · Хранилище: Google Drive · Цена: ECB/Frankfurter</p>
+</footer>
+
+<script>
+// ── DATA SOURCE ────────────────────────────────────────
+var FILE_ID = '14zSjw05xirKHbpUUp_42nA19Wpb79fq4';
+var DATA_URL = 'https://raw.githubusercontent.com/egokud/Nova-FX-2.0/main/data.json';
+// Fallback через Google Drive API public export
+// fallback removed
+
+// ── THEME ──────────────────────────────────────────────
+var tbtn = document.getElementById('tbtn');
+var theme = localStorage.getItem('nova-theme') || 'dark';
+applyTheme(theme);
+tbtn.addEventListener('click', function(){theme=theme==='dark'?'light':'dark';applyTheme(theme);localStorage.setItem('nova-theme',theme);});
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);tbtn.textContent=t==='dark'?'☀️':'🌙';}
+
+// ── BURGER ─────────────────────────────────────────────
+var bb=document.getElementById('bbtn'),dd=document.getElementById('ndd');
+bb.addEventListener('click',function(e){e.stopPropagation();dd.classList.toggle('open');});
+document.addEventListener('click',function(){dd.classList.remove('open');});
+dd.addEventListener('click',function(e){e.stopPropagation();});
+function cm(){dd.classList.remove('open');}
+
+// ── CLOCK ──────────────────────────────────────────────
+setInterval(function(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('ru-RU');},1000);
+
+// ── TABS ───────────────────────────────────────────────
+function st(name,el){
+  ['news','calendar','geo','levels'].forEach(function(t){var d=document.getElementById('tab-'+t);if(d)d.style.display='none';});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  var tgt=document.getElementById('tab-'+name);if(tgt)tgt.style.display='block';
+  if(el)el.classList.add('active');
+}
+
+// ── LOAD DATA ──────────────────────────────────────────
+async function loadData() {
+  var btn = document.getElementById('rbtn');
+  btn.disabled=true; btn.textContent='↻ Загружаем...';
+  document.getElementById('loading-state').style.display='block';
+  document.getElementById('content').style.display='none';
+
+  try {
+    // Пробуем через corsproxy.io который работает с Google Drive
+    var proxyUrl = DATA_URL; // GitHub Raw supports CORS
+    var r = await fetch(proxyUrl);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var data = await r.json();
+    renderAll(data);
+  } catch(e) {
+    // Fallback: пробуем напрямую
+    try {
+      var r2 = await fetch(DATA_URL);
+      var data2 = await r2.json();
+      renderAll(data2);
+    } catch(e2) {
+      document.getElementById('loading-state').innerHTML =
+        '<div style="color:var(--red)">⚠️ Не удалось загрузить данные.<br><small style="color:var(--t3)">'+e2.message+'</small><br><br>' +
+        '<button class="rb" onclick="loadData()" style="margin-top:8px">Повторить</button></div>';
+    }
+  }
+
+  btn.disabled=false; btn.textContent='↻ Обновить';
+}
+
+// ── RENDER ─────────────────────────────────────────────
+function renderAll(d) {
+  document.getElementById('loading-state').style.display='none';
+  document.getElementById('content').style.display='block';
+
+  // Updated time
+  document.getElementById('upd-time').textContent = d.updated_ru || d.updated || '—';
+
+  // Price
+  if(d.price) {
+    var p=d.price, isUp=p.direction==='up';
+    document.getElementById('pval').className='pval '+(isUp?'up':'dn');
+    document.getElementById('pval').textContent=p.rate||'—';
+    if(p.change){
+      var pc=document.getElementById('pchg');
+      pc.className='pchg '+(isUp?'up':'dn');
+      pc.textContent=(isUp?'▲ +':'▼ ')+p.change+' ('+(isUp?'+':'')+p.change_pct+'%)';
+      pc.style.display='';
+    }
+    var stats='';
+    if(p.open) stats+=mkStat('Открытие',p.open,'');
+    if(p.high) stats+=mkStat('High',p.high,'var(--green)');
+    if(p.low)  stats+=mkStat('Low',p.low,'var(--red)');
+    if(p.range_pp) stats+=mkStat('Диапазон',p.range_pp+' пп','');
+    document.getElementById('pstats').innerHTML=stats;
+    document.getElementById('psrc').textContent=(p.source||'ECB')+' · '+formatUpdated(d.updated);
+  }
+
+  // AI summary
+  if(d.ai_summary){
+    document.getElementById('ai-txt').textContent=d.ai_summary;
+    document.getElementById('ai-bar').style.display='flex';
+  }
+
+  // Volatility
+  if(d.volatility){
+    var v=d.volatility, pct=v.atr_pct||0;
+    var clr=v.color==='red'?'var(--red)':v.color==='orange'?'var(--orange)':'var(--green)';
+    document.getElementById('vol-body').innerHTML=
+      '<div class="vbig" style="color:'+clr+'">'+v.range_pp+' пп · '+v.level+'</div>'+
+      '<div class="vsub">Ср. ATR ~70 пп / день</div>'+
+      '<div class="bw"><div class="bf" style="width:'+Math.min(pct,100)+'%"></div></div>'+
+      '<div class="br"><span>'+((d.price&&d.price.low)||'')+'</span><span style="color:'+clr+'">'+pct+'% ATR</span><span>'+((d.price&&d.price.high)||'')+'</span></div>';
+  }
+
+  // Sentiment
+  if(d.sentiment){
+    var s=d.sentiment;
+    document.getElementById('sent-body').innerHTML=
+      '<div class="srow"><span class="slbl long">Bull</span><div class="sbw"><div class="sbf long" style="width:'+s.bull+'%"></div></div><span class="spct long">'+s.bull+'%</span></div>'+
+      '<div class="srow"><span class="slbl short">Bear</span><div class="sbw"><div class="sbf short" style="width:'+s.bear+'%"></div></div><span class="spct short">'+s.bear+'%</span></div>'+
+      '<div class="snote">'+(s.note||'')+'</div>';
+  }
+
+  // News
+  if(d.news&&d.news.length){
+    var highCnt=d.news.filter(function(n){return n.impact==='HIGH';}).length;
+    document.getElementById('news-ttl').textContent='Новости · EUR/USD · '+d.news.length+' материалов';
+    document.getElementById('news-badge').textContent=highCnt+' HIGH';
+    var html='';
+    d.news.forEach(function(n){
+      var ic=n.impact==='HIGH'?'ni-h':n.impact==='MED'?'ni-m':'ni-l';
+      var mc=n.dir==='up'?'mv-up':n.dir==='down'?'mv-dn':'mv-n';
+      html+='<div class="ni">'+
+        '<div class="nm"><span class="ns">'+n.src+'</span><span class="nt2">'+n.time+'</span><span class="nimp '+ic+'">'+n.impact+'</span></div>'+
+        '<div class="ntitle">'+n.title+'</div>'+
+        (n.move?'<div class="nmove"><span class="'+mc+'">'+n.move+'</span></div>':'')+
+      '</div>';
+    });
+    document.getElementById('news-body').innerHTML=html;
+  }
+
+  // Drivers
+  if(d.drivers&&d.drivers.length){
+    var dhtml='<div class="drivers">';
+    d.drivers.forEach(function(dr){
+      var cls=dr.type==='bear'?'dt-bear':dr.type==='bull'?'dt-bull':'dt-n';
+      dhtml+='<span class="dt '+cls+'">'+dr.label+'</span>';
+    });
+    dhtml+='</div>';
+    document.getElementById('drivers-body').innerHTML=dhtml;
+  }
+
+  // Calendar
+  if(d.calendar&&d.calendar.length){
+    var highCal=d.calendar.filter(function(e){return e.importance==='high';}).length;
+    document.getElementById('cal-badge').textContent=highCal+' HIGH IMPACT';
+    document.getElementById('cal-badge').className='pbg '+(highCal>0?'pb-r':'pb-o');
+    var chtml='';
+    d.calendar.forEach(function(e){
+      var cls='ci'+(e.hot?' c-hot':e.importance==='high'?' c-warn':'');
+      chtml+='<div class="'+cls+'">'+
+        '<div><div class="ctime">'+e.time+'</div><div class="cflag">'+e.flag+'</div></div>'+
+        '<div><div class="cname'+(e.hot?' hot':'')+'">'+e.name+'</div><div class="csub">'+e.sub+'</div></div>'+
+        '<div class="cdots">'+
+          '<div class="cdot '+(e.importance==='high'?'h':e.importance==='med'?'m':'')+'"></div>'+
+          '<div class="cdot '+(e.importance!=='low'?e.importance==='high'?'h':'m':'')+'"></div>'+
+          '<div class="cdot '+(e.importance==='high'?'h':'')+'"></div>'+
+        '</div>'+
+      '</div>';
+    });
+    document.getElementById('cal-body').innerHTML=chtml;
+  }
+
+  // Geo
+  if(d.geo&&d.geo.length){
+    var geoHigh=d.geo.filter(function(g){return g.level==='red';}).length;
+    document.getElementById('geo-badge').textContent=geoHigh>0?geoHigh+' АКТИВНЫХ':'Фоновые риски';
+    var ghtml='';
+    d.geo.forEach(function(g){
+      var sc=g.level==='red'?'gs-r':g.level==='orange'?'gs-o':'gs-g';
+      var dc=g.dir==='down'?'style="color:var(--red)"':g.dir==='up'?'style="color:var(--green)"':'style="color:var(--t3)"';
+      var arrow=g.dir==='down'?'↓ Давление на EUR':g.dir==='up'?'↑ Поддержка EUR':'→ Влияние неоднозначно';
+      ghtml+='<div class="gi">'+
+        '<div class="ghdr"><span class="glbl">'+g.label+'</span><span class="gst '+sc+'">'+g.status+'</span></div>'+
+        '<div class="gtitle">'+g.title+'</div>'+
+        '<div class="gdesc">'+g.desc+'</div>'+
+        '<div style="margin-top:8px;font-family:var(--fm);font-size:12px;" '+dc+'>'+arrow+'</div>'+
+      '</div>';
+    });
+    document.getElementById('geo-body').innerHTML=ghtml;
+  }
+
+  // Levels
+  if(d.levels&&d.levels.length){
+    var lhtml='';
+    d.levels.forEach(function(l){
+      var cls='lv'+(l.current?' now':'');
+      lhtml+='<div class="'+cls+'">'+
+        '<span class="lvtag'+(l.current?' now':'')+'">'+l.tag+'</span>'+
+        '<span class="lvprice'+(l.current?' now':'')+'">'+l.price+'</span>'+
+        '<span class="lvnote">'+l.note+'</span>'+
+      '</div>';
+    });
+    document.getElementById('levels-body').innerHTML=lhtml;
+  }
+}
+
+function mkStat(l,v,c){return '<div class="psi"><div class="psl">'+l+'</div><div class="psv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div></div>';}
+
+function formatUpdated(iso){
+  if(!iso)return '';
+  try{return new Date(iso).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});}
+  catch(e){return '';}
+}
+
+// ── INIT ───────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
