@@ -8,88 +8,62 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#0f1117; --bg-card:#161b26; --bg-input:#1e2535;
-  --border:#2a3245; --border-light:#1e2535;
-  --text:#e8eaf0; --text-2:#8892a4; --text-3:#5a6478;
-  --green:#22c55e; --green-bg:rgba(34,197,94,0.1); --green-border:rgba(34,197,94,0.25);
-  --blue:#3b82f6; --blue-bg:rgba(59,130,246,0.1); --blue-border:rgba(59,130,246,0.25);
-  --orange:#f59e0b; --orange-bg:rgba(245,158,11,0.1); --orange-border:rgba(245,158,11,0.25);
-  --red:#ef4444; --red-bg:rgba(239,68,68,0.1); --red-border:rgba(239,68,68,0.25);
-  --r:12px; --r-sm:8px;
-  --font-d:'Syne',sans-serif; --font-b:'Inter',sans-serif;
+  --bg:#0f1117;--bg-card:#161b26;--bg-input:#1e2535;
+  --border:#2a3245;--border-light:#1e2535;
+  --text:#e8eaf0;--text-2:#8892a4;--text-3:#5a6478;
+  --green:#22c55e;--green-bg:rgba(34,197,94,0.1);--green-border:rgba(34,197,94,0.25);
+  --red:#ef4444;--r:12px;--r-sm:8px;
+  --font-d:'Syne',sans-serif;--font-b:'Inter',sans-serif;--font-m:'JetBrains Mono',monospace;
 }
 [data-theme="light"] {
-  --bg:#f4f6fb; --bg-card:#ffffff; --bg-input:#eef1f8;
-  --border:#d1d9e8; --border-light:#e4e9f2;
-  --text:#111827; --text-2:#4b5563; --text-3:#9ca3af;
-  --green-bg:rgba(34,197,94,0.08); --green-border:rgba(34,197,94,0.3);
-  --blue-bg:rgba(59,130,246,0.08); --blue-border:rgba(59,130,246,0.3);
-  --orange-bg:rgba(245,158,11,0.08); --orange-border:rgba(245,158,11,0.3);
-  --red-bg:rgba(239,68,68,0.08); --red-border:rgba(239,68,68,0.3);
+  --bg:#f4f6fb;--bg-card:#ffffff;--bg-input:#eef1f8;
+  --border:#d1d9e8;--border-light:#e4e9f2;
+  --text:#111827;--text-2:#4b5563;--text-3:#9ca3af;
+  --green-bg:rgba(34,197,94,0.08);--green-border:rgba(34,197,94,0.3);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;transition:background .2s,color .2s;}
-nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);background:rgba(15,17,23,0.88);backdrop-filter:blur(12px);transition:background .3s;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);background:rgba(15,17,23,0.88);backdrop-filter:blur(12px);}
 [data-theme="light"] nav{background:rgba(244,246,251,0.92);}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
 .nav-name{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--text);letter-spacing:.04em;}
 .nav-dashboard{font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:var(--r-sm);border:.5px solid var(--border);transition:all .15s;}
 .nav-dashboard:hover{color:var(--text);border-color:var(--text-3);}
-@media(max-width:400px){.nav-dashboard{font-size:12px;padding:3px 8px;}}
 .nav-right{display:flex;align-items:center;gap:8px;}
 .nav-links{display:flex;align-items:center;gap:4px;}
 .nav-a{padding:6px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;transition:all .15s;}
 .nav-a:hover{color:var(--text);background:var(--bg-input);}
 .nav-cta{background:var(--green-bg);color:var(--green)!important;border:.5px solid var(--green-border);}
-.nav-cta:hover{opacity:.85;background:var(--green-bg)!important;}
+.nav-cta:hover{opacity:.85;}
 .theme-btn{width:34px;height:34px;border-radius:50%;background:var(--bg-input);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .2s;flex-shrink:0;}
-.theme-btn:hover{background:var(--bg-card);}
-.burger-btn{display:none;width:34px;height:34px;border-radius:var(--r-sm);background:var(--bg-input);border:.5px solid var(--border);flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .2s;flex-shrink:0;padding:0;}
-.burger-btn:hover{background:var(--bg-card);}
-.burger-line{width:16px;height:1.5px;background:var(--text);border-radius:2px;transition:all .25s;}
+.burger-btn{display:none;width:34px;height:34px;border-radius:var(--r-sm);background:var(--bg-input);border:.5px solid var(--border);flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;padding:0;}
+.burger-line{width:16px;height:1.5px;background:var(--text);border-radius:2px;}
 .nav-dropdown{display:none;position:absolute;top:60px;right:16px;min-width:200px;background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);box-shadow:0 8px 32px rgba(0,0,0,.25);padding:6px;z-index:100;}
 .nav-dropdown.open{display:block;}
-.nav-dropdown a{display:flex;align-items:center;padding:10px 14px;border-radius:var(--r-sm);font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;transition:all .15s;gap:8px;}
+.nav-dropdown a{display:flex;align-items:center;padding:10px 14px;border-radius:var(--r-sm);font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;transition:all .15s;}
 .nav-dropdown a:hover{color:var(--text);background:var(--bg-input);}
 .nav-dropdown .dd-tg{color:var(--green);background:var(--green-bg);border:.5px solid var(--green-border);margin-top:4px;}
-.nav-dropdown .dd-tg:hover{opacity:.85;}
 .nav-dropdown hr{border:none;border-top:.5px solid var(--border);margin:4px 0;}
-  nav{padding:0 16px;}
 @media(max-width:768px){
   nav{padding:0 16px;}
   .nav-links{display:none;}
   .burger-btn{display:flex;}
 }
-@media(max-width:400px){.bt-cards{grid-template-columns:1fr;}}
 
-/* LAYOUT */
-.wrap{max-width:960px;margin:0 auto;padding:80px 20px 32px;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.full{grid-column:1/-1;}
-@media(max-width:600px){
-  .wrap{grid-template-columns:1fr;padding:76px 12px 24px;gap:10px;}
-  .full{grid-column:1;}
-}
-
-/* CARDS */
+.wrap{max-width:960px;margin:0 auto;padding:80px 20px 32px;display:flex;flex-direction:column;gap:12px;}
 .card{background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);padding:14px;}
 .clabel{font-size:9px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
 .auto-tag{background:var(--green-bg);color:var(--green);font-size:9px;padding:2px 6px;border-radius:4px;border:.5px solid var(--green-border);}
-
-/* PRICE */
 .price-num{font-family:var(--font-m);font-size:44px;font-weight:600;letter-spacing:-2px;line-height:1;}
 .price-chg{font-size:12px;margin-left:8px;font-family:var(--font-m);}
 .price-meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:11px;color:var(--text-2);}
 .price-meta b{color:var(--text);font-weight:500;}
 .c-green{color:var(--green);}.c-red{color:#ef4444;}.c-amber{color:#f59e0b;}
-
-/* VOLATILITY */
 .vol-val{font-family:var(--font-m);font-size:24px;font-weight:600;}
 .vol-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,#f59e0b 50%,#ef4444 100%);margin-top:8px;position:relative;}
 .vol-marker{position:absolute;top:-4px;width:3px;height:13px;background:var(--text);border-radius:2px;transition:left .5s;}
-
-/* NEWS widget */
-.news-wrap{border-radius:var(--r);overflow:hidden;}
 </style>
 </head>
 <body>
@@ -103,23 +77,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     <a href="/dashboard" class="nav-a nav-dashboard">Дашборд</a>
   </div>
   <div class="nav-right">
-    <!-- Desktop links -->
     <div class="nav-links">
       <a href="/#about" class="nav-a">О продукте</a>
       <a href="/#contacts" class="nav-a">Контакты</a>
       <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a">Техподдержка</a>
       <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a nav-cta">Telegram</a>
     </div>
-    <!-- Theme toggle -->
     <button class="theme-btn" id="theme-btn">🌙</button>
-    <!-- Hamburger (mobile only) -->
     <button class="burger-btn" id="burger-btn" aria-label="Меню">
       <span class="burger-line"></span>
       <span class="burger-line"></span>
       <span class="burger-line"></span>
     </button>
   </div>
-  <!-- Dropdown menu -->
   <div class="nav-dropdown" id="nav-dropdown">
     <a href="/#about" onclick="closeMenu()">О продукте</a>
     <a href="/#contacts" onclick="closeMenu()">Контакты</a>
@@ -131,8 +101,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 
 <div class="wrap">
 
-  <!-- PRICE -->
-  <div class="card full">
+  <div class="card">
     <div class="clabel">EUR/USD · цена <span class="auto-tag">● ECB · каждые 30 сек</span></div>
     <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:4px">
       <span class="price-num" id="price">—</span>
@@ -147,8 +116,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     </div>
   </div>
 
-  <!-- VOLATILITY -->
-  <div class="card full">
+  <div class="card">
     <div class="clabel">Волатильность <span class="auto-tag">● авто · 30д диапазон</span></div>
     <div class="vol-val c-amber" id="vol-val">— пп</div>
     <div style="font-size:10px;color:var(--text-2);margin-top:3px" id="vol-label">вычисляется...</div>
@@ -158,10 +126,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     </div>
   </div>
 
-  <!-- NEWS TradingView -->
-  <div class="card full" style="padding:0;overflow:hidden;">
+  <div class="card" style="padding:0;overflow:hidden;">
     <div class="clabel" style="padding:14px 14px 8px;">Новости EUR/USD <span class="auto-tag">● TradingView · авто</span></div>
-    <div class="tradingview-widget-container" style="min-height:400px">
+    <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
       {
@@ -192,7 +159,6 @@ btn.addEventListener('click', function() {
   btn.textContent = theme === 'dark' ? '☀️' : '🌙';
 });
 
-// Hamburger menu
 var burgerBtn = document.getElementById('burger-btn');
 var dropdown = document.getElementById('nav-dropdown');
 burgerBtn.addEventListener('click', function(e) {
@@ -204,9 +170,7 @@ document.addEventListener('click', function() {
 });
 dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
 function closeMenu() { dropdown.classList.remove('open'); }
-</script>
 
-// PRICE
 var prevRate = null;
 function fetchPrice() {
   fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD')
@@ -221,33 +185,25 @@ function fetchPrice() {
         el.textContent = (diff >= 0 ? '▲ +' : '▼ ') + diff.toFixed(4) + ' (' + (diff>=0?'+':'') + pct.toFixed(2) + '%)';
         el.style.color = diff >= 0 ? 'var(--green)' : '#ef4444';
       } else {
-        var el = document.getElementById('price-chg');
-        el.textContent = '● live ECB';
-        el.style.color = 'var(--green)';
+        document.getElementById('price-chg').textContent = '● live ECB';
+        document.getElementById('price-chg').style.color = 'var(--green)';
       }
       prevRate = rate;
       var now = new Date();
-      document.getElementById('p-time').textContent =
-        'обновлено ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-    }).catch(function(){
-      document.getElementById('p-time').textContent = 'ошибка соединения';
-    });
+      document.getElementById('p-time').textContent = 'обновлено ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    }).catch(function(){ document.getElementById('p-time').textContent = 'ошибка'; });
 }
 
 function fetchHistory() {
   var today = new Date();
   var fmt = function(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-  var todayStr = fmt(today);
-  var d30 = new Date(today); d30.setDate(d30.getDate()-30);
-  var d30Str = fmt(d30);
-  // Get today's open (yesterday's close)
   var yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+  var d30 = new Date(today); d30.setDate(d30.getDate()-30);
   fetch('https://api.frankfurter.dev/v1/'+fmt(yesterday)+'?base=EUR&symbols=USD')
     .then(function(r){ return r.json(); })
     .then(function(d){ document.getElementById('p-open').textContent = d.rates.USD.toFixed(4); })
     .catch(function(){});
-  // Get 30d range for vol/high/low
-  fetch('https://api.frankfurter.dev/v1/'+d30Str+'..'+todayStr+'?base=EUR&symbols=USD')
+  fetch('https://api.frankfurter.dev/v1/'+fmt(d30)+'..'+fmt(today)+'?base=EUR&symbols=USD')
     .then(function(r){ return r.json(); })
     .then(function(d) {
       var rates = Object.values(d.rates).map(function(x){ return x.USD; });
