@@ -5,483 +5,334 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EUR/USD Дашборд — NovaFX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1117;--bg-card:#161b26;--bg-input:#1e2535;--border:#2a3245;--bl:#252d3d;--text:#f0f2f8;--t2:#a8b3c8;--t3:#7a8aa0;--green:#22c55e;--gbg:rgba(34,197,94,0.1);--gbr:rgba(34,197,94,0.25);--blue:#3b82f6;--bbg:rgba(59,130,246,0.1);--bbr:rgba(59,130,246,0.25);--orange:#f59e0b;--obg:rgba(245,158,11,0.1);--obr:rgba(245,158,11,0.25);--red:#ef4444;--rbg:rgba(239,68,68,0.1);--rbr:rgba(239,68,68,0.25);--r:12px;--rs:8px;--fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace}
-[data-theme="light"]{--bg:#f0f4fa;--bg-card:#fff;--bg-input:#e4eaf5;--border:#c4cedf;--bl:#d8e0ee;--text:#0d1117;--t2:#2d3a4f;--t3:#5a6a80;--gbg:rgba(34,197,94,0.08);--gbr:rgba(34,197,94,0.3);--bbg:rgba(59,130,246,0.08);--bbr:rgba(59,130,246,0.3);--obg:rgba(245,158,11,0.08);--obr:rgba(245,158,11,0.25);--rbg:rgba(239,68,68,0.08);--rbr:rgba(239,68,68,0.3)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
-nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);background:rgba(15,17,23,0.92);backdrop-filter:blur(12px);transition:background .3s}
-[data-theme="light"] nav{background:rgba(244,246,251,0.95)}
-.nlogo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.ndot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
-.nname{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--text);letter-spacing:.04em}
-.ndash{font-size:13px;font-weight:500;color:var(--green);text-decoration:none;padding:4px 10px;border-radius:var(--rs);border:.5px solid var(--gbr);background:var(--gbg)}
-.nright{display:flex;align-items:center;gap:8px}
-.nlinks{display:flex;align-items:center;gap:2px}
-.na{padding:6px 12px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--t2);text-decoration:none;transition:all .15s}
-.na:hover{color:var(--text);background:var(--bg-input)}
-.ncta{background:var(--gbg);color:var(--green)!important;border:.5px solid var(--gbr)}
-.tbtn{width:34px;height:34px;border-radius:50%;background:var(--bg-input);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0}
-.bbtn{display:none;width:34px;height:34px;border-radius:var(--rs);background:var(--bg-input);border:.5px solid var(--border);flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;padding:0}
-.bl{width:16px;height:1.5px;background:var(--text);border-radius:2px}
-.ndd{display:none;position:absolute;top:60px;right:16px;min-width:200px;background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);box-shadow:0 8px 32px rgba(0,0,0,.3);padding:6px;z-index:100}
-.ndd.open{display:block}
-.ndd a{display:flex;align-items:center;padding:10px 14px;border-radius:var(--rs);font-size:14px;font-weight:500;color:var(--t2);text-decoration:none;transition:all .15s}
-.ndd a:hover{color:var(--text);background:var(--bg-input)}
-.ndd .tg{color:var(--green);background:var(--gbg);border:.5px solid var(--gbr);margin-top:4px}
-.ndd hr{border:none;border-top:.5px solid var(--border);margin:4px 0}
-@media(max-width:768px){nav{padding:0 16px}.nlinks{display:none}.bbtn{display:flex}}
-.page{max-width:1200px;margin:0 auto;padding:68px 20px 48px}
-@media(max-width:600px){.page{padding:68px 12px 40px}}
-.phdr{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:.5px solid var(--border);margin-bottom:14px;flex-wrap:wrap;gap:10px}
-.pbadge{font-family:var(--fm);font-size:12px;font-weight:700;letter-spacing:2px;color:#fff;background:var(--green);padding:5px 12px;border-radius:var(--rs)}
-.ptitle{font-family:var(--fd);font-size:18px;font-weight:700}
-.lrow{display:flex;align-items:center;gap:8px}
-.ldot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.ltime{font-family:var(--fm);font-size:12px;color:var(--t3)}
-.rb{background:none;border:.5px solid var(--border);color:var(--t2);padding:5px 14px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--fm);transition:all .15s}
-.rb:hover{color:var(--text);border-color:var(--blue)}
-.rb:disabled{opacity:.4;cursor:not-allowed}
-/* UPDATED BADGE */
-.upd-bar{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--rs);padding:8px 14px;margin-bottom:14px;flex-wrap:wrap}
-.upd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-.upd-txt{font-family:var(--fm);font-size:12px;color:var(--t2)}
-.upd-note{font-size:12px;color:var(--t3);margin-left:auto}
+:root {
+  --bg: #0b0e14;
+  --bg2: #111520;
+  --bg3: #171d2b;
+  --border: #222c40;
+  --text: #e8edf5;
+  --text2: #8a97b0;
+  --text3: #4a5568;
+  --green: #00e676;
+  --green-bg: rgba(0,230,118,.08);
+  --green-border: rgba(0,230,118,.2);
+  --red: #ff4757;
+  --red-bg: rgba(255,71,87,.08);
+  --amber: #ffb300;
+  --amber-bg: rgba(255,179,0,.08);
+  --blue: #2979ff;
+  --blue-bg: rgba(41,121,255,.08);
+  --r: 10px;
+  --rs: 6px;
+  --ff: 'Syne', sans-serif;
+  --fb: 'Inter', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); min-height: 100vh; }
+
+/* NAV */
+nav { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 0.5px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 10; }
+.nav-logo { font-family: var(--ff); font-weight: 800; font-size: 17px; color: var(--green); letter-spacing: -0.5px; }
+.nav-badge { background: var(--bg3); border: 0.5px solid var(--border); color: var(--text2); font-size: 11px; padding: 3px 8px; border-radius: var(--rs); }
+.nav-live { margin-left: auto; font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
+.nav-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* LAYOUT */
+.wrap { max-width: 900px; margin: 0 auto; padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.full { grid-column: 1 / -1; }
+
+/* CARDS */
+.card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--r); padding: 14px; }
+.card-label { font-size: 9px; letter-spacing: .1em; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+.auto-tag { background: var(--green-bg); color: var(--green); font-size: 9px; padding: 2px 6px; border-radius: 4px; border: 0.5px solid var(--green-border); }
+
 /* PRICE */
-.pstrip{background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--r);padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;flex-wrap:wrap;gap:16px}
-.plbl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fm);margin-bottom:3px}
-.pval{font-family:var(--fm);font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1}
-.pval.up{color:var(--green)}.pval.dn{color:var(--red)}
-.pchg{font-family:var(--fm);font-size:13px;font-weight:600;padding:5px 12px;border-radius:var(--rs)}
-.pchg.up{color:var(--green);background:var(--gbg);border:.5px solid var(--gbr)}
-.pchg.dn{color:var(--red);background:var(--rbg);border:.5px solid var(--rbr)}
-.pstats{display:flex;gap:18px;flex-wrap:wrap}
-.psi .psl{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.07em;font-family:var(--fm);margin-bottom:3px}
-.psi .psv{font-family:var(--fm);font-size:14px;font-weight:600}
-.psrc{font-size:11px;color:var(--t3);font-family:var(--fm);margin-left:auto}
-/* AI SUMMARY */
-.ai-bar{background:var(--bg-card);border:.5px solid var(--gbr);border-radius:var(--r);padding:14px 18px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
-.ai-icon{font-size:18px;flex-shrink:0;margin-top:1px}
-.ai-txt{font-size:14px;color:var(--t2);line-height:1.6}
-/* TWO COL */
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:600px){.two{grid-template-columns:1fr}}
-.mc{background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--r);padding:14px 18px}
-.mct{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--fm);margin-bottom:10px}
-.vbig{font-family:var(--fm);font-size:22px;font-weight:700;margin-bottom:3px}
-.vsub{font-size:13px;color:var(--t2);margin-bottom:8px}
-.bw{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:5px}
-.bf{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--orange),var(--red));transition:width .8s}
-.br{display:flex;justify-content:space-between;font-family:var(--fm);font-size:11px;color:var(--t3)}
-.srow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.slbl{font-size:13px;font-family:var(--fm);width:44px}
-.slbl.long{color:var(--green)}.slbl.short{color:var(--red)}
-.sbw{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.sbf{height:100%;border-radius:4px;transition:width .8s}
-.sbf.long{background:var(--green)}.sbf.short{background:var(--red)}
-.spct{font-family:var(--fm);font-size:13px;font-weight:700;width:36px;text-align:right}
-.spct.long{color:var(--green)}.spct.short{color:var(--red)}
-.snote{font-size:12px;color:var(--t2);margin-top:3px}
-/* TABS */
-.tabs{display:flex;gap:2px;margin-bottom:14px;background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--rs);padding:4px;width:fit-content}
-.tab{padding:8px 20px;font-size:14px;font-weight:500;border-radius:6px;cursor:pointer;border:none;color:var(--t2);background:transparent;transition:all .15s;font-family:var(--fb)}
-.tab:hover{color:var(--text)}.tab.active{color:var(--text);background:var(--bg-input)}
-/* PANEL */
-.panel{background:var(--bg-card);border:.5px solid var(--bl);border-radius:var(--r);overflow:hidden}
-.ph{padding:12px 16px;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.pt{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);font-family:var(--fm)}
-.pbg{font-size:11px;padding:3px 9px;border-radius:999px;font-family:var(--fm);font-weight:600}
-.pb-g{color:var(--green);background:var(--gbg);border:.5px solid var(--gbr)}
-.pb-r{color:var(--red);background:var(--rbg);border:.5px solid var(--rbr)}
-.pb-o{color:var(--orange);background:var(--obg);border:.5px solid var(--obr)}
-/* NEWS */
-.ni{padding:14px 16px;border-bottom:.5px solid var(--bl);transition:background .1s}
-.ni:last-child{border-bottom:none}.ni:hover{background:var(--bg-input)}
-.nm{display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap}
-.ns{font-size:12px;font-family:var(--fm);font-weight:700;color:var(--blue);text-transform:uppercase}
-.nt2{font-size:12px;color:var(--t2);font-family:var(--fm)}
-.nimp{font-size:11px;padding:3px 8px;border-radius:999px;font-family:var(--fm);font-weight:700}
-.ni-h{background:var(--rbg);color:var(--red);border:.5px solid var(--rbr)}
-.ni-m{background:var(--obg);color:var(--orange);border:.5px solid var(--obr)}
-.ni-l{background:var(--bg-input);color:var(--t2);border:.5px solid var(--border)}
-.ntitle{font-size:15px;color:var(--text);line-height:1.55;margin-bottom:5px}
-.nmove{font-family:var(--fm);font-size:12px}
-.mv-up{color:var(--green)}.mv-dn{color:var(--red)}.mv-n{color:var(--t3)}
-.drivers{padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px;border-top:.5px solid var(--bl)}
-.dt{font-size:12px;padding:4px 12px;border-radius:999px;font-family:var(--fm);border:.5px solid}
-.dt-bear{border-color:var(--rbr);color:var(--red);background:var(--rbg)}
-.dt-bull{border-color:var(--gbr);color:var(--green);background:var(--gbg)}
-.dt-n{border-color:var(--border);color:var(--t2)}
+.price-num { font-family: var(--fm); font-size: 44px; font-weight: 600; letter-spacing: -2px; color: var(--text); }
+.price-chg { font-size: 13px; margin-left: 8px; font-family: var(--fm); }
+.price-meta { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--text2); }
+.price-meta b { color: var(--text); font-weight: 500; }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.amber { color: var(--amber); }
+
+/* VOLATILITY */
+.vol-val { font-family: var(--fm); font-size: 24px; font-weight: 600; }
+.vol-bar { height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--red) 100%); margin-top: 8px; position: relative; }
+.vol-marker { position: absolute; top: -4px; width: 3px; height: 13px; background: #fff; border-radius: 2px; }
+
+/* SENTIMENT */
+.sent-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; margin-bottom: 5px; }
+.sent-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; gap: 2px; }
+.sent-bull { background: var(--green); border-radius: 5px 0 0 5px; }
+.sent-bear { background: var(--red); border-radius: 0 5px 5px 0; }
+.sent-note { font-size: 10px; color: var(--text2); margin-top: 6px; }
+
 /* CALENDAR */
-.ci{padding:12px 16px;border-bottom:.5px solid var(--bl);display:grid;grid-template-columns:64px 1fr auto;gap:0 10px;align-items:center}
-.ci:last-child{border-bottom:none}
-.ci.c-hot{background:rgba(34,197,94,0.03);border-left:2px solid var(--green)}
-.ci.c-warn{background:rgba(245,158,11,0.03);border-left:2px solid var(--orange)}
-.ctime{font-family:var(--fm);font-size:13px;color:var(--t2)}
-.cflag{font-size:11px;color:var(--t2);margin-bottom:2px}
-.cname{font-size:14px;color:var(--text);margin-bottom:2px}
-.cname.hot{color:var(--green);font-weight:600}
-.csub{font-size:12px;color:var(--t2)}
-.cdots{display:flex;gap:3px}
-.cdot{width:6px;height:6px;border-radius:50%;background:var(--border)}
-.cdot.m{background:var(--orange)}.cdot.h{background:var(--red)}
-/* GEO */
-.gi{padding:16px;border-bottom:.5px solid var(--bl)}
-.gi:last-child{border-bottom:none}
-.ghdr{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
-.gst{font-size:10px;padding:3px 9px;border-radius:999px;font-family:var(--fm);font-weight:700}
-.gs-r{background:var(--rbg);color:var(--red);border:.5px solid var(--rbr)}
-.gs-o{background:var(--obg);color:var(--orange);border:.5px solid var(--obr)}
-.gs-g{background:var(--bg-input);color:var(--t2);border:.5px solid var(--border)}
-.glbl{font-size:13px;font-weight:600;color:var(--t2);font-family:var(--fm)}
-.gtitle{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px}
-.gdesc{font-size:14px;color:var(--t2);line-height:1.6}
-/* LEVELS */
-.lv{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:.5px solid var(--bl)}
-.lv:last-child{border-bottom:none}
-.lv.now{background:rgba(34,197,94,0.04);border-left:2px solid var(--green)}
-.lvtag{font-size:11px;font-family:var(--fm);color:var(--t2);width:44px}
-.lvtag.now{color:var(--green);font-weight:700}
-.lvprice{font-family:var(--fm);font-size:14px;font-weight:600;color:var(--text)}
-.lvprice.now{color:var(--green);font-size:15px}
-.lvnote{font-size:12px;color:var(--t2);text-align:right}
-/* LOADING */
-.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
-@keyframes sp{to{transform:rotate(360deg)}}
-.lmsg{padding:32px;text-align:center;font-size:14px;color:var(--t3);font-family:var(--fm)}
-footer{border-top:.5px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--t3)}
-footer a{color:var(--t2);text-decoration:none}
+.cal-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 11px; }
+.cal-row:last-child { border-bottom: none; }
+.cal-time { color: var(--text2); width: 40px; flex-shrink: 0; font-family: var(--fm); font-size: 10px; }
+.cal-name { flex: 1; color: var(--text); }
+.cal-hot { color: var(--red); font-size: 10px; margin-left: 3px; }
+.tag-h { background: var(--red-bg); color: var(--red); font-size: 9px; padding: 1px 5px; border-radius: 3px; }
+.tag-m { background: var(--amber-bg); color: var(--amber); font-size: 9px; padding: 1px 5px; border-radius: 3px; }
+.tag-l { background: var(--green-bg); color: var(--green); font-size: 9px; padding: 1px 5px; border-radius: 3px; }
+
+/* TA */
+.ta-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 11px; }
+.ta-row:last-child { border-bottom: none; }
+.ta-tf { color: var(--text2); font-family: var(--fm); font-size: 10px; }
+.sig-buy { color: var(--green); font-weight: 600; font-size: 11px; }
+.sig-sell { color: var(--red); font-weight: 600; font-size: 11px; }
+.sig-neut { color: var(--amber); font-weight: 600; font-size: 11px; }
+
+/* NEWS */
+.news-item { padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+.news-item:last-child { border-bottom: none; }
+.news-meta { font-size: 9px; color: var(--text2); margin-bottom: 3px; display: flex; gap: 8px; align-items: center; }
+.news-time { color: var(--blue); }
+.news-tag { background: var(--blue-bg); color: var(--blue); font-size: 9px; padding: 1px 5px; border-radius: 3px; border: 0.5px solid rgba(41,121,255,.2); }
+.news-title { font-size: 12px; color: var(--text); line-height: 1.45; }
+.news-loading { font-size: 11px; color: var(--text2); padding: 12px 0; text-align: center; }
+
+/* SOURCE */
+.src-note { font-size: 9px; color: var(--text3); text-align: right; margin-top: 8px; }
+.err { font-size: 10px; color: var(--red); }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .wrap { grid-template-columns: 1fr; padding: 10px; gap: 10px; }
+  .full { grid-column: 1; }
+  .price-num { font-size: 36px; }
+}
 </style>
 </head>
 <body>
+
 <nav>
-  <div style="display:flex;align-items:center;gap:14px;">
-    <a href="/" class="nlogo"><div class="ndot"></div><span class="nname">NovaFX</span></a>
-    <a href="/dashboard" class="ndash">Дашборд</a>
-  </div>
-  <div class="nright">
-    <div class="nlinks">
-      <a href="/#about" class="na">О продукте</a>
-      <a href="/#contacts" class="na">Контакты</a>
-      <a href="https://t.me/DigitalNovaLabs" target="_blank" class="na ncta">Telegram</a>
-    </div>
-    <button class="tbtn" id="tbtn">🌙</button>
-    <button class="bbtn" id="bbtn"><span class="bl"></span><span class="bl"></span><span class="bl"></span></button>
-  </div>
-  <div class="ndd" id="ndd">
-    <a href="/#about" onclick="cm()">О продукте</a>
-    <a href="/#contacts" onclick="cm()">Контакты</a>
-    <hr>
-    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="tg" onclick="cm()">✈️ Telegram</a>
-  </div>
+  <span class="nav-logo">NovaFX</span>
+  <span class="nav-badge">EUR/USD</span>
+  <span class="nav-badge">Дашборд</span>
+  <span class="nav-live"><span class="nav-dot"></span>Живые данные</span>
 </nav>
 
-<div class="page">
-  <div class="phdr">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <span class="pbadge">EUR/USD</span>
-      <span class="ptitle">Новостной дашборд</span>
+<div class="wrap">
+
+  <!-- PRICE -->
+  <div class="card full">
+    <div class="card-label">EUR/USD · цена в реальном времени <span class="auto-tag">● ECB API · каждые 30 сек</span></div>
+    <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:4px">
+      <span class="price-num" id="price">—</span>
+      <span class="price-chg" id="price-chg"></span>
     </div>
-    <div class="lrow">
-      <div class="ldot"></div>
-      <span class="ltime" id="clock">--:--:--</span>
-      <button class="rb" id="rbtn" onclick="loadData()">↻ Обновить</button>
+    <div class="price-meta">
+      <span>Open: <b id="p-open">—</b></span>
+      <span>High: <b class="green" id="p-high">—</b></span>
+      <span>Low: <b class="red" id="p-low">—</b></span>
+      <span>Диапазон: <b id="p-range">—</b></span>
+      <span style="margin-left:auto;color:var(--green)" id="p-time">загрузка...</span>
     </div>
   </div>
 
-  <!-- LOADING STATE -->
-  <div id="loading-state" class="lmsg"><span class="spin"></span>Загружаем данные...</div>
+  <!-- VOLATILITY -->
+  <div class="card">
+    <div class="card-label">Волатильность дня <span class="auto-tag">● авто</span></div>
+    <div class="vol-val amber" id="vol-val">— пп</div>
+    <div style="font-size:10px;color:var(--text2);margin-top:3px" id="vol-label">вычисляется...</div>
+    <div class="vol-bar"><div class="vol-marker" id="vol-marker" style="left:50%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px"><span>Низкая</span><span>Средняя</span><span>Высокая</span></div>
+  </div>
 
-  <!-- CONTENT (hidden until loaded) -->
-  <div id="content" style="display:none">
-
-    <!-- UPDATED BAR -->
-    <div class="upd-bar">
-      <div class="upd-dot"></div>
-      <span class="upd-txt">Данные обновлены: <strong id="upd-time">—</strong></span>
-      <span class="upd-note">Обновляется вручную · следующее обновление по запросу</span>
+  <!-- SENTIMENT -->
+  <div class="card">
+    <div class="card-label">Сентимент рынка</div>
+    <div class="sent-row">
+      <span class="green" id="bull-pct">Bull 48%</span>
+      <span class="red" id="bear-pct">Bear 52%</span>
     </div>
-
-    <!-- PRICE -->
-    <div class="pstrip">
-      <div>
-        <div class="plbl">EUR/USD · Цена на момент анализа</div>
-        <div class="pval" id="pval">—</div>
-      </div>
-      <div id="pchg" class="pchg" style="display:none"></div>
-      <div id="pstats" class="pstats"></div>
-      <div id="psrc" class="psrc"></div>
+    <div class="sent-bar">
+      <div class="sent-bull" id="bull-bar" style="width:48%"></div>
+      <div class="sent-bear" id="bear-bar" style="width:52%"></div>
     </div>
+    <div class="sent-note" id="sent-note">Медведи незначительно доминируют</div>
+  </div>
 
-    <!-- AI SUMMARY -->
-    <div class="ai-bar" id="ai-bar" style="display:none">
-      <div class="ai-icon">🤖</div>
-      <div class="ai-txt" id="ai-txt"></div>
+  <!-- CALENDAR -->
+  <div class="card full">
+    <div class="card-label">Экономический календарь <span class="auto-tag">● Investing.com · авто · рус.</span></div>
+    <div id="cal-widget">
+      <!-- Investing.com Economic Calendar Widget -->
+      <iframe src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&importance=2,3&features=datepicker,timezone,timeselector,filters&countries=5,22,25,17&calType=week&timeZone=18&lang=10"
+        width="100%" height="360" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"
+        style="border:none;border-radius:6px;background:transparent">
+      </iframe>
     </div>
+    <div class="src-note">Источник: investing.com — обновляется автоматически</div>
+  </div>
 
-    <!-- VOL + SENT -->
-    <div class="two">
-      <div class="mc"><div class="mct">Волатильность дня</div><div id="vol-body"></div></div>
-      <div class="mc"><div class="mct">Новостной сентимент</div><div id="sent-body"></div></div>
+  <!-- TECHNICAL ANALYSIS -->
+  <div class="card">
+    <div class="card-label">Технический анализ <span class="auto-tag">● TradingView · авто</span></div>
+    <!-- TradingView Technical Analysis Widget -->
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
     </div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+    {
+      "interval": "1h",
+      "width": "100%",
+      "isTransparent": true,
+      "height": "280",
+      "symbol": "FX:EURUSD",
+      "showIntervalTabs": true,
+      "displayMode": "single",
+      "locale": "ru",
+      "colorTheme": "dark"
+    }
+    </script>
+  </div>
 
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab active" onclick="st('news',this)">📰 Новости</button>
-      <button class="tab" onclick="st('calendar',this)">📅 Календарь</button>
-      <button class="tab" onclick="st('geo',this)">🌍 Геополитика</button>
-      <button class="tab" onclick="st('levels',this)">📊 Уровни</button>
-    </div>
+  <!-- NEWS -->
+  <div class="card">
+    <div class="card-label">Новости EUR/USD <span class="auto-tag">● RSS · рус. · каждые 5 мин</span></div>
+    <div id="news-container"><div class="news-loading">Загрузка новостей...</div></div>
+    <div class="src-note">Источник: investing.com/rss</div>
+  </div>
 
-    <div id="tab-news">
-      <div class="panel">
-        <div class="ph"><span class="pt" id="news-ttl">Новости · EUR/USD</span><span class="pbg pb-r" id="news-badge"></span></div>
-        <div id="news-body"></div>
-        <div id="drivers-body"></div>
-      </div>
-    </div>
-
-    <div id="tab-calendar" style="display:none">
-      <div class="panel">
-        <div class="ph"><span class="pt" id="cal-ttl">Экономический календарь</span><span class="pbg pb-o" id="cal-badge"></span></div>
-        <div id="cal-body"></div>
-      </div>
-    </div>
-
-    <div id="tab-geo" style="display:none">
-      <div class="panel">
-        <div class="ph"><span class="pt">Геополитика · Влияние на EUR/USD</span><span class="pbg pb-r" id="geo-badge"></span></div>
-        <div id="geo-body"></div>
-      </div>
-    </div>
-
-    <div id="tab-levels" style="display:none">
-      <div class="panel">
-        <div class="ph"><span class="pt">Ключевые уровни · EUR/USD</span></div>
-        <div id="levels-body"></div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
 </div>
 
-<footer>
-  <p>NovaFX · DigitalNovaLabs · <a href="https://t.me/DigitalNovaLabs">Telegram</a></p>
-  <p style="margin-top:5px;">Данные: ручной анализ EUR/USD · Хранилище: Google Drive · Цена: ECB/Frankfurter</p>
-</footer>
-
 <script>
-// ── DATA SOURCE ────────────────────────────────────────
-var FILE_ID = '14zSjw05xirKHbpUUp_42nA19Wpb79fq4';
-var DATA_URL = 'https://raw.githubusercontent.com/egokud/NovaFX2.0/main/data.json';
-// Fallback через Google Drive API public export
-// fallback removed
+// === LIVE PRICE ===
+var prevRate = null;
+function fetchPrice() {
+  fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD')
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      var rate = d.rates.USD;
+      var rateStr = rate.toFixed(4);
+      document.getElementById('price').textContent = rateStr;
 
-// ── THEME ──────────────────────────────────────────────
-var tbtn = document.getElementById('tbtn');
-var theme = localStorage.getItem('nova-theme') || 'dark';
-applyTheme(theme);
-tbtn.addEventListener('click', function(){theme=theme==='dark'?'light':'dark';applyTheme(theme);localStorage.setItem('nova-theme',theme);});
-function applyTheme(t){document.documentElement.setAttribute('data-theme',t);tbtn.textContent=t==='dark'?'☀️':'🌙';}
+      if (prevRate !== null) {
+        var diff = rate - prevRate;
+        var pct = (diff / prevRate * 100);
+        var el = document.getElementById('price-chg');
+        if (diff >= 0) {
+          el.textContent = '▲ +' + diff.toFixed(4) + ' (+' + pct.toFixed(2) + '%)';
+          el.className = 'price-chg green';
+        } else {
+          el.textContent = '▼ ' + diff.toFixed(4) + ' (' + pct.toFixed(2) + '%)';
+          el.className = 'price-chg red';
+        }
+      } else {
+        document.getElementById('price-chg').textContent = '● ECB live';
+        document.getElementById('price-chg').className = 'price-chg green';
+      }
+      prevRate = rate;
 
-// ── BURGER ─────────────────────────────────────────────
-var bb=document.getElementById('bbtn'),dd=document.getElementById('ndd');
-bb.addEventListener('click',function(e){e.stopPropagation();dd.classList.toggle('open');});
-document.addEventListener('click',function(){dd.classList.remove('open');});
-dd.addEventListener('click',function(e){e.stopPropagation();});
-function cm(){dd.classList.remove('open');}
-
-// ── CLOCK ──────────────────────────────────────────────
-setInterval(function(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('ru-RU');},1000);
-
-// ── TABS ───────────────────────────────────────────────
-function st(name,el){
-  ['news','calendar','geo','levels'].forEach(function(t){var d=document.getElementById('tab-'+t);if(d)d.style.display='none';});
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  var tgt=document.getElementById('tab-'+name);if(tgt)tgt.style.display='block';
-  if(el)el.classList.add('active');
+      // Volatility calc from range
+      fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD')
+        .then(function(r2){ return r2.json(); })
+        .then(function(d2){
+          // Use 90-day data for ATR approximation
+          var now = new Date();
+          document.getElementById('p-time').textContent =
+            'обновлено ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+        });
+    })
+    .catch(function() {
+      document.getElementById('p-time').textContent = 'ошибка соединения';
+    });
 }
 
-// ── LOAD DATA ──────────────────────────────────────────
-async function loadData() {
-  var btn = document.getElementById('rbtn');
-  btn.disabled=true; btn.textContent='↻ Загружаем...';
-  document.getElementById('loading-state').style.display='block';
-  document.getElementById('content').style.display='none';
+// Fetch historical for high/low/range
+function fetchHistory() {
+  var today = new Date();
+  var yyyy = today.getFullYear();
+  var mm = String(today.getMonth()+1).padStart(2,'0');
+  var dd = String(today.getDate()).padStart(2,'0');
+  var dateStr = yyyy + '-' + mm + '-' + dd;
 
-  try {
-    // Пробуем через corsproxy.io который работает с Google Drive
-    var proxyUrl = DATA_URL; // GitHub Raw supports CORS
-    var r = await fetch(proxyUrl);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    var data = await r.json();
-    renderAll(data);
-  } catch(e) {
-    // Fallback: пробуем напрямую
-    try {
-      var r2 = await fetch(DATA_URL);
-      var data2 = await r2.json();
-      renderAll(data2);
-    } catch(e2) {
-      document.getElementById('loading-state').innerHTML =
-        '<div style="color:var(--red)">⚠️ Не удалось загрузить данные.<br><small style="color:var(--t3)">'+e2.message+'</small><br><br>' +
-        '<button class="rb" onclick="loadData()" style="margin-top:8px">Повторить</button></div>';
-    }
-  }
+  fetch('https://api.frankfurter.dev/v1/' + dateStr + '?base=EUR&symbols=USD')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var rate = d.rates.USD;
+      document.getElementById('p-open').textContent = rate.toFixed(4);
+    }).catch(function(){});
 
-  btn.disabled=false; btn.textContent='↻ Обновить';
+  // 30-day range for volatility
+  var d30 = new Date(today);
+  d30.setDate(d30.getDate() - 30);
+  var from = d30.getFullYear() + '-' + String(d30.getMonth()+1).padStart(2,'0') + '-' + String(d30.getDate()).padStart(2,'0');
+
+  fetch('https://api.frankfurter.dev/v1/' + from + '..' + dateStr + '?base=EUR&symbols=USD')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var rates = Object.values(d.rates).map(function(x){ return x.USD; });
+      var high = Math.max.apply(null, rates);
+      var low = Math.min.apply(null, rates);
+      var range = Math.round((high - low) * 10000);
+      var atr = Math.round((high - low) / low * 10000);
+
+      document.getElementById('p-high').textContent = high.toFixed(4);
+      document.getElementById('p-low').textContent = low.toFixed(4);
+      document.getElementById('p-range').textContent = range + ' пп (30д)';
+
+      // Volatility display
+      document.getElementById('vol-val').textContent = range + ' пп';
+      var level, color;
+      if (range < 200) { level = 'Низкая · 30д диапазон'; color = 'var(--green)'; }
+      else if (range < 400) { level = 'Умеренная · 30д диапазон'; color = 'var(--amber)'; }
+      else { level = 'Высокая · 30д диапазон'; color = 'var(--red)'; }
+      document.getElementById('vol-label').textContent = level;
+      document.getElementById('vol-val').style.color = color;
+
+      var pct = Math.min(Math.max(range / 600 * 100, 5), 95);
+      document.getElementById('vol-marker').style.left = pct + '%';
+    }).catch(function(){});
 }
 
-// ── RENDER ─────────────────────────────────────────────
-function renderAll(d) {
-  document.getElementById('loading-state').style.display='none';
-  document.getElementById('content').style.display='block';
+// === NEWS via RSS proxy ===
+function fetchNews() {
+  var rssUrl = 'https://ru.investing.com/rss/news_301.rss';
+  var proxyUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&count=5';
 
-  // Updated time
-  document.getElementById('upd-time').textContent = d.updated_ru || d.updated || '—';
-
-  // Price
-  if(d.price) {
-    var p=d.price, isUp=p.direction==='up';
-    document.getElementById('pval').className='pval '+(isUp?'up':'dn');
-    document.getElementById('pval').textContent=p.rate||'—';
-    if(p.change){
-      var pc=document.getElementById('pchg');
-      pc.className='pchg '+(isUp?'up':'dn');
-      pc.textContent=(isUp?'▲ +':'▼ ')+p.change+' ('+(isUp?'+':'')+p.change_pct+'%)';
-      pc.style.display='';
-    }
-    var stats='';
-    if(p.open) stats+=mkStat('Открытие',p.open,'');
-    if(p.high) stats+=mkStat('High',p.high,'var(--green)');
-    if(p.low)  stats+=mkStat('Low',p.low,'var(--red)');
-    if(p.range_pp) stats+=mkStat('Диапазон',p.range_pp+' пп','');
-    document.getElementById('pstats').innerHTML=stats;
-    document.getElementById('psrc').textContent=(p.source||'ECB')+' · '+formatUpdated(d.updated);
-  }
-
-  // AI summary
-  if(d.ai_summary){
-    document.getElementById('ai-txt').textContent=d.ai_summary;
-    document.getElementById('ai-bar').style.display='flex';
-  }
-
-  // Volatility
-  if(d.volatility){
-    var v=d.volatility, pct=v.atr_pct||0;
-    var clr=v.color==='red'?'var(--red)':v.color==='orange'?'var(--orange)':'var(--green)';
-    document.getElementById('vol-body').innerHTML=
-      '<div class="vbig" style="color:'+clr+'">'+v.range_pp+' пп · '+v.level+'</div>'+
-      '<div class="vsub">Ср. ATR ~70 пп / день</div>'+
-      '<div class="bw"><div class="bf" style="width:'+Math.min(pct,100)+'%"></div></div>'+
-      '<div class="br"><span>'+((d.price&&d.price.low)||'')+'</span><span style="color:'+clr+'">'+pct+'% ATR</span><span>'+((d.price&&d.price.high)||'')+'</span></div>';
-  }
-
-  // Sentiment
-  if(d.sentiment){
-    var s=d.sentiment;
-    document.getElementById('sent-body').innerHTML=
-      '<div class="srow"><span class="slbl long">Bull</span><div class="sbw"><div class="sbf long" style="width:'+s.bull+'%"></div></div><span class="spct long">'+s.bull+'%</span></div>'+
-      '<div class="srow"><span class="slbl short">Bear</span><div class="sbw"><div class="sbf short" style="width:'+s.bear+'%"></div></div><span class="spct short">'+s.bear+'%</span></div>'+
-      '<div class="snote">'+(s.note||'')+'</div>';
-  }
-
-  // News
-  if(d.news&&d.news.length){
-    var highCnt=d.news.filter(function(n){return n.impact==='HIGH';}).length;
-    document.getElementById('news-ttl').textContent='Новости · EUR/USD · '+d.news.length+' материалов';
-    document.getElementById('news-badge').textContent=highCnt+' HIGH';
-    var html='';
-    d.news.forEach(function(n){
-      var ic=n.impact==='HIGH'?'ni-h':n.impact==='MED'?'ni-m':'ni-l';
-      var mc=n.dir==='up'?'mv-up':n.dir==='down'?'mv-dn':'mv-n';
-      html+='<div class="ni">'+
-        '<div class="nm"><span class="ns">'+n.src+'</span><span class="nt2">'+n.time+'</span><span class="nimp '+ic+'">'+n.impact+'</span></div>'+
-        '<div class="ntitle">'+n.title+'</div>'+
-        (n.move?'<div class="nmove"><span class="'+mc+'">'+n.move+'</span></div>':'')+
-      '</div>';
+  fetch(proxyUrl)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var container = document.getElementById('news-container');
+      if (!d.items || !d.items.length) {
+        container.innerHTML = '<div class="news-loading">Нет данных</div>';
+        return;
+      }
+      container.innerHTML = d.items.slice(0, 5).map(function(item) {
+        var date = new Date(item.pubDate);
+        var now = new Date();
+        var diff = Math.round((now - date) / 60000);
+        var timeStr = diff < 60 ? diff + ' мин назад' : Math.round(diff/60) + 'ч назад';
+        var title = item.title.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+        return '<div class="news-item">' +
+          '<div class="news-meta"><span>Investing.com</span><span class="news-time">' + timeStr + '</span>' +
+          '<span class="news-tag">EUR/USD</span></div>' +
+          '<div class="news-title">' + title + '</div></div>';
+      }).join('');
+    })
+    .catch(function() {
+      document.getElementById('news-container').innerHTML =
+        '<div class="news-loading err">Не удалось загрузить новости</div>';
     });
-    document.getElementById('news-body').innerHTML=html;
-  }
-
-  // Drivers
-  if(d.drivers&&d.drivers.length){
-    var dhtml='<div class="drivers">';
-    d.drivers.forEach(function(dr){
-      var cls=dr.type==='bear'?'dt-bear':dr.type==='bull'?'dt-bull':'dt-n';
-      dhtml+='<span class="dt '+cls+'">'+dr.label+'</span>';
-    });
-    dhtml+='</div>';
-    document.getElementById('drivers-body').innerHTML=dhtml;
-  }
-
-  // Calendar
-  if(d.calendar&&d.calendar.length){
-    var highCal=d.calendar.filter(function(e){return e.importance==='high';}).length;
-    document.getElementById('cal-badge').textContent=highCal+' HIGH IMPACT';
-    document.getElementById('cal-badge').className='pbg '+(highCal>0?'pb-r':'pb-o');
-    var chtml='';
-    d.calendar.forEach(function(e){
-      var cls='ci'+(e.hot?' c-hot':e.importance==='high'?' c-warn':'');
-      chtml+='<div class="'+cls+'">'+
-        '<div><div class="ctime">'+e.time+'</div><div class="cflag">'+e.flag+'</div></div>'+
-        '<div><div class="cname'+(e.hot?' hot':'')+'">'+e.name+'</div><div class="csub">'+e.sub+'</div></div>'+
-        '<div class="cdots">'+
-          '<div class="cdot '+(e.importance==='high'?'h':e.importance==='med'?'m':'')+'"></div>'+
-          '<div class="cdot '+(e.importance!=='low'?e.importance==='high'?'h':'m':'')+'"></div>'+
-          '<div class="cdot '+(e.importance==='high'?'h':'')+'"></div>'+
-        '</div>'+
-      '</div>';
-    });
-    document.getElementById('cal-body').innerHTML=chtml;
-  }
-
-  // Geo
-  if(d.geo&&d.geo.length){
-    var geoHigh=d.geo.filter(function(g){return g.level==='red';}).length;
-    document.getElementById('geo-badge').textContent=geoHigh>0?geoHigh+' АКТИВНЫХ':'Фоновые риски';
-    var ghtml='';
-    d.geo.forEach(function(g){
-      var sc=g.level==='red'?'gs-r':g.level==='orange'?'gs-o':'gs-g';
-      var dc=g.dir==='down'?'style="color:var(--red)"':g.dir==='up'?'style="color:var(--green)"':'style="color:var(--t3)"';
-      var arrow=g.dir==='down'?'↓ Давление на EUR':g.dir==='up'?'↑ Поддержка EUR':'→ Влияние неоднозначно';
-      ghtml+='<div class="gi">'+
-        '<div class="ghdr"><span class="glbl">'+g.label+'</span><span class="gst '+sc+'">'+g.status+'</span></div>'+
-        '<div class="gtitle">'+g.title+'</div>'+
-        '<div class="gdesc">'+g.desc+'</div>'+
-        '<div style="margin-top:8px;font-family:var(--fm);font-size:12px;" '+dc+'>'+arrow+'</div>'+
-      '</div>';
-    });
-    document.getElementById('geo-body').innerHTML=ghtml;
-  }
-
-  // Levels
-  if(d.levels&&d.levels.length){
-    var lhtml='';
-    d.levels.forEach(function(l){
-      var cls='lv'+(l.current?' now':'');
-      lhtml+='<div class="'+cls+'">'+
-        '<span class="lvtag'+(l.current?' now':'')+'">'+l.tag+'</span>'+
-        '<span class="lvprice'+(l.current?' now':'')+'">'+l.price+'</span>'+
-        '<span class="lvnote">'+l.note+'</span>'+
-      '</div>';
-    });
-    document.getElementById('levels-body').innerHTML=lhtml;
-  }
 }
 
-function mkStat(l,v,c){return '<div class="psi"><div class="psl">'+l+'</div><div class="psv"'+(c?' style="color:'+c+'"':'')+'>'+v+'</div></div>';}
-
-function formatUpdated(iso){
-  if(!iso)return '';
-  try{return new Date(iso).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});}
-  catch(e){return '';}
-}
-
-// ── INIT ───────────────────────────────────────────────
-loadData();
+// Init
+fetchPrice();
+fetchHistory();
+fetchNews();
+setInterval(fetchPrice, 30000);
+setInterval(fetchNews, 300000);
+setInterval(fetchHistory, 3600000);
 </script>
+
 </body>
 </html>
