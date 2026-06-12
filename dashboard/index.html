@@ -8,122 +8,109 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0b0e14;
-  --bg2: #111520;
-  --bg3: #171d2b;
-  --border: #222c40;
-  --text: #e8edf5;
-  --text2: #8a97b0;
-  --text3: #4a5568;
-  --green: #00e676;
-  --green-bg: rgba(0,230,118,.08);
-  --green-border: rgba(0,230,118,.2);
-  --red: #ff4757;
-  --red-bg: rgba(255,71,87,.08);
-  --amber: #ffb300;
-  --amber-bg: rgba(255,179,0,.08);
-  --blue: #2979ff;
-  --blue-bg: rgba(41,121,255,.08);
-  --r: 10px;
-  --rs: 6px;
-  --ff: 'Syne', sans-serif;
-  --fb: 'Inter', sans-serif;
-  --fm: 'JetBrains Mono', monospace;
+  --bg:#0b0e14;--bg2:#111520;--bg3:#171d2b;
+  --border:#222c40;--border2:#2a3550;
+  --text:#e8edf5;--text2:#8a97b0;--text3:#4a5568;
+  --green:#00e676;--green-bg:rgba(0,230,118,.08);--green-br:rgba(0,230,118,.2);
+  --red:#ff4757;--red-bg:rgba(255,71,87,.08);
+  --amber:#ffb300;--amber-bg:rgba(255,179,0,.08);
+  --r:10px;--rs:6px;
+  --ff:'Syne',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: var(--fb); min-height: 100vh; }
+[data-theme="light"] {
+  --bg:#f0f4fa;--bg2:#fff;--bg3:#e4eaf5;
+  --border:#c4cedf;--border2:#b0bed4;
+  --text:#0d1117;--text2:#2d3a4f;--text3:#5a6a80;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;transition:background .2s,color .2s}
 
 /* NAV */
-nav { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 0.5px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 10; }
-.nav-logo { font-family: var(--ff); font-weight: 800; font-size: 17px; color: var(--green); letter-spacing: -0.5px; }
-.nav-badge { background: var(--bg3); border: 0.5px solid var(--border); color: var(--text2); font-size: 11px; padding: 3px 8px; border-radius: var(--rs); }
-.nav-live { margin-left: auto; font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
-.nav-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+nav{display:flex;align-items:center;gap:6px;padding:0 20px;height:52px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100}
+.nav-logo{font-family:var(--ff);font-weight:800;font-size:17px;color:var(--green);letter-spacing:-.5px;text-decoration:none;margin-right:8px}
+.nav-badge{background:var(--bg3);border:0.5px solid var(--border);color:var(--text2);font-size:11px;padding:3px 9px;border-radius:var(--rs);font-family:var(--fb)}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:auto}
+.nav-a{padding:5px 11px;border-radius:var(--rs);font-size:13px;font-weight:500;color:var(--text2);text-decoration:none;transition:all .15s}
+.nav-a:hover{color:var(--text);background:var(--bg3)}
+.nav-cta{background:var(--green-bg);color:var(--green)!important;border:0.5px solid var(--green-br)}
+.nav-cta:hover{opacity:.85}
+.theme-btn{background:none;border:0.5px solid var(--border);border-radius:var(--rs);width:32px;height:32px;cursor:pointer;color:var(--text2);font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:6px;transition:all .15s}
+.theme-btn:hover{background:var(--bg3);color:var(--text)}
+.burger{display:none;background:none;border:0.5px solid var(--border);border-radius:var(--rs);width:32px;height:32px;cursor:pointer;color:var(--text);font-size:18px;align-items:center;justify-content:center;margin-left:6px}
+.dd{display:none;position:absolute;top:52px;right:12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:8px;min-width:180px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.dd.open{display:block}
+.dd a{display:block;padding:8px 12px;font-size:13px;color:var(--text2);text-decoration:none;border-radius:var(--rs)}
+.dd a:hover{background:var(--bg3);color:var(--text)}
+.dd hr{border:none;border-top:0.5px solid var(--border);margin:4px 0}
+.dd-tg{color:var(--green)!important}
+@media(max-width:700px){
+  .nav-links{display:none}
+  .burger{display:flex}
+}
 
 /* LAYOUT */
-.wrap { max-width: 900px; margin: 0 auto; padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.full { grid-column: 1 / -1; }
+.wrap{max-width:960px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+@media(max-width:600px){
+  .wrap{grid-template-columns:1fr;padding:10px;gap:10px}
+  .full{grid-column:1}
+}
 
 /* CARDS */
-.card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--r); padding: 14px; }
-.card-label { font-size: 9px; letter-spacing: .1em; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
-.auto-tag { background: var(--green-bg); color: var(--green); font-size: 9px; padding: 2px 6px; border-radius: 4px; border: 0.5px solid var(--green-border); }
+.card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:14px}
+.clabel{font-size:9px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.auto-tag{background:var(--green-bg);color:var(--green);font-size:9px;padding:2px 6px;border-radius:4px;border:0.5px solid var(--green-br)}
 
 /* PRICE */
-.price-num { font-family: var(--fm); font-size: 44px; font-weight: 600; letter-spacing: -2px; color: var(--text); }
-.price-chg { font-size: 13px; margin-left: 8px; font-family: var(--fm); }
-.price-meta { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--text2); }
-.price-meta b { color: var(--text); font-weight: 500; }
-.green { color: var(--green); }
-.red { color: var(--red); }
-.amber { color: var(--amber); }
+.price-num{font-family:var(--fm);font-size:44px;font-weight:600;letter-spacing:-2px;line-height:1}
+.price-chg{font-size:12px;margin-left:8px;font-family:var(--fm)}
+.price-meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:11px;color:var(--text2)}
+.price-meta b{color:var(--text);font-weight:500}
+.green{color:var(--green)}.red{color:var(--red)}.amber{color:var(--amber)}
 
 /* VOLATILITY */
-.vol-val { font-family: var(--fm); font-size: 24px; font-weight: 600; }
-.vol-bar { height: 5px; border-radius: 3px; background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--red) 100%); margin-top: 8px; position: relative; }
-.vol-marker { position: absolute; top: -4px; width: 3px; height: 13px; background: #fff; border-radius: 2px; }
+.vol-val{font-family:var(--fm);font-size:24px;font-weight:600}
+.vol-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,var(--amber) 50%,var(--red) 100%);margin-top:8px;position:relative}
+.vol-marker{position:absolute;top:-4px;width:3px;height:13px;background:var(--text);border-radius:2px;transition:left .5s}
 
 /* SENTIMENT */
-.sent-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 500; margin-bottom: 5px; }
-.sent-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; gap: 2px; }
-.sent-bull { background: var(--green); border-radius: 5px 0 0 5px; }
-.sent-bear { background: var(--red); border-radius: 0 5px 5px 0; }
-.sent-note { font-size: 10px; color: var(--text2); margin-top: 6px; }
-
-/* CALENDAR */
-.cal-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 11px; }
-.cal-row:last-child { border-bottom: none; }
-.cal-time { color: var(--text2); width: 40px; flex-shrink: 0; font-family: var(--fm); font-size: 10px; }
-.cal-name { flex: 1; color: var(--text); }
-.cal-hot { color: var(--red); font-size: 10px; margin-left: 3px; }
-.tag-h { background: var(--red-bg); color: var(--red); font-size: 9px; padding: 1px 5px; border-radius: 3px; }
-.tag-m { background: var(--amber-bg); color: var(--amber); font-size: 9px; padding: 1px 5px; border-radius: 3px; }
-.tag-l { background: var(--green-bg); color: var(--green); font-size: 9px; padding: 1px 5px; border-radius: 3px; }
-
-/* TA */
-.ta-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 11px; }
-.ta-row:last-child { border-bottom: none; }
-.ta-tf { color: var(--text2); font-family: var(--fm); font-size: 10px; }
-.sig-buy { color: var(--green); font-weight: 600; font-size: 11px; }
-.sig-sell { color: var(--red); font-weight: 600; font-size: 11px; }
-.sig-neut { color: var(--amber); font-weight: 600; font-size: 11px; }
-
-/* NEWS */
-.news-item { padding: 8px 0; border-bottom: 0.5px solid var(--border); }
-.news-item:last-child { border-bottom: none; }
-.news-meta { font-size: 9px; color: var(--text2); margin-bottom: 3px; display: flex; gap: 8px; align-items: center; }
-.news-time { color: var(--blue); }
-.news-tag { background: var(--blue-bg); color: var(--blue); font-size: 9px; padding: 1px 5px; border-radius: 3px; border: 0.5px solid rgba(41,121,255,.2); }
-.news-title { font-size: 12px; color: var(--text); line-height: 1.45; }
-.news-loading { font-size: 11px; color: var(--text2); padding: 12px 0; text-align: center; }
-
-/* SOURCE */
-.src-note { font-size: 9px; color: var(--text3); text-align: right; margin-top: 8px; }
-.err { font-size: 10px; color: var(--red); }
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-  .wrap { grid-template-columns: 1fr; padding: 10px; gap: 10px; }
-  .full { grid-column: 1; }
-  .price-num { font-size: 36px; }
-}
+.sent-row{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:5px}
+.sent-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:2px}
+.sent-bull{background:var(--green);border-radius:5px 0 0 5px;transition:width .5s}
+.sent-bear{background:var(--red);border-radius:0 5px 5px 0;transition:width .5s}
+.sent-note{font-size:10px;color:var(--text2);margin-top:6px}
 </style>
 </head>
 <body>
 
 <nav>
-  <span class="nav-logo">NovaFX</span>
-  <span class="nav-badge">EUR/USD</span>
+  <a href="/" class="nav-logo">NovaFX</a>
   <span class="nav-badge">Дашборд</span>
-  <span class="nav-live"><span class="nav-dot"></span>Живые данные</span>
+
+  <div class="nav-links">
+    <a href="/#about" class="nav-a">О продукте</a>
+    <a href="/#contacts" class="nav-a">Контакты</a>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a">Техподдержка</a>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a nav-cta">Telegram</a>
+  </div>
+
+  <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Сменить тему">🌙</button>
+
+  <button class="burger" onclick="toggleMenu()" aria-label="Меню">☰</button>
+  <div class="dd" id="dd">
+    <a href="/#about" onclick="closeMenu()">О продукте</a>
+    <a href="/#contacts" onclick="closeMenu()">Контакты</a>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" onclick="closeMenu()">Техподдержка</a>
+    <hr>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="dd-tg" onclick="closeMenu()">✈️ Telegram</a>
+  </div>
 </nav>
 
 <div class="wrap">
 
   <!-- PRICE -->
   <div class="card full">
-    <div class="card-label">EUR/USD · цена в реальном времени <span class="auto-tag">● ECB API · каждые 30 сек</span></div>
+    <div class="clabel">EUR/USD · цена <span class="auto-tag">● ECB · каждые 30 сек</span></div>
     <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:4px">
       <span class="price-num" id="price">—</span>
       <span class="price-chg" id="price-chg"></span>
@@ -132,207 +119,138 @@ nav { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-
       <span>Open: <b id="p-open">—</b></span>
       <span>High: <b class="green" id="p-high">—</b></span>
       <span>Low: <b class="red" id="p-low">—</b></span>
-      <span>Диапазон: <b id="p-range">—</b></span>
+      <span>Диапазон 30д: <b id="p-range">—</b></span>
       <span style="margin-left:auto;color:var(--green)" id="p-time">загрузка...</span>
     </div>
   </div>
 
   <!-- VOLATILITY -->
-  <div class="card">
-    <div class="card-label">Волатильность дня <span class="auto-tag">● авто</span></div>
+  <div class="card full">
+    <div class="clabel">Волатильность <span class="auto-tag">● авто</span></div>
     <div class="vol-val amber" id="vol-val">— пп</div>
     <div style="font-size:10px;color:var(--text2);margin-top:3px" id="vol-label">вычисляется...</div>
     <div class="vol-bar"><div class="vol-marker" id="vol-marker" style="left:50%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px"><span>Низкая</span><span>Средняя</span><span>Высокая</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px">
+      <span>Низкая</span><span>Средняя</span><span>Высокая</span>
+    </div>
   </div>
 
-  <!-- SENTIMENT -->
-  <div class="card">
-    <div class="card-label">Сентимент рынка</div>
-    <div class="sent-row">
-      <span class="green" id="bull-pct">Bull 48%</span>
-      <span class="red" id="bear-pct">Bear 52%</span>
+    <!-- NEWS TradingView -->
+  <div class="card full" style="padding:0;overflow:hidden;min-height:500px">
+    <div class="clabel" style="padding:14px 14px 0">Новости EUR/USD <span class="auto-tag">● TradingView · авто</span></div>
+    <div class="tradingview-widget-container" style="height:460px">
+      <div class="tradingview-widget-container__widget" style="height:100%"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+      {
+        "feedMode": "symbol",
+        "symbol": "FX:EURUSD",
+        "isTransparent": true,
+        "displayMode": "regular",
+        "width": "100%",
+        "height": "460",
+        "colorTheme": "dark",
+        "locale": "en"
+      }
+      </script>
     </div>
-    <div class="sent-bar">
-      <div class="sent-bull" id="bull-bar" style="width:48%"></div>
-      <div class="sent-bear" id="bear-bar" style="width:52%"></div>
-    </div>
-    <div class="sent-note" id="sent-note">Медведи незначительно доминируют</div>
-  </div>
-
-  <!-- CALENDAR -->
-  <div class="card full">
-    <div class="card-label">Экономический календарь <span class="auto-tag">● Investing.com · авто · рус.</span></div>
-    <div id="cal-widget">
-      <!-- Investing.com Economic Calendar Widget -->
-      <iframe src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&importance=2,3&features=datepicker,timezone,timeselector,filters&countries=5,22,25,17&calType=week&timeZone=18&lang=10"
-        width="100%" height="360" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"
-        style="border:none;border-radius:6px;background:transparent">
-      </iframe>
-    </div>
-    <div class="src-note">Источник: investing.com — обновляется автоматически</div>
-  </div>
-
-  <!-- TECHNICAL ANALYSIS -->
-  <div class="card">
-    <div class="card-label">Технический анализ <span class="auto-tag">● TradingView · авто</span></div>
-    <!-- TradingView Technical Analysis Widget -->
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
-    </div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-    {
-      "interval": "1h",
-      "width": "100%",
-      "isTransparent": true,
-      "height": "280",
-      "symbol": "FX:EURUSD",
-      "showIntervalTabs": true,
-      "displayMode": "single",
-      "locale": "ru",
-      "colorTheme": "dark"
-    }
-    </script>
-  </div>
-
-  <!-- NEWS -->
-  <div class="card">
-    <div class="card-label">Новости EUR/USD <span class="auto-tag">● RSS · рус. · каждые 5 мин</span></div>
-    <div id="news-container"><div class="news-loading">Загрузка новостей...</div></div>
-    <div class="src-note">Источник: investing.com/rss</div>
   </div>
 
 </div>
 
 <script>
-// === LIVE PRICE ===
+function toggleTheme() {
+  var html = document.documentElement;
+  var btn = document.getElementById('theme-btn');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.setAttribute('data-theme', 'light');
+    btn.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+function toggleMenu() {
+  document.getElementById('dd').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('dd').classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.burger') && !e.target.closest('.dd')) closeMenu();
+});
+var saved = localStorage.getItem('theme');
+if (saved) {
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('theme-btn').textContent = saved === 'dark' ? '☀️' : '🌙';
+}
+
+// PRICE
 var prevRate = null;
 function fetchPrice() {
   fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD')
     .then(function(r){ return r.json(); })
     .then(function(d) {
       var rate = d.rates.USD;
-      var rateStr = rate.toFixed(4);
-      document.getElementById('price').textContent = rateStr;
-
+      document.getElementById('price').textContent = rate.toFixed(4);
       if (prevRate !== null) {
         var diff = rate - prevRate;
         var pct = (diff / prevRate * 100);
         var el = document.getElementById('price-chg');
         if (diff >= 0) {
-          el.textContent = '▲ +' + diff.toFixed(4) + ' (+' + pct.toFixed(2) + '%)';
-          el.className = 'price-chg green';
+          el.textContent = '▲ +' + diff.toFixed(4) + ' (+' + Math.abs(pct).toFixed(2) + '%)';
+          el.style.color = 'var(--green)';
         } else {
           el.textContent = '▼ ' + diff.toFixed(4) + ' (' + pct.toFixed(2) + '%)';
-          el.className = 'price-chg red';
+          el.style.color = 'var(--red)';
         }
       } else {
-        document.getElementById('price-chg').textContent = '● ECB live';
-        document.getElementById('price-chg').className = 'price-chg green';
+        var el = document.getElementById('price-chg');
+        el.textContent = '● live ECB';
+        el.style.color = 'var(--green)';
       }
       prevRate = rate;
-
-      // Volatility calc from range
-      fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD')
-        .then(function(r2){ return r2.json(); })
-        .then(function(d2){
-          // Use 90-day data for ATR approximation
-          var now = new Date();
-          document.getElementById('p-time').textContent =
-            'обновлено ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-        });
-    })
-    .catch(function() {
-      document.getElementById('p-time').textContent = 'ошибка соединения';
+      var now = new Date();
+      document.getElementById('p-time').textContent =
+        'обновлено ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    }).catch(function(){
+      document.getElementById('p-time').textContent = 'ошибка';
     });
 }
 
-// Fetch historical for high/low/range
+// HISTORY
 function fetchHistory() {
   var today = new Date();
-  var yyyy = today.getFullYear();
-  var mm = String(today.getMonth()+1).padStart(2,'0');
-  var dd = String(today.getDate()).padStart(2,'0');
-  var dateStr = yyyy + '-' + mm + '-' + dd;
-
-  fetch('https://api.frankfurter.dev/v1/' + dateStr + '?base=EUR&symbols=USD')
+  var fmt = function(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+  var d30 = new Date(today); d30.setDate(d30.getDate()-30);
+  fetch('https://api.frankfurter.dev/v1/'+fmt(d30)+'..'+fmt(today)+'?base=EUR&symbols=USD')
     .then(function(r){ return r.json(); })
-    .then(function(d){
-      var rate = d.rates.USD;
-      document.getElementById('p-open').textContent = rate.toFixed(4);
-    }).catch(function(){});
-
-  // 30-day range for volatility
-  var d30 = new Date(today);
-  d30.setDate(d30.getDate() - 30);
-  var from = d30.getFullYear() + '-' + String(d30.getMonth()+1).padStart(2,'0') + '-' + String(d30.getDate()).padStart(2,'0');
-
-  fetch('https://api.frankfurter.dev/v1/' + from + '..' + dateStr + '?base=EUR&symbols=USD')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
+    .then(function(d) {
       var rates = Object.values(d.rates).map(function(x){ return x.USD; });
       var high = Math.max.apply(null, rates);
       var low = Math.min.apply(null, rates);
       var range = Math.round((high - low) * 10000);
-      var atr = Math.round((high - low) / low * 10000);
-
+      document.getElementById('p-open').textContent = rates[0].toFixed(4);
       document.getElementById('p-high').textContent = high.toFixed(4);
       document.getElementById('p-low').textContent = low.toFixed(4);
-      document.getElementById('p-range').textContent = range + ' пп (30д)';
-
-      // Volatility display
+      document.getElementById('p-range').textContent = range + ' пп';
       document.getElementById('vol-val').textContent = range + ' пп';
-      var level, color;
-      if (range < 200) { level = 'Низкая · 30д диапазон'; color = 'var(--green)'; }
-      else if (range < 400) { level = 'Умеренная · 30д диапазон'; color = 'var(--amber)'; }
-      else { level = 'Высокая · 30д диапазон'; color = 'var(--red)'; }
-      document.getElementById('vol-label').textContent = level;
+      var level, color, pct;
+      if (range < 150) { level='Низкая'; color='var(--green)'; pct=15; }
+      else if (range < 300) { level='Умеренная'; color='var(--amber)'; pct=45; }
+      else if (range < 500) { level='Высокая'; color='var(--red)'; pct=75; }
+      else { level='Очень высокая'; color='var(--red)'; pct=92; }
+      document.getElementById('vol-label').textContent = level + ' · 30д диапазон';
       document.getElementById('vol-val').style.color = color;
-
-      var pct = Math.min(Math.max(range / 600 * 100, 5), 95);
       document.getElementById('vol-marker').style.left = pct + '%';
     }).catch(function(){});
 }
 
-// === NEWS via RSS proxy ===
-function fetchNews() {
-  var rssUrl = 'https://ru.investing.com/rss/news_301.rss';
-  var proxyUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&count=5';
-
-  fetch(proxyUrl)
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      var container = document.getElementById('news-container');
-      if (!d.items || !d.items.length) {
-        container.innerHTML = '<div class="news-loading">Нет данных</div>';
-        return;
-      }
-      container.innerHTML = d.items.slice(0, 5).map(function(item) {
-        var date = new Date(item.pubDate);
-        var now = new Date();
-        var diff = Math.round((now - date) / 60000);
-        var timeStr = diff < 60 ? diff + ' мин назад' : Math.round(diff/60) + 'ч назад';
-        var title = item.title.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
-        return '<div class="news-item">' +
-          '<div class="news-meta"><span>Investing.com</span><span class="news-time">' + timeStr + '</span>' +
-          '<span class="news-tag">EUR/USD</span></div>' +
-          '<div class="news-title">' + title + '</div></div>';
-      }).join('');
-    })
-    .catch(function() {
-      document.getElementById('news-container').innerHTML =
-        '<div class="news-loading err">Не удалось загрузить новости</div>';
-    });
-}
-
-// Init
 fetchPrice();
 fetchHistory();
-fetchNews();
 setInterval(fetchPrice, 30000);
-setInterval(fetchNews, 300000);
 setInterval(fetchHistory, 3600000);
 </script>
-
 </body>
 </html>
