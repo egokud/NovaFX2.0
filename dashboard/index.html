@@ -157,9 +157,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 
   <!-- NEWS TradingView -->
   <div class="card full" style="padding:0;overflow:hidden;">
-    <div class="clabel" style="padding:14px 14px 0;">Новости EUR/USD <span class="auto-tag">● TradingView · авто</span></div>
-    <div class="tradingview-widget-container" style="height:500px;">
-      <div class="tradingview-widget-container__widget" style="height:100%;"></div>
+    <div class="clabel" style="padding:14px 14px 8px;">Новости EUR/USD <span class="auto-tag">● TradingView · авто</span></div>
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
       {
         "feedMode": "symbol",
@@ -167,7 +167,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
         "isTransparent": true,
         "displayMode": "regular",
         "width": "100%",
-        "height": "500",
+        "height": "600",
         "colorTheme": "dark",
         "locale": "en"
       }
@@ -234,15 +234,23 @@ function fetchPrice() {
 function fetchHistory() {
   var today = new Date();
   var fmt = function(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+  var todayStr = fmt(today);
   var d30 = new Date(today); d30.setDate(d30.getDate()-30);
-  fetch('https://api.frankfurter.dev/v1/'+fmt(d30)+'..'+fmt(today)+'?base=EUR&symbols=USD')
+  var d30Str = fmt(d30);
+  // Get today's open (yesterday's close)
+  var yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+  fetch('https://api.frankfurter.dev/v1/'+fmt(yesterday)+'?base=EUR&symbols=USD')
+    .then(function(r){ return r.json(); })
+    .then(function(d){ document.getElementById('p-open').textContent = d.rates.USD.toFixed(4); })
+    .catch(function(){});
+  // Get 30d range for vol/high/low
+  fetch('https://api.frankfurter.dev/v1/'+d30Str+'..'+todayStr+'?base=EUR&symbols=USD')
     .then(function(r){ return r.json(); })
     .then(function(d) {
       var rates = Object.values(d.rates).map(function(x){ return x.USD; });
       var high = Math.max.apply(null, rates);
       var low = Math.min.apply(null, rates);
       var range = Math.round((high - low) * 10000);
-      document.getElementById('p-open').textContent = rates[0].toFixed(4);
       document.getElementById('p-high').textContent = high.toFixed(4);
       document.getElementById('p-low').textContent = low.toFixed(4);
       document.getElementById('p-range').textContent = range + ' пп';
