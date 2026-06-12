@@ -173,10 +173,10 @@ function closeMenu() { dropdown.classList.remove('open'); }
 
 var prevRate = null;
 function fetchPrice() {
-  fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD')
+  fetch('https://open.er-api.com/v6/latest/EUR')
     .then(function(r){ return r.json(); })
     .then(function(d) {
-      var rate = d.rates.USD;
+      var rate = d.rates['USD'];
       document.getElementById('price').textContent = rate.toFixed(4);
       if (prevRate !== null) {
         var diff = rate - prevRate;
