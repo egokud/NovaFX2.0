@@ -74,7 +74,7 @@ export default async function handler(req) {
         { text: '🌐 Сайт', url: 'https://novafx20-alpha.vercel.app' },
         { text: '📊 Дашборд', url: 'https://novafx20-alpha.vercel.app/dashboard' }
       ], [
-        { text: '💬 Написать нам', url: 'https://t.me/DigitalNovaLabs' }
+        { text: '💬 Написать нам', url: 'https://t.me/digitalnovafx' }
       ]] }
     );
   }
