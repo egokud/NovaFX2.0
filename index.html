@@ -205,15 +205,15 @@ footer a:hover{color:var(--text);}
 /* BACKTEST */
 .bt-params{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:24px;}
 .bt-param{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r-sm);padding:12px 14px;}
-.bt-param-label{font-size:13px;color:var(--text-2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.bt-param-label{font-size:13px;color:var(--text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
 .bt-param-val{font-size:15px;font-weight:600;color:var(--text);}
 .bt-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:24px;}
 @media(max-width:700px){.bt-cards{grid-template-columns:1fr 1fr;}}
 @media(max-width:400px){.bt-cards{grid-template-columns:1fr;}}
 .bt-card{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:16px;}
-.bt-card-label{font-size:13px;color:var(--text-3);margin-bottom:6px;}
+.bt-card-label{font-size:13px;color:var(--text);margin-bottom:6px;}
 .bt-card-val{font-size:30px;font-weight:700;font-family:var(--font-d);margin-bottom:3px;}
-.bt-card-sub{font-size:13px;color:var(--text-3);line-height:1.5;}
+.bt-card-sub{font-size:13px;color:var(--text-2);line-height:1.5;}
 .bt-green .bt-card-val{color:var(--green);}
 .bt-blue .bt-card-val{color:var(--blue);}
 .bt-orange .bt-card-val{color:var(--orange);}
@@ -221,7 +221,7 @@ footer a:hover{color:var(--text);}
 .bt-purple .bt-card-val{color:#a855f7;}
 .bt-chart-wrap{background:var(--bg-card);border:.5px solid var(--border-light);border-radius:var(--r);padding:20px;margin-bottom:16px;}
 .bt-chart-label{font-size:13px;font-weight:600;margin-bottom:4px;}
-.bt-chart-desc{font-size:14px;color:var(--text-3);margin-bottom:16px;line-height:1.5;}
+.bt-chart-desc{font-size:14px;color:var(--text-2);margin-bottom:16px;line-height:1.5;}
 .bt-chart-inner{width:100%;height:200px;border-radius:var(--r-sm);overflow:visible;}
 .bt-chart-legend{display:flex;gap:16px;margin-top:10px;font-size:13px;color:var(--text-2);}
 .bt-leg{display:flex;align-items:center;gap:5px;}
@@ -489,25 +489,6 @@ footer a:hover{color:var(--text);}
       <div class="bt-card-label">Прибыльность</div>
       <div class="bt-card-val">1.61</div>
       <div class="bt-card-sub">на каждый $ убытка — 1.61 $ прибыли</div>
-    </div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:16px;">
-    <div class="bt-param">
-      <div class="bt-param-label">Начальный депозит</div>
-      <div class="bt-param-val">$25 000</div>
-    </div>
-    <div class="bt-param">
-      <div class="bt-param-label">Финальный баланс</div>
-      <div class="bt-param-val" style="color:var(--blue);">$78 759</div>
-    </div>
-    <div class="bt-param">
-      <div class="bt-param-label">Прирост капитала</div>
-      <div class="bt-param-val" style="color:var(--green);">+215%</div>
-    </div>
-    <div class="bt-param">
-      <div class="bt-param-label">Период</div>
-      <div class="bt-param-val">2023–2026</div>
     </div>
   </div>
 
