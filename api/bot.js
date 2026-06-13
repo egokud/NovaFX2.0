@@ -63,7 +63,20 @@ export default async function handler(req) {
   const cb = body.callback_query?.data;
   const markup = { inline_keyboard: [[{ text: 'Update', callback_data:'update'},{ text:'Dashboard', url:'https://novafx20-alpha.vercel.app/dashboard'}]] };
   if (text === '/start') {
-    await sendMsg(chat_id, '<b>NovaFX Dashboard Bot</b>\n\nUpdates EUR/USD price on your dashboard.', markup);
+    await sendMsg(chat_id,
+      '👋 <b>Добро пожаловать в NovaFX!</b>\n\n' +
+      'Мы разрабатываем алгоритмические торговые стратегии для EUR/USD на платформе MetaTrader 5.\n\n' +
+      '📈 Реализация любой из трёх стратегий торговли\n' +
+      '🤖 Советник работает автоматически 24/5 на VPS\n' +
+      '📊 Минимальный депозит — от $1 000\n\n' +
+      'Узнать подробнее и начать:',
+      { inline_keyboard: [[
+        { text: '🌐 Сайт', url: 'https://novafx20-alpha.vercel.app' },
+        { text: '📊 Дашборд', url: 'https://novafx20-alpha.vercel.app/dashboard' }
+      ], [
+        { text: '💬 Написать нам', url: 'https://t.me/DigitalNovaLabs' }
+      ]] }
+    );
   }
   if (cb === 'update') {
     await fetch(TG_API+'/answerCallbackQuery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({callback_query_id:body.callback_query.id,text:'Updating...'})});
