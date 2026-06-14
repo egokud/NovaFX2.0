@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<script>(function(){var t=localStorage.getItem("nova-theme")||"dark";document.documentElement.setAttribute("data-theme",t);})();</script>
+<script>(function(){var t=localStorage.getItem("novafx-theme")||"dark";document.documentElement.setAttribute("data-theme",t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор просадки — NovaFX</title>
@@ -137,6 +137,18 @@
   background: rgba(5,150,105,0.2) !important;
   border-color: #059669 !important;
   color: #6ee7b7 !important;
+}
+
+[data-theme="light"] #theme-toggle,
+[data-theme="light"] #back-btn {
+  background: rgba(0,0,0,0.06) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #374151 !important;
+}
+[data-theme="light"] #back-btn:hover {
+  background: rgba(5,150,105,0.12) !important;
+  border-color: #059669 !important;
+  color: #065f46 !important;
 }
 </style>
 </head>
@@ -466,11 +478,11 @@ function applyTheme(t){
 }
 function toggleTheme(){
   var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  localStorage.setItem('nova-theme', cur);
+  localStorage.setItem('novafx-theme', cur);
   applyTheme(cur);
 }
 (function(){
-  var saved = localStorage.getItem('nova-theme') || 'dark';
+  var saved = localStorage.getItem('novafx-theme') || 'dark';
   applyTheme(saved);
 })();
 </script>
