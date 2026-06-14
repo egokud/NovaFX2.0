@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaFX — Автоматический торговый алгоритм</title>
+<title>NovaFX â ÐÐ²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸Ð¹ ÑÐ¾ÑÐ³Ð¾Ð²ÑÐ¹ Ð°Ð»Ð³Ð¾ÑÐ¸ÑÐ¼</title>
+<meta property="og:title" content="NovaFX — Автоматический торговый алгоритм">
+<meta property="og:description" content="Советник для торговли EUR/USD на MetaTrader 5.">
+<meta property="og:image" content="https://raw.githubusercontent.com/egokud/NovaFX2.0/main/og-image.png">
+<meta property="og:url" content="https://www.novafx.io">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/egokud/NovaFX2.0/main/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -247,20 +254,20 @@ footer a:hover{color:var(--text);}
       <div class="nav-dot"></div>
       <span class="nav-name">NovaFX</span>
     </a>
-    <a href="/dashboard" class="nav-a nav-dashboard">Дашборд</a>
+    <a href="/dashboard" class="nav-a nav-dashboard">ÐÐ°ÑÐ±Ð¾ÑÐ´</a>
   </div>
   <div class="nav-right">
     <!-- Desktop links -->
     <div class="nav-links">
-      <a href="#about" class="nav-a">О продукте</a>
-      <a href="#contacts" class="nav-a">Контакты</a>
-      <a href="https://t.me/digitalnovafx" target="_blank" class="nav-a">Техподдержка</a>
+      <a href="#about" class="nav-a">Ð Ð¿ÑÐ¾Ð´ÑÐºÑÐµ</a>
+      <a href="#contacts" class="nav-a">ÐÐ¾Ð½ÑÐ°ÐºÑÑ</a>
+      <a href="https://t.me/digitalnovafx" target="_blank" class="nav-a">Ð¢ÐµÑÐ¿Ð¾Ð´Ð´ÐµÑÐ¶ÐºÐ°</a>
       <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a nav-cta">Telegram</a>
     </div>
     <!-- Theme toggle -->
-    <button class="theme-btn" id="theme-btn">🌙</button>
+    <button class="theme-btn" id="theme-btn">ð</button>
     <!-- Hamburger (mobile only) -->
-    <button class="burger-btn" id="burger-btn" aria-label="Меню">
+    <button class="burger-btn" id="burger-btn" aria-label="ÐÐµÐ½Ñ">
       <span class="burger-line"></span>
       <span class="burger-line"></span>
       <span class="burger-line"></span>
@@ -268,33 +275,33 @@ footer a:hover{color:var(--text);}
   </div>
   <!-- Dropdown menu -->
   <div class="nav-dropdown" id="nav-dropdown">
-    <a href="#about" onclick="closeMenu()">О продукте</a>
-    <a href="#contacts" onclick="closeMenu()">Контакты</a>
-    <a href="https://t.me/digitalnovafx" target="_blank" onclick="closeMenu()">Техподдержка</a>
+    <a href="#about" onclick="closeMenu()">Ð Ð¿ÑÐ¾Ð´ÑÐºÑÐµ</a>
+    <a href="#contacts" onclick="closeMenu()">ÐÐ¾Ð½ÑÐ°ÐºÑÑ</a>
+    <a href="https://t.me/digitalnovafx" target="_blank" onclick="closeMenu()">Ð¢ÐµÑÐ¿Ð¾Ð´Ð´ÐµÑÐ¶ÐºÐ°</a>
     <hr>
-    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="dd-tg" onclick="closeMenu()">✈️ Telegram</a>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="dd-tg" onclick="closeMenu()">âï¸ Telegram</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div>
-    <div class="badge"><div class="badge-dot"></div>Форекс · Алготрейдинг · EUR/USD · M5</div>
-    <h1>Торгует<br>вместо <span>вас</span></h1>
-    <p class="hero-sub">NovaFX — автоматический советник для торговли на рынке Форекс (EUR/USD) через MetaTrader 5. Работает 24/5 на VPS без вашего участия в каждой сделке.</p>
+    <div class="badge"><div class="badge-dot"></div>Ð¤Ð¾ÑÐµÐºÑ Â· ÐÐ»Ð³Ð¾ÑÑÐµÐ¹Ð´Ð¸Ð½Ð³ Â· EUR/USD Â· M5</div>
+    <h1>Ð¢Ð¾ÑÐ³ÑÐµÑ<br>Ð²Ð¼ÐµÑÑÐ¾ <span>Ð²Ð°Ñ</span></h1>
+    <p class="hero-sub">NovaFX â Ð°Ð²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸Ð¹ ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº Ð´Ð»Ñ ÑÐ¾ÑÐ³Ð¾Ð²Ð»Ð¸ Ð½Ð° ÑÑÐ½ÐºÐµ Ð¤Ð¾ÑÐµÐºÑ (EUR/USD) ÑÐµÑÐµÐ· MetaTrader 5. Ð Ð°Ð±Ð¾ÑÐ°ÐµÑ 24/5 Ð½Ð° VPS Ð±ÐµÐ· Ð²Ð°ÑÐµÐ³Ð¾ ÑÑÐ°ÑÑÐ¸Ñ Ð² ÐºÐ°Ð¶Ð´Ð¾Ð¹ ÑÐ´ÐµÐ»ÐºÐµ.</p>
     <div class="hero-btns">
-      <a href="https://nova-fx-calc-profit.vercel.app" target="_blank" class="btn-green">📈 Калькулятор доходности</a>
-      <a href="https://novafx-calculator.vercel.app" target="_blank" class="btn-outline">🛡 Калькулятор просадки</a>
+      <a href="https://nova-fx-calc-profit.vercel.app" target="_blank" class="btn-green">ð ÐÐ°Ð»ÑÐºÑÐ»ÑÑÐ¾Ñ Ð´Ð¾ÑÐ¾Ð´Ð½Ð¾ÑÑÐ¸</a>
+      <a href="https://novafx-calculator.vercel.app" target="_blank" class="btn-outline">ð¡ ÐÐ°Ð»ÑÐºÑÐ»ÑÑÐ¾Ñ Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ¸</a>
     </div>
     <div style="margin-top:16px;">
-      <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">Попробовать советник бесплатно →</a>
+      <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">ÐÐ¾Ð¿ÑÐ¾Ð±Ð¾Ð²Ð°ÑÑ ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº Ð±ÐµÑÐ¿Ð»Ð°ÑÐ½Ð¾ â</a>
     </div>
   </div>
   <div class="hero-stats">
-    <div class="stat s-green"><div class="stat-val">24/5</div><div class="stat-label">Работает без остановок</div></div>
-    <div class="stat s-blue"><div class="stat-val">EUR/USD</div><div class="stat-label">Самая ликвидная пара</div></div>
-    <div class="stat s-orange"><div class="stat-val">3</div><div class="stat-label">Стратегии на выбор</div></div>
-    <div class="stat"><div class="stat-val">MT5</div><div class="stat-label">MetaTrader 5 · RoboForex</div></div>
+    <div class="stat s-green"><div class="stat-val">24/5</div><div class="stat-label">Ð Ð°Ð±Ð¾ÑÐ°ÐµÑ Ð±ÐµÐ· Ð¾ÑÑÐ°Ð½Ð¾Ð²Ð¾Ðº</div></div>
+    <div class="stat s-blue"><div class="stat-val">EUR/USD</div><div class="stat-label">Ð¡Ð°Ð¼Ð°Ñ Ð»Ð¸ÐºÐ²Ð¸Ð´Ð½Ð°Ñ Ð¿Ð°ÑÐ°</div></div>
+    <div class="stat s-orange"><div class="stat-val">3</div><div class="stat-label">Ð¡ÑÑÐ°ÑÐµÐ³Ð¸Ð¸ Ð½Ð° Ð²ÑÐ±Ð¾Ñ</div></div>
+    <div class="stat"><div class="stat-val">MT5</div><div class="stat-label">MetaTrader 5 Â· RoboForex</div></div>
   </div>
 </section>
 
@@ -302,67 +309,67 @@ footer a:hover{color:var(--text);}
 
 <!-- ABOUT -->
 <section class="section" id="about">
-  <div class="section-title">Что такое NovaFX</div>
-  <p class="section-sub">Автоматический торговый алгоритм — советник работает самостоятельно, без вашего участия в каждой сделке.</p>
+  <div class="section-title">Ð§ÑÐ¾ ÑÐ°ÐºÐ¾Ðµ NovaFX</div>
+  <p class="section-sub">ÐÐ²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸Ð¹ ÑÐ¾ÑÐ³Ð¾Ð²ÑÐ¹ Ð°Ð»Ð³Ð¾ÑÐ¸ÑÐ¼ â ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº ÑÐ°Ð±Ð¾ÑÐ°ÐµÑ ÑÐ°Ð¼Ð¾ÑÑÐ¾ÑÑÐµÐ»ÑÐ½Ð¾, Ð±ÐµÐ· Ð²Ð°ÑÐµÐ³Ð¾ ÑÑÐ°ÑÑÐ¸Ñ Ð² ÐºÐ°Ð¶Ð´Ð¾Ð¹ ÑÐ´ÐµÐ»ÐºÐµ.</p>
 
   <div class="features">
-    <div class="feat"><div class="feat-icon">⏰</div><div class="feat-title">Свободное время</div><div class="feat-body">Советник работает на VPS-сервере круглосуточно. Не нужно сидеть у графиков или принимать решения по каждой сделке.</div></div>
-    <div class="feat"><div class="feat-icon">🧠</div><div class="feat-title">Торговля без эмоций</div><div class="feat-body">Алгоритм не паникует при просадке и не жадничает при прибыли. Строгая система вместо импульсивных решений.</div></div>
-    <div class="feat"><div class="feat-icon">📊</div><div class="feat-title">Автоматический рост</div><div class="feat-body">Советник сам пересчитывает объём при росте баланса — запускает сложный процент и ускоряет капитализацию.</div></div>
-    <div class="feat"><div class="feat-icon">🔍</div><div class="feat-title">Полная прозрачность</div><div class="feat-body">Мониторинг FX Monitor в реальном времени — каждая сделка, баланс и статистика открыты. Ничего скрытого.</div></div>
+    <div class="feat"><div class="feat-icon">â°</div><div class="feat-title">Ð¡Ð²Ð¾Ð±Ð¾Ð´Ð½Ð¾Ðµ Ð²ÑÐµÐ¼Ñ</div><div class="feat-body">Ð¡Ð¾Ð²ÐµÑÐ½Ð¸Ðº ÑÐ°Ð±Ð¾ÑÐ°ÐµÑ Ð½Ð° VPS-ÑÐµÑÐ²ÐµÑÐµ ÐºÑÑÐ³Ð»Ð¾ÑÑÑÐ¾ÑÐ½Ð¾. ÐÐµ Ð½ÑÐ¶Ð½Ð¾ ÑÐ¸Ð´ÐµÑÑ Ñ Ð³ÑÐ°ÑÐ¸ÐºÐ¾Ð² Ð¸Ð»Ð¸ Ð¿ÑÐ¸Ð½Ð¸Ð¼Ð°ÑÑ ÑÐµÑÐµÐ½Ð¸Ñ Ð¿Ð¾ ÐºÐ°Ð¶Ð´Ð¾Ð¹ ÑÐ´ÐµÐ»ÐºÐµ.</div></div>
+    <div class="feat"><div class="feat-icon">ð§ </div><div class="feat-title">Ð¢Ð¾ÑÐ³Ð¾Ð²Ð»Ñ Ð±ÐµÐ· ÑÐ¼Ð¾ÑÐ¸Ð¹</div><div class="feat-body">ÐÐ»Ð³Ð¾ÑÐ¸ÑÐ¼ Ð½Ðµ Ð¿Ð°Ð½Ð¸ÐºÑÐµÑ Ð¿ÑÐ¸ Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐµ Ð¸ Ð½Ðµ Ð¶Ð°Ð´Ð½Ð¸ÑÐ°ÐµÑ Ð¿ÑÐ¸ Ð¿ÑÐ¸Ð±ÑÐ»Ð¸. Ð¡ÑÑÐ¾Ð³Ð°Ñ ÑÐ¸ÑÑÐµÐ¼Ð° Ð²Ð¼ÐµÑÑÐ¾ Ð¸Ð¼Ð¿ÑÐ»ÑÑÐ¸Ð²Ð½ÑÑ ÑÐµÑÐµÐ½Ð¸Ð¹.</div></div>
+    <div class="feat"><div class="feat-icon">ð</div><div class="feat-title">ÐÐ²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸Ð¹ ÑÐ¾ÑÑ</div><div class="feat-body">Ð¡Ð¾Ð²ÐµÑÐ½Ð¸Ðº ÑÐ°Ð¼ Ð¿ÐµÑÐµÑÑÐ¸ÑÑÐ²Ð°ÐµÑ Ð¾Ð±ÑÑÐ¼ Ð¿ÑÐ¸ ÑÐ¾ÑÑÐµ Ð±Ð°Ð»Ð°Ð½ÑÐ° â Ð·Ð°Ð¿ÑÑÐºÐ°ÐµÑ ÑÐ»Ð¾Ð¶Ð½ÑÐ¹ Ð¿ÑÐ¾ÑÐµÐ½Ñ Ð¸ ÑÑÐºÐ¾ÑÑÐµÑ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»Ð¸Ð·Ð°ÑÐ¸Ñ.</div></div>
+    <div class="feat"><div class="feat-icon">ð</div><div class="feat-title">ÐÐ¾Ð»Ð½Ð°Ñ Ð¿ÑÐ¾Ð·ÑÐ°ÑÐ½Ð¾ÑÑÑ</div><div class="feat-body">ÐÐ¾Ð½Ð¸ÑÐ¾ÑÐ¸Ð½Ð³ FX Monitor Ð² ÑÐµÐ°Ð»ÑÐ½Ð¾Ð¼ Ð²ÑÐµÐ¼ÐµÐ½Ð¸ â ÐºÐ°Ð¶Ð´Ð°Ñ ÑÐ´ÐµÐ»ÐºÐ°, Ð±Ð°Ð»Ð°Ð½Ñ Ð¸ ÑÑÐ°ÑÐ¸ÑÑÐ¸ÐºÐ° Ð¾ÑÐºÑÑÑÑ. ÐÐ¸ÑÐµÐ³Ð¾ ÑÐºÑÑÑÐ¾Ð³Ð¾.</div></div>
   </div>
 
   <div class="strat-grid">
     <div class="strat s-cons">
-      <div class="strat-name">Консервативная</div>
-      <div class="strat-yield">20–100%</div>
-      <div class="strat-desc">годовых ориентир*<br>Минимальный риск. Контроль 1–2 раза в месяц. Идеально для роста большого капитала.</div>
-      <div class="strat-entry">Резервный капитал: <strong>+100% к депозиту</strong></div>
+      <div class="strat-name">ÐÐ¾Ð½ÑÐµÑÐ²Ð°ÑÐ¸Ð²Ð½Ð°Ñ</div>
+      <div class="strat-yield">20â100%</div>
+      <div class="strat-desc">Ð³Ð¾Ð´Ð¾Ð²ÑÑ Ð¾ÑÐ¸ÐµÐ½ÑÐ¸Ñ*<br>ÐÐ¸Ð½Ð¸Ð¼Ð°Ð»ÑÐ½ÑÐ¹ ÑÐ¸ÑÐº. ÐÐ¾Ð½ÑÑÐ¾Ð»Ñ 1â2 ÑÐ°Ð·Ð° Ð² Ð¼ÐµÑÑÑ. ÐÐ´ÐµÐ°Ð»ÑÐ½Ð¾ Ð´Ð»Ñ ÑÐ¾ÑÑÐ° Ð±Ð¾Ð»ÑÑÐ¾Ð³Ð¾ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»Ð°.</div>
+      <div class="strat-entry">Ð ÐµÐ·ÐµÑÐ²Ð½ÑÐ¹ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»: <strong>+100% Ðº Ð´ÐµÐ¿Ð¾Ð·Ð¸ÑÑ</strong></div>
     </div>
     <div class="strat s-mod">
-      <div class="strat-name">Умеренная</div>
-      <div class="strat-yield">50–150%</div>
-      <div class="strat-desc">годовых ориентир*<br>Баланс риска и доходности. Контроль 1–3 раза в неделю.</div>
-      <div class="strat-entry">Резервный капитал: <strong>+200% к депозиту</strong></div>
+      <div class="strat-name">Ð£Ð¼ÐµÑÐµÐ½Ð½Ð°Ñ</div>
+      <div class="strat-yield">50â150%</div>
+      <div class="strat-desc">Ð³Ð¾Ð´Ð¾Ð²ÑÑ Ð¾ÑÐ¸ÐµÐ½ÑÐ¸Ñ*<br>ÐÐ°Ð»Ð°Ð½Ñ ÑÐ¸ÑÐºÐ° Ð¸ Ð´Ð¾ÑÐ¾Ð´Ð½Ð¾ÑÑÐ¸. ÐÐ¾Ð½ÑÑÐ¾Ð»Ñ 1â3 ÑÐ°Ð·Ð° Ð² Ð½ÐµÐ´ÐµÐ»Ñ.</div>
+      <div class="strat-entry">Ð ÐµÐ·ÐµÑÐ²Ð½ÑÐ¹ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»: <strong>+200% Ðº Ð´ÐµÐ¿Ð¾Ð·Ð¸ÑÑ</strong></div>
     </div>
     <div class="strat s-agg">
-      <div class="strat-name">Агрессивная</div>
-      <div class="strat-yield">100% – ∞</div>
-      <div class="strat-desc">годовых ориентир*<br>Максимальный потенциал. Ежедневный контроль. Для опытных.</div>
-      <div class="strat-entry">Резервный капитал: <strong>+400% к депозиту</strong></div>
+      <div class="strat-name">ÐÐ³ÑÐµÑÑÐ¸Ð²Ð½Ð°Ñ</div>
+      <div class="strat-yield">100% â â</div>
+      <div class="strat-desc">Ð³Ð¾Ð´Ð¾Ð²ÑÑ Ð¾ÑÐ¸ÐµÐ½ÑÐ¸Ñ*<br>ÐÐ°ÐºÑÐ¸Ð¼Ð°Ð»ÑÐ½ÑÐ¹ Ð¿Ð¾ÑÐµÐ½ÑÐ¸Ð°Ð». ÐÐ¶ÐµÐ´Ð½ÐµÐ²Ð½ÑÐ¹ ÐºÐ¾Ð½ÑÑÐ¾Ð»Ñ. ÐÐ»Ñ Ð¾Ð¿ÑÑÐ½ÑÑ.</div>
+      <div class="strat-entry">Ð ÐµÐ·ÐµÑÐ²Ð½ÑÐ¹ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»: <strong>+400% Ðº Ð´ÐµÐ¿Ð¾Ð·Ð¸ÑÑ</strong></div>
     </div>
   </div>
-  <p style="font-size:12px;color:var(--text-3);margin-bottom:24px;">* Ориентиры основаны на исторических данных и не являются гарантией доходности.</p>
+  <p style="font-size:12px;color:var(--text-3);margin-bottom:24px;">* ÐÑÐ¸ÐµÐ½ÑÐ¸ÑÑ Ð¾ÑÐ½Ð¾Ð²Ð°Ð½Ñ Ð½Ð° Ð¸ÑÑÐ¾ÑÐ¸ÑÐµÑÐºÐ¸Ñ Ð´Ð°Ð½Ð½ÑÑ Ð¸ Ð½Ðµ ÑÐ²Ð»ÑÑÑÑÑ Ð³Ð°ÑÐ°Ð½ÑÐ¸ÐµÐ¹ Ð´Ð¾ÑÐ¾Ð´Ð½Ð¾ÑÑÐ¸.</p>
   <div class="cta-block">
   <div class="cta-block-inner">
-    <div class="cta-block-title">Хотите попробовать?</div>
-    <div class="cta-block-sub">Напишите нам — расскажем как начать и ответим на все вопросы</div>
-    <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">Попробовать советник бесплатно →</a>
+    <div class="cta-block-title">Ð¥Ð¾ÑÐ¸ÑÐµ Ð¿Ð¾Ð¿ÑÐ¾Ð±Ð¾Ð²Ð°ÑÑ?</div>
+    <div class="cta-block-sub">ÐÐ°Ð¿Ð¸ÑÐ¸ÑÐµ Ð½Ð°Ð¼ â ÑÐ°ÑÑÐºÐ°Ð¶ÐµÐ¼ ÐºÐ°Ðº Ð½Ð°ÑÐ°ÑÑ Ð¸ Ð¾ÑÐ²ÐµÑÐ¸Ð¼ Ð½Ð° Ð²ÑÐµ Ð²Ð¾Ð¿ÑÐ¾ÑÑ</div>
+    <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">ÐÐ¾Ð¿ÑÐ¾Ð±Ð¾Ð²Ð°ÑÑ ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº Ð±ÐµÑÐ¿Ð»Ð°ÑÐ½Ð¾ â</a>
   </div>
 </div>
 
-  <div class="section-title" style="margin-bottom:8px;">Как работает алгоритм</div>
-  <p class="section-sub">Стратегия сетки с усреднением — каждая серия ордеров закрывается с положительным суммарным результатом.</p>
+  <div class="section-title" style="margin-bottom:8px;">ÐÐ°Ðº ÑÐ°Ð±Ð¾ÑÐ°ÐµÑ Ð°Ð»Ð³Ð¾ÑÐ¸ÑÐ¼</div>
+  <p class="section-sub">Ð¡ÑÑÐ°ÑÐµÐ³Ð¸Ñ ÑÐµÑÐºÐ¸ Ñ ÑÑÑÐµÐ´Ð½ÐµÐ½Ð¸ÐµÐ¼ â ÐºÐ°Ð¶Ð´Ð°Ñ ÑÐµÑÐ¸Ñ Ð¾ÑÐ´ÐµÑÐ¾Ð² Ð·Ð°ÐºÑÑÐ²Ð°ÐµÑÑÑ Ñ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸ÑÐµÐ»ÑÐ½ÑÐ¼ ÑÑÐ¼Ð¼Ð°ÑÐ½ÑÐ¼ ÑÐµÐ·ÑÐ»ÑÑÐ°ÑÐ¾Ð¼.</p>
   <div class="steps">
     <div class="step">
       <div class="step-wrap"><div class="step-num">1</div><div class="step-line"></div></div>
-      <div class="step-content"><div class="step-title">Умное усреднение вместо стоп-лосса</div><div class="step-desc">Если цена идёт против позиции — советник открывает следующий ордер по более выгодной цене, снижая среднюю цену входа по всей серии.</div></div>
+      <div class="step-content"><div class="step-title">Ð£Ð¼Ð½Ð¾Ðµ ÑÑÑÐµÐ´Ð½ÐµÐ½Ð¸Ðµ Ð²Ð¼ÐµÑÑÐ¾ ÑÑÐ¾Ð¿-Ð»Ð¾ÑÑÐ°</div><div class="step-desc">ÐÑÐ»Ð¸ ÑÐµÐ½Ð° Ð¸Ð´ÑÑ Ð¿ÑÐ¾ÑÐ¸Ð² Ð¿Ð¾Ð·Ð¸ÑÐ¸Ð¸ â ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº Ð¾ÑÐºÑÑÐ²Ð°ÐµÑ ÑÐ»ÐµÐ´ÑÑÑÐ¸Ð¹ Ð¾ÑÐ´ÐµÑ Ð¿Ð¾ Ð±Ð¾Ð»ÐµÐµ Ð²ÑÐ³Ð¾Ð´Ð½Ð¾Ð¹ ÑÐµÐ½Ðµ, ÑÐ½Ð¸Ð¶Ð°Ñ ÑÑÐµÐ´Ð½ÑÑ ÑÐµÐ½Ñ Ð²ÑÐ¾Ð´Ð° Ð¿Ð¾ Ð²ÑÐµÐ¹ ÑÐµÑÐ¸Ð¸.</div></div>
     </div>
     <div class="step">
       <div class="step-wrap"><div class="step-num">2</div><div class="step-line"></div></div>
-      <div class="step-content"><div class="step-title">Нарастающий объём — быстрый выход</div><div class="step-desc">Каждый последующий ордер в серии позволяет вывести суммарные позиции в плюс значительно быстрее при развороте цены.</div></div>
+      <div class="step-content"><div class="step-title">ÐÐ°ÑÐ°ÑÑÐ°ÑÑÐ¸Ð¹ Ð¾Ð±ÑÑÐ¼ â Ð±ÑÑÑÑÑÐ¹ Ð²ÑÑÐ¾Ð´</div><div class="step-desc">ÐÐ°Ð¶Ð´ÑÐ¹ Ð¿Ð¾ÑÐ»ÐµÐ´ÑÑÑÐ¸Ð¹ Ð¾ÑÐ´ÐµÑ Ð² ÑÐµÑÐ¸Ð¸ Ð¿Ð¾Ð·Ð²Ð¾Ð»ÑÐµÑ Ð²ÑÐ²ÐµÑÑÐ¸ ÑÑÐ¼Ð¼Ð°ÑÐ½ÑÐµ Ð¿Ð¾Ð·Ð¸ÑÐ¸Ð¸ Ð² Ð¿Ð»ÑÑ Ð·Ð½Ð°ÑÐ¸ÑÐµÐ»ÑÐ½Ð¾ Ð±ÑÑÑÑÐµÐµ Ð¿ÑÐ¸ ÑÐ°Ð·Ð²Ð¾ÑÐ¾ÑÐµ ÑÐµÐ½Ñ.</div></div>
     </div>
     <div class="step">
       <div class="step-wrap"><div class="step-num">3</div><div class="step-line"></div></div>
-      <div class="step-content"><div class="step-title">Закрытие всегда в прибыль</div><div class="step-desc">Вся серия закрывается единым тейкпрофитом — только когда суммарный результат положительный. TP адаптируется к глубине сетки.</div></div>
+      <div class="step-content"><div class="step-title">ÐÐ°ÐºÑÑÑÐ¸Ðµ Ð²ÑÐµÐ³Ð´Ð° Ð² Ð¿ÑÐ¸Ð±ÑÐ»Ñ</div><div class="step-desc">ÐÑÑ ÑÐµÑÐ¸Ñ Ð·Ð°ÐºÑÑÐ²Ð°ÐµÑÑÑ ÐµÐ´Ð¸Ð½ÑÐ¼ ÑÐµÐ¹ÐºÐ¿ÑÐ¾ÑÐ¸ÑÐ¾Ð¼ â ÑÐ¾Ð»ÑÐºÐ¾ ÐºÐ¾Ð³Ð´Ð° ÑÑÐ¼Ð¼Ð°ÑÐ½ÑÐ¹ ÑÐµÐ·ÑÐ»ÑÑÐ°Ñ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸ÑÐµÐ»ÑÐ½ÑÐ¹. TP Ð°Ð´Ð°Ð¿ÑÐ¸ÑÑÐµÑÑÑ Ðº Ð³Ð»ÑÐ±Ð¸Ð½Ðµ ÑÐµÑÐºÐ¸.</div></div>
     </div>
     <div class="step">
       <div class="step-wrap"><div class="step-num">4</div><div class="step-line"></div></div>
-      <div class="step-content"><div class="step-title">Автоматический компаундинг</div><div class="step-desc">После каждого закрытия серии советник пересчитывает объём под текущий баланс. Прибыль автоматически начинает работать на вас.</div></div>
+      <div class="step-content"><div class="step-title">ÐÐ²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸Ð¹ ÐºÐ¾Ð¼Ð¿Ð°ÑÐ½Ð´Ð¸Ð½Ð³</div><div class="step-desc">ÐÐ¾ÑÐ»Ðµ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾ Ð·Ð°ÐºÑÑÑÐ¸Ñ ÑÐµÑÐ¸Ð¸ ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº Ð¿ÐµÑÐµÑÑÐ¸ÑÑÐ²Ð°ÐµÑ Ð¾Ð±ÑÑÐ¼ Ð¿Ð¾Ð´ ÑÐµÐºÑÑÐ¸Ð¹ Ð±Ð°Ð»Ð°Ð½Ñ. ÐÑÐ¸Ð±ÑÐ»Ñ Ð°Ð²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸ Ð½Ð°ÑÐ¸Ð½Ð°ÐµÑ ÑÐ°Ð±Ð¾ÑÐ°ÑÑ Ð½Ð° Ð²Ð°Ñ.</div></div>
     </div>
     <div class="step">
       <div class="step-wrap"><div class="step-num">5</div></div>
-      <div class="step-content"><div class="step-title">Полный контроль</div><div class="step-desc">Панель управления на графике MT5 — Trade Stop, Stop All, Close Buy/Sell. Остановить торговлю можно в любой момент одной кнопкой.</div></div>
+      <div class="step-content"><div class="step-title">ÐÐ¾Ð»Ð½ÑÐ¹ ÐºÐ¾Ð½ÑÑÐ¾Ð»Ñ</div><div class="step-desc">ÐÐ°Ð½ÐµÐ»Ñ ÑÐ¿ÑÐ°Ð²Ð»ÐµÐ½Ð¸Ñ Ð½Ð° Ð³ÑÐ°ÑÐ¸ÐºÐµ MT5 â Trade Stop, Stop All, Close Buy/Sell. ÐÑÑÐ°Ð½Ð¾Ð²Ð¸ÑÑ ÑÐ¾ÑÐ³Ð¾Ð²Ð»Ñ Ð¼Ð¾Ð¶Ð½Ð¾ Ð² Ð»ÑÐ±Ð¾Ð¹ Ð¼Ð¾Ð¼ÐµÐ½Ñ Ð¾Ð´Ð½Ð¾Ð¹ ÐºÐ½Ð¾Ð¿ÐºÐ¾Ð¹.</div></div>
     </div>
   </div>
 </section>
@@ -371,26 +378,26 @@ footer a:hover{color:var(--text);}
 
 <!-- WHY NOVAFX -->
 <section class="section">
-  <div class="section-title">Почему NovaFX</div>
-  <p class="section-sub">Сравнение с другими подходами к торговле на форекс.</p>
+  <div class="section-title">ÐÐ¾ÑÐµÐ¼Ñ NovaFX</div>
+  <p class="section-sub">Ð¡ÑÐ°Ð²Ð½ÐµÐ½Ð¸Ðµ Ñ Ð´ÑÑÐ³Ð¸Ð¼Ð¸ Ð¿Ð¾Ð´ÑÐ¾Ð´Ð°Ð¼Ð¸ Ðº ÑÐ¾ÑÐ³Ð¾Ð²Ð»Ðµ Ð½Ð° ÑÐ¾ÑÐµÐºÑ.</p>
   <div class="compare-wrap">
     <table class="compare-table">
       <thead>
         <tr>
-          <th>Критерий</th>
+          <th>ÐÑÐ¸ÑÐµÑÐ¸Ð¹</th>
           <th class="col-nova">NovaFX</th>
-          <th>Другие Grid EA</th>
-          <th>Ручная торговля</th>
+          <th>ÐÑÑÐ³Ð¸Ðµ Grid EA</th>
+          <th>Ð ÑÑÐ½Ð°Ñ ÑÐ¾ÑÐ³Ð¾Ð²Ð»Ñ</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>Серия закрывается в плюс</td><td class="col-nova">Всегда</td><td>Всегда</td><td>Зависит от навыков</td></tr>
-        <tr><td>Сигнальный фильтр входа</td><td class="col-nova">Встроен</td><td>Слабый или нет</td><td>На усмотрение трейдера</td></tr>
-        <tr><td>Торговля в обе стороны</td><td class="col-nova">Да</td><td>Редко</td><td>Требует опыта</td></tr>
-        <tr><td>Автоматический компаундинг</td><td class="col-nova">Встроен</td><td>Нет</td><td>Ручная настройка</td></tr>
-        <tr><td>Инструменты выхода из просадки</td><td class="col-nova">Force режим</td><td>Нет</td><td>Нет</td></tr>
-        <tr><td>Эмоциональный фактор</td><td class="col-nova">Отсутствует</td><td>Отсутствует</td><td>Высокий</td></tr>
-        <tr><td>Требует присутствия</td><td class="col-nova">1–2 раза/мес</td><td>Периодически</td><td>Постоянно</td></tr>
+        <tr><td>Ð¡ÐµÑÐ¸Ñ Ð·Ð°ÐºÑÑÐ²Ð°ÐµÑÑÑ Ð² Ð¿Ð»ÑÑ</td><td class="col-nova">ÐÑÐµÐ³Ð´Ð°</td><td>ÐÑÐµÐ³Ð´Ð°</td><td>ÐÐ°Ð²Ð¸ÑÐ¸Ñ Ð¾Ñ Ð½Ð°Ð²ÑÐºÐ¾Ð²</td></tr>
+        <tr><td>Ð¡Ð¸Ð³Ð½Ð°Ð»ÑÐ½ÑÐ¹ ÑÐ¸Ð»ÑÑÑ Ð²ÑÐ¾Ð´Ð°</td><td class="col-nova">ÐÑÑÑÐ¾ÐµÐ½</td><td>Ð¡Ð»Ð°Ð±ÑÐ¹ Ð¸Ð»Ð¸ Ð½ÐµÑ</td><td>ÐÐ° ÑÑÐ¼Ð¾ÑÑÐµÐ½Ð¸Ðµ ÑÑÐµÐ¹Ð´ÐµÑÐ°</td></tr>
+        <tr><td>Ð¢Ð¾ÑÐ³Ð¾Ð²Ð»Ñ Ð² Ð¾Ð±Ðµ ÑÑÐ¾ÑÐ¾Ð½Ñ</td><td class="col-nova">ÐÐ°</td><td>Ð ÐµÐ´ÐºÐ¾</td><td>Ð¢ÑÐµÐ±ÑÐµÑ Ð¾Ð¿ÑÑÐ°</td></tr>
+        <tr><td>ÐÐ²ÑÐ¾Ð¼Ð°ÑÐ¸ÑÐµÑÐºÐ¸Ð¹ ÐºÐ¾Ð¼Ð¿Ð°ÑÐ½Ð´Ð¸Ð½Ð³</td><td class="col-nova">ÐÑÑÑÐ¾ÐµÐ½</td><td>ÐÐµÑ</td><td>Ð ÑÑÐ½Ð°Ñ Ð½Ð°ÑÑÑÐ¾Ð¹ÐºÐ°</td></tr>
+        <tr><td>ÐÐ½ÑÑÑÑÐ¼ÐµÐ½ÑÑ Ð²ÑÑÐ¾Ð´Ð° Ð¸Ð· Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ¸</td><td class="col-nova">Force ÑÐµÐ¶Ð¸Ð¼</td><td>ÐÐµÑ</td><td>ÐÐµÑ</td></tr>
+        <tr><td>Ð­Ð¼Ð¾ÑÐ¸Ð¾Ð½Ð°Ð»ÑÐ½ÑÐ¹ ÑÐ°ÐºÑÐ¾Ñ</td><td class="col-nova">ÐÑÑÑÑÑÑÐ²ÑÐµÑ</td><td>ÐÑÑÑÑÑÑÐ²ÑÐµÑ</td><td>ÐÑÑÐ¾ÐºÐ¸Ð¹</td></tr>
+        <tr><td>Ð¢ÑÐµÐ±ÑÐµÑ Ð¿ÑÐ¸ÑÑÑÑÑÐ²Ð¸Ñ</td><td class="col-nova">1â2 ÑÐ°Ð·Ð°/Ð¼ÐµÑ</td><td>ÐÐµÑÐ¸Ð¾Ð´Ð¸ÑÐµÑÐºÐ¸</td><td>ÐÐ¾ÑÑÐ¾ÑÐ½Ð½Ð¾</td></tr>
       </tbody>
     </table>
   </div>
@@ -400,32 +407,32 @@ footer a:hover{color:var(--text);}
 
 <!-- RISKS -->
 <section class="section">
-  <div class="section-title">Честно о рисках</div>
-  <p class="section-sub">Мы говорим о рисках первыми — понимание рисков делает работу с алгоритмом осознанной.</p>
+  <div class="section-title">Ð§ÐµÑÑÐ½Ð¾ Ð¾ ÑÐ¸ÑÐºÐ°Ñ</div>
+  <p class="section-sub">ÐÑ Ð³Ð¾Ð²Ð¾ÑÐ¸Ð¼ Ð¾ ÑÐ¸ÑÐºÐ°Ñ Ð¿ÐµÑÐ²ÑÐ¼Ð¸ â Ð¿Ð¾Ð½Ð¸Ð¼Ð°Ð½Ð¸Ðµ ÑÐ¸ÑÐºÐ¾Ð² Ð´ÐµÐ»Ð°ÐµÑ ÑÐ°Ð±Ð¾ÑÑ Ñ Ð°Ð»Ð³Ð¾ÑÐ¸ÑÐ¼Ð¾Ð¼ Ð¾ÑÐ¾Ð·Ð½Ð°Ð½Ð½Ð¾Ð¹.</p>
   <div class="risks">
-    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">При однонаправленном тренде против набранных позиций просадка будет увеличиваться — это главная особенность стратегии.</div></div>
-    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">Стратегия требует резервного капитала отдельно от торгового депозита — это обязательное условие работы.</div></div>
-    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">Пока серия открыта — на счёте есть плавающий убыток. Это нормальная часть работы алгоритма, не ошибка.</div></div>
-    <div class="risk"><div class="risk-icon">⚠️</div><div class="risk-text">Не рекомендуется использовать заёмный или кредитный капитал. Торгуйте только своими средствами.</div></div>
+    <div class="risk"><div class="risk-icon">â ï¸</div><div class="risk-text">ÐÑÐ¸ Ð¾Ð´Ð½Ð¾Ð½Ð°Ð¿ÑÐ°Ð²Ð»ÐµÐ½Ð½Ð¾Ð¼ ÑÑÐµÐ½Ð´Ðµ Ð¿ÑÐ¾ÑÐ¸Ð² Ð½Ð°Ð±ÑÐ°Ð½Ð½ÑÑ Ð¿Ð¾Ð·Ð¸ÑÐ¸Ð¹ Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ° Ð±ÑÐ´ÐµÑ ÑÐ²ÐµÐ»Ð¸ÑÐ¸Ð²Ð°ÑÑÑÑ â ÑÑÐ¾ Ð³Ð»Ð°Ð²Ð½Ð°Ñ Ð¾ÑÐ¾Ð±ÐµÐ½Ð½Ð¾ÑÑÑ ÑÑÑÐ°ÑÐµÐ³Ð¸Ð¸.</div></div>
+    <div class="risk"><div class="risk-icon">â ï¸</div><div class="risk-text">Ð¡ÑÑÐ°ÑÐµÐ³Ð¸Ñ ÑÑÐµÐ±ÑÐµÑ ÑÐµÐ·ÐµÑÐ²Ð½Ð¾Ð³Ð¾ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»Ð° Ð¾ÑÐ´ÐµÐ»ÑÐ½Ð¾ Ð¾Ñ ÑÐ¾ÑÐ³Ð¾Ð²Ð¾Ð³Ð¾ Ð´ÐµÐ¿Ð¾Ð·Ð¸ÑÐ° â ÑÑÐ¾ Ð¾Ð±ÑÐ·Ð°ÑÐµÐ»ÑÐ½Ð¾Ðµ ÑÑÐ»Ð¾Ð²Ð¸Ðµ ÑÐ°Ð±Ð¾ÑÑ.</div></div>
+    <div class="risk"><div class="risk-icon">â ï¸</div><div class="risk-text">ÐÐ¾ÐºÐ° ÑÐµÑÐ¸Ñ Ð¾ÑÐºÑÑÑÐ° â Ð½Ð° ÑÑÑÑÐµ ÐµÑÑÑ Ð¿Ð»Ð°Ð²Ð°ÑÑÐ¸Ð¹ ÑÐ±ÑÑÐ¾Ðº. Ð­ÑÐ¾ Ð½Ð¾ÑÐ¼Ð°Ð»ÑÐ½Ð°Ñ ÑÐ°ÑÑÑ ÑÐ°Ð±Ð¾ÑÑ Ð°Ð»Ð³Ð¾ÑÐ¸ÑÐ¼Ð°, Ð½Ðµ Ð¾ÑÐ¸Ð±ÐºÐ°.</div></div>
+    <div class="risk"><div class="risk-icon">â ï¸</div><div class="risk-text">ÐÐµ ÑÐµÐºÐ¾Ð¼ÐµÐ½Ð´ÑÐµÑÑÑ Ð¸ÑÐ¿Ð¾Ð»ÑÐ·Ð¾Ð²Ð°ÑÑ Ð·Ð°ÑÐ¼Ð½ÑÐ¹ Ð¸Ð»Ð¸ ÐºÑÐµÐ´Ð¸ÑÐ½ÑÐ¹ ÐºÐ°Ð¿Ð¸ÑÐ°Ð». Ð¢Ð¾ÑÐ³ÑÐ¹ÑÐµ ÑÐ¾Ð»ÑÐºÐ¾ ÑÐ²Ð¾Ð¸Ð¼Ð¸ ÑÑÐµÐ´ÑÑÐ²Ð°Ð¼Ð¸.</div></div>
   </div>
-  <div class="note">NovaFX — инструмент автоматизированной торговли. Прошлые результаты не гарантируют будущих. Никто не может гарантировать прибыль на финансовых рынках.</div>
+  <div class="note">NovaFX â Ð¸Ð½ÑÑÑÑÐ¼ÐµÐ½Ñ Ð°Ð²ÑÐ¾Ð¼Ð°ÑÐ¸Ð·Ð¸ÑÐ¾Ð²Ð°Ð½Ð½Ð¾Ð¹ ÑÐ¾ÑÐ³Ð¾Ð²Ð»Ð¸. ÐÑÐ¾ÑÐ»ÑÐµ ÑÐµÐ·ÑÐ»ÑÑÐ°ÑÑ Ð½Ðµ Ð³Ð°ÑÐ°Ð½ÑÐ¸ÑÑÑÑ Ð±ÑÐ´ÑÑÐ¸Ñ. ÐÐ¸ÐºÑÐ¾ Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ Ð³Ð°ÑÐ°Ð½ÑÐ¸ÑÐ¾Ð²Ð°ÑÑ Ð¿ÑÐ¸Ð±ÑÐ»Ñ Ð½Ð° ÑÐ¸Ð½Ð°Ð½ÑÐ¾Ð²ÑÑ ÑÑÐ½ÐºÐ°Ñ.</div>
 </section>
 
 <hr class="divider">
 
 <!-- MONITORING -->
 <section class="section">
-  <div class="section-title">Мониторинг в реальном времени</div>
-  <p class="section-sub">Открытая статистика торгового счёта — без выборочной подачи, включая просадки.</p>
+  <div class="section-title">ÐÐ¾Ð½Ð¸ÑÐ¾ÑÐ¸Ð½Ð³ Ð² ÑÐµÐ°Ð»ÑÐ½Ð¾Ð¼ Ð²ÑÐµÐ¼ÐµÐ½Ð¸</div>
+  <p class="section-sub">ÐÑÐºÑÑÑÐ°Ñ ÑÑÐ°ÑÐ¸ÑÑÐ¸ÐºÐ° ÑÐ¾ÑÐ³Ð¾Ð²Ð¾Ð³Ð¾ ÑÑÑÑÐ° â Ð±ÐµÐ· Ð²ÑÐ±Ð¾ÑÐ¾ÑÐ½Ð¾Ð¹ Ð¿Ð¾Ð´Ð°ÑÐ¸, Ð²ÐºÐ»ÑÑÐ°Ñ Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ¸.</p>
   <div class="monitor">
     <div class="monitor-left">
       <div class="monitor-dot"></div>
       <div>
-        <div class="monitor-title">FX Monitor · Счёт NovaFX</div>
-        <div class="monitor-sub">Баланс, сделки, просадка и аналитика в реальном времени</div>
+        <div class="monitor-title">FX Monitor Â· Ð¡ÑÑÑ NovaFX</div>
+        <div class="monitor-sub">ÐÐ°Ð»Ð°Ð½Ñ, ÑÐ´ÐµÐ»ÐºÐ¸, Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ° Ð¸ Ð°Ð½Ð°Ð»Ð¸ÑÐ¸ÐºÐ° Ð² ÑÐµÐ°Ð»ÑÐ½Ð¾Ð¼ Ð²ÑÐµÐ¼ÐµÐ½Ð¸</div>
       </div>
     </div>
-    <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank" class="btn-green">Открыть мониторинг 🕯</a>
+    <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank" class="btn-green">ÐÑÐºÑÑÑÑ Ð¼Ð¾Ð½Ð¸ÑÐ¾ÑÐ¸Ð½Ð³ ð¯</a>
   </div>
 </section>
 
@@ -433,104 +440,104 @@ footer a:hover{color:var(--text);}
 
 <!-- BACKTEST -->
 <section class="section" id="backtest">
-  <div class="section-title">Результаты бэктеста</div>
-  <p class="section-sub">Тест консервативной стратегии на реальных тиках MT5 — январь 2023 по апрель 2026. Качество истории 100%.</p>
+  <div class="section-title">Ð ÐµÐ·ÑÐ»ÑÑÐ°ÑÑ Ð±ÑÐºÑÐµÑÑÐ°</div>
+  <p class="section-sub">Ð¢ÐµÑÑ ÐºÐ¾Ð½ÑÐµÑÐ²Ð°ÑÐ¸Ð²Ð½Ð¾Ð¹ ÑÑÑÐ°ÑÐµÐ³Ð¸Ð¸ Ð½Ð° ÑÐµÐ°Ð»ÑÐ½ÑÑ ÑÐ¸ÐºÐ°Ñ MT5 â ÑÐ½Ð²Ð°ÑÑ 2023 Ð¿Ð¾ Ð°Ð¿ÑÐµÐ»Ñ 2026. ÐÐ°ÑÐµÑÑÐ²Ð¾ Ð¸ÑÑÐ¾ÑÐ¸Ð¸ 100%.</p>
 
   <div class="bt-params">
     <div class="bt-param">
-      <div class="bt-param-label">Стратегия</div>
-      <div class="bt-param-val">Консервативная</div>
+      <div class="bt-param-label">Ð¡ÑÑÐ°ÑÐµÐ³Ð¸Ñ</div>
+      <div class="bt-param-val">ÐÐ¾Ð½ÑÐµÑÐ²Ð°ÑÐ¸Ð²Ð½Ð°Ñ</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Шаг усреднения</div>
-      <div class="bt-param-val">205 пунктов</div>
+      <div class="bt-param-label">Ð¨Ð°Ð³ ÑÑÑÐµÐ´Ð½ÐµÐ½Ð¸Ñ</div>
+      <div class="bt-param-val">205 Ð¿ÑÐ½ÐºÑÐ¾Ð²</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Депозит + резерв</div>
+      <div class="bt-param-label">ÐÐµÐ¿Ð¾Ð·Ð¸Ñ + ÑÐµÐ·ÐµÑÐ²</div>
       <div class="bt-param-val">25 000 $</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Период</div>
-      <div class="bt-param-val">3.5 года</div>
+      <div class="bt-param-label">ÐÐµÑÐ¸Ð¾Ð´</div>
+      <div class="bt-param-val">3.5 Ð³Ð¾Ð´Ð°</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Инструмент</div>
+      <div class="bt-param-label">ÐÐ½ÑÑÑÑÐ¼ÐµÐ½Ñ</div>
       <div class="bt-param-val">EUR/USD M5</div>
     </div>
   </div>
 
   <div class="bt-cards">
     <div class="bt-card bt-green">
-      <div class="bt-card-label">Чистая прибыль</div>
+      <div class="bt-card-label">Ð§Ð¸ÑÑÐ°Ñ Ð¿ÑÐ¸Ð±ÑÐ»Ñ</div>
       <div class="bt-card-val">+53 758 $</div>
-      <div class="bt-card-sub">+430% на торговый депозит<br>+215% на общий капитал</div>
+      <div class="bt-card-sub">+430% Ð½Ð° ÑÐ¾ÑÐ³Ð¾Ð²ÑÐ¹ Ð´ÐµÐ¿Ð¾Ð·Ð¸Ñ<br>+215% Ð½Ð° Ð¾Ð±ÑÐ¸Ð¹ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»</div>
     </div>
     <div class="bt-card bt-blue">
-      <div class="bt-card-label">Годовых (среднее)</div>
+      <div class="bt-card-label">ÐÐ¾Ð´Ð¾Ð²ÑÑ (ÑÑÐµÐ´Ð½ÐµÐµ)</div>
       <div class="bt-card-val">+123%</div>
-      <div class="bt-card-sub">за 3.5 года непрерывной работы</div>
+      <div class="bt-card-sub">Ð·Ð° 3.5 Ð³Ð¾Ð´Ð° Ð½ÐµÐ¿ÑÐµÑÑÐ²Ð½Ð¾Ð¹ ÑÐ°Ð±Ð¾ÑÑ</div>
     </div>
     <div class="bt-card bt-orange">
       <div class="bt-card-label">Win Rate</div>
       <div class="bt-card-val">71.69%</div>
-      <div class="bt-card-sub">4 940 прибыльных сделок из 6 891</div>
+      <div class="bt-card-sub">4 940 Ð¿ÑÐ¸Ð±ÑÐ»ÑÐ½ÑÑ ÑÐ´ÐµÐ»Ð¾Ðº Ð¸Ð· 6 891</div>
     </div>
     <div class="bt-card bt-purple">
-      <div class="bt-card-label">Фактор восстановления</div>
+      <div class="bt-card-label">Ð¤Ð°ÐºÑÐ¾Ñ Ð²Ð¾ÑÑÑÐ°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ</div>
       <div class="bt-card-val">2.60</div>
-      <div class="bt-card-sub">доход превышает макс. просадку в 2.6×</div>
+      <div class="bt-card-sub">Ð´Ð¾ÑÐ¾Ð´ Ð¿ÑÐµÐ²ÑÑÐ°ÐµÑ Ð¼Ð°ÐºÑ. Ð¿ÑÐ¾ÑÐ°Ð´ÐºÑ Ð² 2.6Ã</div>
     </div>
     <div class="bt-card bt-red">
-      <div class="bt-card-label">Макс. просадка (средства)</div>
+      <div class="bt-card-label">ÐÐ°ÐºÑ. Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ° (ÑÑÐµÐ´ÑÑÐ²Ð°)</div>
       <div class="bt-card-val">38%</div>
-      <div class="bt-card-sub">~9 500 $ — резерв покрыл с запасом</div>
+      <div class="bt-card-sub">~9 500 $ â ÑÐµÐ·ÐµÑÐ² Ð¿Ð¾ÐºÑÑÐ» Ñ Ð·Ð°Ð¿Ð°ÑÐ¾Ð¼</div>
     </div>
     <div class="bt-card">
-      <div class="bt-card-label">Прибыльность</div>
+      <div class="bt-card-label">ÐÑÐ¸Ð±ÑÐ»ÑÐ½Ð¾ÑÑÑ</div>
       <div class="bt-card-val">1.61</div>
-      <div class="bt-card-sub">на каждый $ убытка — 1.61 $ прибыли</div>
+      <div class="bt-card-sub">Ð½Ð° ÐºÐ°Ð¶Ð´ÑÐ¹ $ ÑÐ±ÑÑÐºÐ° â 1.61 $ Ð¿ÑÐ¸Ð±ÑÐ»Ð¸</div>
     </div>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:16px;">
     <div class="bt-param">
-      <div class="bt-param-label">Начальный депозит</div>
+      <div class="bt-param-label">ÐÐ°ÑÐ°Ð»ÑÐ½ÑÐ¹ Ð´ÐµÐ¿Ð¾Ð·Ð¸Ñ</div>
       <div class="bt-param-val">$25 000</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Финальный баланс</div>
+      <div class="bt-param-label">Ð¤Ð¸Ð½Ð°Ð»ÑÐ½ÑÐ¹ Ð±Ð°Ð»Ð°Ð½Ñ</div>
       <div class="bt-param-val" style="color:var(--blue);">$78 758</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Прирост капитала</div>
+      <div class="bt-param-label">ÐÑÐ¸ÑÐ¾ÑÑ ÐºÐ°Ð¿Ð¸ÑÐ°Ð»Ð°</div>
       <div class="bt-param-val" style="color:var(--green);">+215%</div>
     </div>
     <div class="bt-param">
-      <div class="bt-param-label">Период</div>
-      <div class="bt-param-val">2023–2026</div>
+      <div class="bt-param-label">ÐÐµÑÐ¸Ð¾Ð´</div>
+      <div class="bt-param-val">2023â2026</div>
     </div>
   </div>
 
   <div class="bt-chart-wrap">
-    <div class="bt-chart-label">График баланса / средств — 3.5 года</div>
-    <div class="bt-chart-desc">Синяя линия — баланс (постоянно растёт). Зелёная — средства (просадки при открытых сериях). Наведите на график — увидите баланс, средства и просадку.</div>
+    <div class="bt-chart-label">ÐÑÐ°ÑÐ¸Ðº Ð±Ð°Ð»Ð°Ð½ÑÐ° / ÑÑÐµÐ´ÑÑÐ² â 3.5 Ð³Ð¾Ð´Ð°</div>
+    <div class="bt-chart-desc">Ð¡Ð¸Ð½ÑÑ Ð»Ð¸Ð½Ð¸Ñ â Ð±Ð°Ð»Ð°Ð½Ñ (Ð¿Ð¾ÑÑÐ¾ÑÐ½Ð½Ð¾ ÑÐ°ÑÑÑÑ). ÐÐµÐ»ÑÐ½Ð°Ñ â ÑÑÐµÐ´ÑÑÐ²Ð° (Ð¿ÑÐ¾ÑÐ°Ð´ÐºÐ¸ Ð¿ÑÐ¸ Ð¾ÑÐºÑÑÑÑÑ ÑÐµÑÐ¸ÑÑ). ÐÐ°Ð²ÐµÐ´Ð¸ÑÐµ Ð½Ð° Ð³ÑÐ°ÑÐ¸Ðº â ÑÐ²Ð¸Ð´Ð¸ÑÐµ Ð±Ð°Ð»Ð°Ð½Ñ, ÑÑÐµÐ´ÑÑÐ²Ð° Ð¸ Ð¿ÑÐ¾ÑÐ°Ð´ÐºÑ.</div>
     <div style="position:relative;width:100%;height:280px;">
-      <canvas id="btChart" role="img" aria-label="График баланса и средств NOVA FX 2023–2026">Баланс вырос с $25 000 до $78 758.</canvas>
+      <canvas id="btChart" role="img" aria-label="ÐÑÐ°ÑÐ¸Ðº Ð±Ð°Ð»Ð°Ð½ÑÐ° Ð¸ ÑÑÐµÐ´ÑÑÐ² NOVA FX 2023â2026">ÐÐ°Ð»Ð°Ð½Ñ Ð²ÑÑÐ¾Ñ Ñ $25 000 Ð´Ð¾ $78 758.</canvas>
     </div>
     <div class="bt-chart-legend">
-      <span class="bt-leg"><span class="bt-leg-dot" style="background:#3b82f6;"></span>Баланс</span>
-      <span class="bt-leg"><span class="bt-leg-dot" style="background:#22c55e;"></span>Средства (Equity)</span>
+      <span class="bt-leg"><span class="bt-leg-dot" style="background:#3b82f6;"></span>ÐÐ°Ð»Ð°Ð½Ñ</span>
+      <span class="bt-leg"><span class="bt-leg-dot" style="background:#22c55e;"></span>Ð¡ÑÐµÐ´ÑÑÐ²Ð° (Equity)</span>
     </div>
   </div>
 
   <div class="note" style="border-color:var(--orange-border);background:var(--orange-bg);">
-    <strong style="color:var(--orange);">⚠ Важно:</strong> Бэктест проводится на исторических данных. Прошлые результаты не гарантируют аналогичной доходности в будущем. Реальная торговля может отличаться от тестовых условий.
+    <strong style="color:var(--orange);">â  ÐÐ°Ð¶Ð½Ð¾:</strong> ÐÑÐºÑÐµÑÑ Ð¿ÑÐ¾Ð²Ð¾Ð´Ð¸ÑÑÑ Ð½Ð° Ð¸ÑÑÐ¾ÑÐ¸ÑÐµÑÐºÐ¸Ñ Ð´Ð°Ð½Ð½ÑÑ. ÐÑÐ¾ÑÐ»ÑÐµ ÑÐµÐ·ÑÐ»ÑÑÐ°ÑÑ Ð½Ðµ Ð³Ð°ÑÐ°Ð½ÑÐ¸ÑÑÑÑ Ð°Ð½Ð°Ð»Ð¾Ð³Ð¸ÑÐ½Ð¾Ð¹ Ð´Ð¾ÑÐ¾Ð´Ð½Ð¾ÑÑÐ¸ Ð² Ð±ÑÐ´ÑÑÐµÐ¼. Ð ÐµÐ°Ð»ÑÐ½Ð°Ñ ÑÐ¾ÑÐ³Ð¾Ð²Ð»Ñ Ð¼Ð¾Ð¶ÐµÑ Ð¾ÑÐ»Ð¸ÑÐ°ÑÑÑÑ Ð¾Ñ ÑÐµÑÑÐ¾Ð²ÑÑ ÑÑÐ»Ð¾Ð²Ð¸Ð¹.
   </div>
   <div style="margin-top:24px;"><div class="cta-block">
   <div class="cta-block-inner">
-    <div class="cta-block-title">Хотите попробовать?</div>
-    <div class="cta-block-sub">Напишите нам — расскажем как начать и ответим на все вопросы</div>
-    <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">Попробовать советник бесплатно →</a>
+    <div class="cta-block-title">Ð¥Ð¾ÑÐ¸ÑÐµ Ð¿Ð¾Ð¿ÑÐ¾Ð±Ð¾Ð²Ð°ÑÑ?</div>
+    <div class="cta-block-sub">ÐÐ°Ð¿Ð¸ÑÐ¸ÑÐµ Ð½Ð°Ð¼ â ÑÐ°ÑÑÐºÐ°Ð¶ÐµÐ¼ ÐºÐ°Ðº Ð½Ð°ÑÐ°ÑÑ Ð¸ Ð¾ÑÐ²ÐµÑÐ¸Ð¼ Ð½Ð° Ð²ÑÐµ Ð²Ð¾Ð¿ÑÐ¾ÑÑ</div>
+    <a href="https://t.me/digitalnovafx" target="_blank" class="btn-cta">ÐÐ¾Ð¿ÑÐ¾Ð±Ð¾Ð²Ð°ÑÑ ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº Ð±ÐµÑÐ¿Ð»Ð°ÑÐ½Ð¾ â</a>
   </div>
 </div></div>
 </section>
@@ -541,16 +548,16 @@ footer a:hover{color:var(--text);}
 <section class="section">
   <div class="support-block">
     <div class="support-left">
-      <div class="support-badge">● Онлайн</div>
-      <div class="support-title">Техподдержка<br><span>24 / 7</span></div>
-      <div class="support-desc">Купив советник NovaFX, вы не остаётесь с ним наедине. Мы всегда на связи — ответим на вопросы по настройке, поможем разобраться с ситуацией на счёте и проконсультируем в любое время суток.</div>
-      <a href="https://t.me/digitalnovafx" target="_blank" class="support-btn">Написать в поддержку →</a>
+      <div class="support-badge">â ÐÐ½Ð»Ð°Ð¹Ð½</div>
+      <div class="support-title">Ð¢ÐµÑÐ¿Ð¾Ð´Ð´ÐµÑÐ¶ÐºÐ°<br><span>24 / 7</span></div>
+      <div class="support-desc">ÐÑÐ¿Ð¸Ð² ÑÐ¾Ð²ÐµÑÐ½Ð¸Ðº NovaFX, Ð²Ñ Ð½Ðµ Ð¾ÑÑÐ°ÑÑÐµÑÑ Ñ Ð½Ð¸Ð¼ Ð½Ð°ÐµÐ´Ð¸Ð½Ðµ. ÐÑ Ð²ÑÐµÐ³Ð´Ð° Ð½Ð° ÑÐ²ÑÐ·Ð¸ â Ð¾ÑÐ²ÐµÑÐ¸Ð¼ Ð½Ð° Ð²Ð¾Ð¿ÑÐ¾ÑÑ Ð¿Ð¾ Ð½Ð°ÑÑÑÐ¾Ð¹ÐºÐµ, Ð¿Ð¾Ð¼Ð¾Ð¶ÐµÐ¼ ÑÐ°Ð·Ð¾Ð±ÑÐ°ÑÑÑÑ Ñ ÑÐ¸ÑÑÐ°ÑÐ¸ÐµÐ¹ Ð½Ð° ÑÑÑÑÐµ Ð¸ Ð¿ÑÐ¾ÐºÐ¾Ð½ÑÑÐ»ÑÑÐ¸ÑÑÐµÐ¼ Ð² Ð»ÑÐ±Ð¾Ðµ Ð²ÑÐµÐ¼Ñ ÑÑÑÐ¾Ðº.</div>
+      <a href="https://t.me/digitalnovafx" target="_blank" class="support-btn">ÐÐ°Ð¿Ð¸ÑÐ°ÑÑ Ð² Ð¿Ð¾Ð´Ð´ÐµÑÐ¶ÐºÑ â</a>
     </div>
     <div class="support-right">
-      <div class="support-item"><div class="support-item-icon">⚡</div><div><div class="support-item-title">Быстрый ответ</div><div class="support-item-sub">Отвечаем в течение нескольких минут</div></div></div>
-      <div class="support-item"><div class="support-item-icon">🛠</div><div><div class="support-item-title">Помощь с настройкой</div><div class="support-item-sub">Помогаем запустить советника с нуля</div></div></div>
-      <div class="support-item"><div class="support-item-icon">📊</div><div><div class="support-item-title">Разбор ситуаций</div><div class="support-item-sub">Объясняем что происходит на счёте</div></div></div>
-      <div class="support-item"><div class="support-item-icon">🔄</div><div><div class="support-item-title">Обновления</div><div class="support-item-sub">Уведомляем о новых версиях советника</div></div></div>
+      <div class="support-item"><div class="support-item-icon">â¡</div><div><div class="support-item-title">ÐÑÑÑÑÑÐ¹ Ð¾ÑÐ²ÐµÑ</div><div class="support-item-sub">ÐÑÐ²ÐµÑÐ°ÐµÐ¼ Ð² ÑÐµÑÐµÐ½Ð¸Ðµ Ð½ÐµÑÐºÐ¾Ð»ÑÐºÐ¸Ñ Ð¼Ð¸Ð½ÑÑ</div></div></div>
+      <div class="support-item"><div class="support-item-icon">ð </div><div><div class="support-item-title">ÐÐ¾Ð¼Ð¾ÑÑ Ñ Ð½Ð°ÑÑÑÐ¾Ð¹ÐºÐ¾Ð¹</div><div class="support-item-sub">ÐÐ¾Ð¼Ð¾Ð³Ð°ÐµÐ¼ Ð·Ð°Ð¿ÑÑÑÐ¸ÑÑ ÑÐ¾Ð²ÐµÑÐ½Ð¸ÐºÐ° Ñ Ð½ÑÐ»Ñ</div></div></div>
+      <div class="support-item"><div class="support-item-icon">ð</div><div><div class="support-item-title">Ð Ð°Ð·Ð±Ð¾Ñ ÑÐ¸ÑÑÐ°ÑÐ¸Ð¹</div><div class="support-item-sub">ÐÐ±ÑÑÑÐ½ÑÐµÐ¼ ÑÑÐ¾ Ð¿ÑÐ¾Ð¸ÑÑÐ¾Ð´Ð¸Ñ Ð½Ð° ÑÑÑÑÐµ</div></div></div>
+      <div class="support-item"><div class="support-item-icon">ð</div><div><div class="support-item-title">ÐÐ±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ</div><div class="support-item-sub">Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÑÐµÐ¼ Ð¾ Ð½Ð¾Ð²ÑÑ Ð²ÐµÑÑÐ¸ÑÑ ÑÐ¾Ð²ÐµÑÐ½Ð¸ÐºÐ°</div></div></div>
     </div>
   </div>
 </section>
@@ -559,31 +566,31 @@ footer a:hover{color:var(--text);}
 
 <!-- CONTACTS -->
 <section class="section" id="contacts">
-  <div class="section-title">Связь и сообщество</div>
-  <p class="section-sub">Присоединяйтесь — публикуем реальные результаты, разборы периодов и обновления алгоритма.</p>
+  <div class="section-title">Ð¡Ð²ÑÐ·Ñ Ð¸ ÑÐ¾Ð¾Ð±ÑÐµÑÑÐ²Ð¾</div>
+  <p class="section-sub">ÐÑÐ¸ÑÐ¾ÐµÐ´Ð¸Ð½ÑÐ¹ÑÐµÑÑ â Ð¿ÑÐ±Ð»Ð¸ÐºÑÐµÐ¼ ÑÐµÐ°Ð»ÑÐ½ÑÐµ ÑÐµÐ·ÑÐ»ÑÑÐ°ÑÑ, ÑÐ°Ð·Ð±Ð¾ÑÑ Ð¿ÐµÑÐ¸Ð¾Ð´Ð¾Ð² Ð¸ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð°Ð»Ð³Ð¾ÑÐ¸ÑÐ¼Ð°.</p>
   <div class="contacts">
-    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="contact"><div class="contact-icon">✈️</div><div><div class="contact-title">Telegram канал</div><div class="contact-sub">@DigitalNovaLabs</div></div></a>
-    <a href="https://www.youtube.com/@digitalnovalabs" target="_blank" class="contact"><div class="contact-icon">▶️</div><div><div class="contact-title">YouTube</div><div class="contact-sub">@digitalnovalabs</div></div></a>
-    <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank" class="contact"><div class="contact-icon">🕯</div><div><div class="contact-title">Мониторинг FX Monitor</div><div class="contact-sub">Реальная статистика счёта</div></div></a>
-    <a href="https://t.me/digitalnovafx" target="_blank" class="contact"><div class="contact-icon">💬</div><div><div class="contact-title">Задать вопрос</div><div class="contact-sub">@digitalnovafx</div></div></a>
+    <a href="https://t.me/DigitalNovaLabs" target="_blank" class="contact"><div class="contact-icon">âï¸</div><div><div class="contact-title">Telegram ÐºÐ°Ð½Ð°Ð»</div><div class="contact-sub">@DigitalNovaLabs</div></div></a>
+    <a href="https://www.youtube.com/@digitalnovalabs" target="_blank" class="contact"><div class="contact-icon">â¶ï¸</div><div><div class="contact-title">YouTube</div><div class="contact-sub">@digitalnovalabs</div></div></a>
+    <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank" class="contact"><div class="contact-icon">ð¯</div><div><div class="contact-title">ÐÐ¾Ð½Ð¸ÑÐ¾ÑÐ¸Ð½Ð³ FX Monitor</div><div class="contact-sub">Ð ÐµÐ°Ð»ÑÐ½Ð°Ñ ÑÑÐ°ÑÐ¸ÑÑÐ¸ÐºÐ° ÑÑÑÑÐ°</div></div></a>
+    <a href="https://t.me/digitalnovafx" target="_blank" class="contact"><div class="contact-icon">ð¬</div><div><div class="contact-title">ÐÐ°Ð´Ð°ÑÑ Ð²Ð¾Ð¿ÑÐ¾Ñ</div><div class="contact-sub">@digitalnovafx</div></div></a>
   </div>
 </section>
 
 <footer>
-  <p>NovaFX · DigitalNovaLabs · <a href="https://t.me/DigitalNovaLabs">t.me/DigitalNovaLabs</a> · <a href="https://www.youtube.com/@digitalnovalabs">YouTube</a></p>
-  <p style="margin-top:8px;">Торговля на форекс сопряжена с рисками. Не является инвестиционной рекомендацией.</p>
+  <p>NovaFX Â· DigitalNovaLabs Â· <a href="https://t.me/DigitalNovaLabs">t.me/DigitalNovaLabs</a> Â· <a href="https://www.youtube.com/@digitalnovalabs">YouTube</a></p>
+  <p style="margin-top:8px;">Ð¢Ð¾ÑÐ³Ð¾Ð²Ð»Ñ Ð½Ð° ÑÐ¾ÑÐµÐºÑ ÑÐ¾Ð¿ÑÑÐ¶ÐµÐ½Ð° Ñ ÑÐ¸ÑÐºÐ°Ð¼Ð¸. ÐÐµ ÑÐ²Ð»ÑÐµÑÑÑ Ð¸Ð½Ð²ÐµÑÑÐ¸ÑÐ¸Ð¾Ð½Ð½Ð¾Ð¹ ÑÐµÐºÐ¾Ð¼ÐµÐ½Ð´Ð°ÑÐ¸ÐµÐ¹.</p>
 </footer>
 
 <script>
 var btn = document.getElementById('theme-btn');
 var theme = localStorage.getItem('nova-theme') || 'dark';
 document.documentElement.setAttribute('data-theme', theme);
-btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+btn.textContent = theme === 'dark' ? 'âï¸' : 'ð';
 btn.addEventListener('click', function() {
   theme = theme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('nova-theme', theme);
-  btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  btn.textContent = theme === 'dark' ? 'âï¸' : 'ð';
 });
 
 // Hamburger menu
@@ -613,8 +620,8 @@ new Chart(document.getElementById('btChart'),{
   data:{
     labels:raw.map(function(d){return d.t;}),
     datasets:[
-      {label:'Баланс',data:raw.map(function(d){return d.b;}),borderColor:'#3b82f6',borderWidth:2,pointRadius:0,tension:0.2,fill:false},
-      {label:'Средства',data:raw.map(function(d){return d.e;}),borderColor:'#22c55e',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0.2,fill:{target:'origin',above:'rgba(34,197,94,0)',below:'rgba(34,197,94,0.08)'}}
+      {label:'ÐÐ°Ð»Ð°Ð½Ñ',data:raw.map(function(d){return d.b;}),borderColor:'#3b82f6',borderWidth:2,pointRadius:0,tension:0.2,fill:false},
+      {label:'Ð¡ÑÐµÐ´ÑÑÐ²Ð°',data:raw.map(function(d){return d.e;}),borderColor:'#22c55e',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0.2,fill:{target:'origin',above:'rgba(34,197,94,0)',below:'rgba(34,197,94,0.08)'}}
     ]
   },
   options:{
@@ -630,7 +637,7 @@ new Chart(document.getElementById('btChart'),{
         bodyColor:isDark?'#8892a4':'#4b5563',
         padding:10,
         callbacks:{
-          afterBody:function(ctx){var i=ctx[0].dataIndex;var dd=ddArr[i];return['Просадка: '+(dd>=0?'0.00':dd.toFixed(2))+'%'];},
+          afterBody:function(ctx){var i=ctx[0].dataIndex;var dd=ddArr[i];return['ÐÑÐ¾ÑÐ°Ð´ÐºÐ°: '+(dd>=0?'0.00':dd.toFixed(2))+'%'];},
           label:function(ctx){return ctx.dataset.label+': $'+ctx.parsed.y.toLocaleString('en-US',{maximumFractionDigits:0});}
         }
       }
