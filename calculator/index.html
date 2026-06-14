@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<script>(function(){var t=localStorage.getItem("nova-theme")||"dark";document.documentElement.setAttribute("data-theme",t);})();</script>
+<script>(function(){var t=localStorage.getItem("novafx-theme")||"dark";document.documentElement.setAttribute("data-theme",t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор доходности — NovaFX</title>
@@ -153,6 +153,18 @@
     --text-tertiary: #475569;
   }
 #back-btn:hover{background:rgba(5,150,105,0.1)!important;border-color:#059669!important;color:#6ee7b7!important;}
+
+[data-theme="light"] #theme-toggle,
+[data-theme="light"] #back-btn {
+  background: rgba(0,0,0,0.06) !important;
+  border-color: rgba(0,0,0,0.15) !important;
+  color: #374151 !important;
+}
+[data-theme="light"] #back-btn:hover {
+  background: rgba(5,150,105,0.12) !important;
+  border-color: #059669 !important;
+  color: #065f46 !important;
+}
 </style>
 </head>
 <body><button id="theme-toggle" onclick="toggleTheme()" style="position:fixed;top:16px;right:130px;z-index:9999;padding:0 14px;height:38px;line-height:38px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:16px;cursor:pointer;font-family:sans-serif;color:#9ca3af;transition:all .2s;">&#9728;</button><a id="back-btn" onclick="document.querySelector('meta[name=viewport]').content='width=device-width,initial-scale=1.0';setTimeout(()=>window.location.href='/',50);" style="position:fixed;top:16px;right:20px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:0 16px;height:38px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;font-family:sans-serif;color:#9ca3af;transition:all .2s;">← На сайт</a>
@@ -750,11 +762,11 @@ function applyTheme(t){
 }
 function toggleTheme(){
   var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  localStorage.setItem('nova-theme', cur);
+  localStorage.setItem('novafx-theme', cur);
   applyTheme(cur);
 }
 (function(){
-  var saved = localStorage.getItem('nova-theme') || 'dark';
+  var saved = localStorage.getItem('novafx-theme') || 'dark';
   applyTheme(saved);
 })();
 </script>
