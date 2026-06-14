@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru" data-theme="dark">
 <head>
+<script>
+(function(){
+  var saved = localStorage.getItem('novafx-theme');
+  if(saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NovaFX — Автоматический торговый алгоритм</title>
