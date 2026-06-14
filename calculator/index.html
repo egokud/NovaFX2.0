@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор доходности — NovaFX</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f1117; --bg-card: #161b26; --bg-input: #1e2535;
+    --border: #2a3245; --border-light: #1e2535;
+    --text: #e8eaf0; --text-secondary: #8892a4; --text-tertiary: #5a6478;
+    --green: #22c55e; --green-bg: rgba(34,197,94,0.1); --green-border: rgba(34,197,94,0.25);
+    --blue: #3b82f6; --blue-bg: rgba(59,130,246,0.1); --blue-border: rgba(59,130,246,0.25);
+    --orange: #f59e0b; --orange-bg: rgba(245,158,11,0.1); --orange-border: rgba(245,158,11,0.25);
+    --red: #ef4444; --red-bg: rgba(239,68,68,0.1); --red-border: rgba(239,68,68,0.25);
+    --radius: 12px; --radius-sm: 8px;
+  }
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75); z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal-box {
+    background: var(--bg-card); border: 0.5px solid var(--orange-border);
+    border-radius: var(--radius); max-width: 520px; width: 100%;
+    padding: 28px 24px; text-align: center;
+  }
+  .modal-icon { font-size: 36px; margin-bottom: 16px; }
+  .modal-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .modal-text { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
+  .modal-btn {
+    padding: 10px 32px; border-radius: var(--radius-sm);
+    border: 0.5px solid var(--orange-border); background: var(--orange-bg);
+    color: var(--orange); font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .modal-btn:hover { opacity: 0.85; }
+  body { font-family: -apple-system,'Segoe UI',sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px 48px; }
+  .container { max-width: 1400px; margin: 0 auto; }
+  .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .logo-text { font-size: 13px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.08em; text-transform: uppercase; }
+  h1 { font-size: 26px; font-weight: 600; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 32px; }
+  .info-bar { background: var(--blue-bg); border: 0.5px solid var(--blue-border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 24px; font-size: 13px; color: #93c5fd; line-height: 1.6; }
+  .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 520px) { .inputs-grid { grid-template-columns: 1fr; } }
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .input-label { font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .input-field { padding: 10px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: var(--bg-input); font-size: 14px; font-weight: 500; color: var(--text); outline: none; width: 100%; }
+  .strat-btns { display: flex; gap: 6px; }
+  .strat-btn { flex: 1; padding: 10px 4px; border-radius: var(--radius-sm); border: 0.5px solid var(--border); background: transparent; font-size: 12px; color: var(--text-secondary); cursor: pointer; font-family: inherit; text-align: center; }
+  .strat-btn.active-cons { background: var(--green-bg); color: var(--green); border-color: var(--green-border); font-weight: 600; }
+  .strat-btn.active-mod  { background: var(--blue-bg);  color: var(--blue);  border-color: var(--blue-border);  font-weight: 600; }
+  .strat-btn.active-agg  { background: var(--red-bg);   color: var(--red);   border-color: var(--red-border);   font-weight: 600; }
+  .sliders-block { margin-bottom: 20px; }
+  .slider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 520px) { .slider-row { grid-template-columns: 1fr; } }
+  .slider-group { display: flex; flex-direction: column; gap: 5px; }
+  .slider-label-row { display: flex; justify-content: space-between; }
+  .slider-val { font-size: 14px; font-weight: 700; }
+  .param-slider {
+    width: 100%; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+    height: 6px; border-radius: 999px;
+    background: var(--border); outline: none;
+    margin: 6px 0;
+  }
+  .param-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--text); cursor: pointer;
+    border: 3px solid var(--bg-input);
+    box-shadow: 0 0 0 1.5px var(--border);
+    margin-top: -8px;
+  }
+  .param-slider::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--text); cursor: pointer;
+    border: 3px solid var(--bg-input);
+    box-shadow: 0 0 0 1.5px var(--border);
+  }
+  .param-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; }
+  .param-slider::-moz-range-track { height: 6px; border-radius: 999px; background: var(--border); }
+  .param-slider::-moz-range-progress { height: 6px; border-radius: 999px; background: currentColor; }
+  .slider-limits { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-tertiary); margin-top: 6px; }
+  .summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 24px; }
+  @media (max-width: 600px) { .summary { grid-template-columns: repeat(2,1fr); } }
+  .sum-card { background: var(--bg-card); border: 0.5px solid var(--border-light); border-radius: var(--radius); padding: 14px 16px; }
+  .sum-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 6px; }
+  .sum-val { font-size: 18px; font-weight: 600; color: var(--text); }
+  .sum-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
+  .c-green .sum-val { color: var(--green); }
+  .c-blue  .sum-val { color: var(--blue); }
+  .c-orange .sum-val { color: var(--orange); }
+  .c-red   .sum-val { color: var(--red); }
+  .section-label { font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 10px; }
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 0.5px solid var(--border-light); width: 100%; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th { text-align: left; padding: 6px 8px; font-size: 10px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 0.5px solid var(--border); background: var(--bg-card); white-space: nowrap; }
+  td { padding: 5px 8px; border-bottom: 0.5px solid var(--border-light); color: var(--text-secondary); white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--text); font-weight: 500; }
+  .row-profit td { background: var(--bg-card); }
+  .row-year td { background: rgba(59,130,246,0.06); font-weight: 500; }
+  .row-year td:first-child { color: var(--blue); }
+  .disclaimer { margin-top: 24px; font-size: 13px; color: var(--text-secondary); line-height: 1.75; padding: 16px 20px; border: 0.5px solid var(--orange-border); border-radius: var(--radius); background: var(--orange-bg); }
+  .strat-btn.active-combo { background: rgba(168,85,247,0.1); color: #a855f7; border-color: rgba(168,85,247,0.25); font-weight: 600; }
+  .combo-block { display: none; margin-bottom: 20px; }
+  .combo-block.visible { display: block; }
+  .combo-split { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .combo-card { border-radius: var(--radius); padding: 14px 16px; border: 0.5px solid var(--border); background: var(--bg-card); }
+  .combo-card-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+  .combo-card .input-field { margin-bottom: 4px; }
+  .combo-card .combo-pct { font-size: 11px; color: var(--text-tertiary); }
+  .combo-sliders { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 600px) { .combo-split, .combo-sliders { grid-template-columns: 1fr; } }
+  .footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--text-tertiary); }
+  .footer a { color: var(--text-secondary); text-decoration: none; }
+
+  [data-theme="light"] {
+    --bg: #f8fafc; --bg-card: #ffffff; --bg-input: #f1f5f9;
+    --border: #e2e8f0; --border-light: #f1f5f9;
+    --text: #0f172a; --text-secondary: #475569; --text-tertiary: #94a3b8;
+    --green: #059669; --green-bg: rgba(5,150,105,0.08); --green-border: rgba(5,150,105,0.25);
+    --blue: #2563eb; --blue-bg: rgba(37,99,235,0.08); --blue-border: rgba(37,99,235,0.25);
+    --orange: #d97706; --orange-bg: rgba(217,119,6,0.08); --orange-border: rgba(217,119,6,0.25);
+    --red: #dc2626; --red-bg: rgba(220,38,38,0.08); --red-border: rgba(220,38,38,0.25);
+  }
+</style>
+</head>
+<body><a onclick="document.querySelector('meta[name=viewport]').content='width=device-width,initial-scale=1.0';setTimeout(()=>window.location.href='/',50);" style="position:fixed;top:16px;right:20px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);color:#9ca3af;border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;font-family:sans-serif;transition:all .2s;;cursor:pointer;">← На сайт</a>
+
+<div class="modal-overlay" id="disclaimer-modal">
+  <div class="modal-box">
+    <div class="modal-icon">⚠</div>
+    <div class="modal-title">Обратите внимание</div>
+    <div class="modal-text">
+      Калькулятор доходности показывает теоретическую модель роста капитала при фиксированной ежемесячной доходности. Это не прогноз и не гарантия результата.<br><br>
+      Реальная торговля на форекс сопряжена с рисками. Месяцы с прибылью чередуются с периодами просадок. Ни один алгоритм не может гарантировать стабильный процент дохода.<br><br>
+      Используйте калькулятор как инструмент планирования, а не как обещание доходности.
+    </div>
+    <button class="modal-btn" id="modal-ok-btn">Понятно</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="logo"><div class="logo-dot"></div><span class="logo-text">NovaFX · DigitalNovaLabs</span></div>
+  <h1>Калькулятор доходности</h1>
+  <p class="subtitle">Моделирует рост баланса с учётом ежемесячного компаундинга — реинвестирования прибыли в торговлю.</p>
+
+  <div class="info-bar">Калькулятор показывает теоретическую модель роста капитала при стабильной ежемесячной доходности. Реальные результаты зависят от рыночных условий и могут отличаться.</div>
+
+  <div class="inputs-grid">
+    <div class="input-group">
+      <span class="input-label">Начальный депозит (USD)</span>
+      <input class="input-field" id="in-deposit" type="number" min="500" max="200000" step="500" value="5000">
+    </div>
+    <div class="input-group">
+      <span class="input-label">Стратегия</span>
+      <div class="strat-btns">
+        <button class="strat-btn active-cons" data-s="cons">Консерв.</button>
+        <button class="strat-btn" data-s="mod">Умеренная</button>
+        <button class="strat-btn" data-s="agg">Агрессив.</button>
+        <button class="strat-btn" data-s="combo">Комбинированная</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sliders-block">
+    <div class="slider-row">
+      <div class="slider-group">
+        <div class="slider-label-row">
+          <span class="input-label">Ожидаемая доходность в месяц</span>
+          <span class="slider-val" id="val-rate" style="color:var(--blue)">8%</span>
+        </div>
+        <input type="range" class="param-slider" id="sl-rate" min="2" max="12" step="0.5" value="8">
+        <div class="slider-limits"><span id="sl-rate-min">2%</span><span id="sl-rate-max">12%</span></div>
+      </div>
+      <div class="slider-group">
+        <div class="slider-label-row">
+          <span class="input-label">Горизонт</span>
+          <span class="slider-val" id="val-months" style="color:var(--blue)">12 мес.</span>
+        </div>
+        <input type="range" class="param-slider" id="sl-months" min="3" max="60" step="1" value="12">
+        <div class="slider-limits"><span>3 мес.</span><span>60 мес.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="combo-block" id="combo-block">
+    <div class="section-label">Распределение депозита по стратегиям</div>
+    <div class="combo-split">
+      <div class="combo-card" style="border-color:var(--green-border);">
+        <div class="combo-card-title" style="color:var(--green);">Консервативная</div>
+        <input class="input-field" id="combo-dep-cons" type="number" min="0" max="200000" step="100" value="2000">
+        <div class="combo-pct" id="combo-pct-cons">40% от депозита</div>
+      </div>
+      <div class="combo-card" style="border-color:var(--blue-border);">
+        <div class="combo-card-title" style="color:var(--blue);">Умеренная</div>
+        <input class="input-field" id="combo-dep-mod" type="number" min="0" max="200000" step="100" value="2000">
+        <div class="combo-pct" id="combo-pct-mod">40% от депозита</div>
+      </div>
+      <div class="combo-card" style="border-color:var(--red-border);">
+        <div class="combo-card-title" style="color:var(--red);">Агрессивная</div>
+        <input class="input-field" id="combo-dep-agg" type="number" min="0" max="200000" step="100" value="1000">
+        <div class="combo-pct" id="combo-pct-agg">20% от депозита</div>
+      </div>
+    </div>
+
+    <div class="section-label">Ожидаемая доходность по стратегиям</div>
+    <div class="combo-sliders">
+      <div class="slider-group">
+        <div class="slider-label-row">
+          <span class="input-label" style="color:var(--green);">Консервативная</span>
+          <span class="slider-val" id="combo-rate-cons-val" style="color:var(--green);">5%</span>
+        </div>
+        <input type="range" class="param-slider" id="combo-rate-cons" min="2" max="8" step="0.5" value="5">
+        <div class="slider-limits"><span>2%</span><span>8%</span></div>
+      </div>
+      <div class="slider-group">
+        <div class="slider-label-row">
+          <span class="input-label" style="color:var(--blue);">Умеренная</span>
+          <span class="slider-val" id="combo-rate-mod-val" style="color:var(--blue);">8%</span>
+        </div>
+        <input type="range" class="param-slider" id="combo-rate-mod" min="5" max="12" step="0.5" value="8">
+        <div class="slider-limits"><span>5%</span><span>12%</span></div>
+      </div>
+      <div class="slider-group">
+        <div class="slider-label-row">
+          <span class="input-label" style="color:var(--red);">Агрессивная</span>
+          <span class="slider-val" id="combo-rate-agg-val" style="color:var(--red);">12%</span>
+        </div>
+        <input type="range" class="param-slider" id="combo-rate-agg" min="8" max="20" step="0.5" value="12">
+        <div class="slider-limits"><span>8%</span><span>20%</span></div>
+      </div>
+    </div>
+
+    <div class="slider-group" style="max-width:50%;">
+      <div class="slider-label-row">
+        <span class="input-label">Горизонт</span>
+        <span class="slider-val" id="combo-months-val" style="color:#a855f7;">12 мес.</span>
+      </div>
+      <input type="range" class="param-slider" id="combo-months" min="3" max="60" step="1" value="12">
+      <div class="slider-limits"><span>3 мес.</span><span>60 мес.</span></div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="sum-card c-green">
+      <div class="sum-label">Итоговый баланс</div>
+      <div class="sum-val" id="s-balance">—</div>
+      <div class="sum-sub">USD на конец периода</div>
+    </div>
+    <div class="sum-card c-blue">
+      <div class="sum-label">Общая прибыль</div>
+      <div class="sum-val" id="s-profit">—</div>
+      <div class="sum-sub">USD за весь период</div>
+    </div>
+    <div class="sum-card c-orange">
+      <div class="sum-label">Общая прибыль</div>
+      <div class="sum-val" id="s-profit-pct">—</div>
+      <div class="sum-sub">% от начального депозита</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">Средний доход</div>
+      <div class="sum-val" id="s-avg">—</div>
+      <div class="sum-sub">USD / месяц (среднее)</div>
+    </div>
+  </div>
+
+  <div class="section-label">Помесячный рост баланса</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Месяц</th>
+          <th>Баланс на начало</th>
+          <th>Доходность</th>
+          <th>Прибыль за месяц</th>
+          <th>Баланс на конец</th>
+          <th>Накопленная прибыль</th>
+          <th>Рост от старта</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:32px;">
+    <div class="section-label">Рост баланса — эффект сложного процента</div>
+    <div style="position:relative;width:100%;aspect-ratio:16/9;">
+      <canvas id="growth-chart"></canvas>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--text-secondary);">
+      <span style="display:flex;align-items:center;gap:5px;"><span id="leg-compound" style="width:10px;height:10px;border-radius:2px;display:inline-block;"></span>С компаундингом</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:3px;display:inline-block;background:var(--text-tertiary);border-radius:1px;"></span>Без компаундинга (линейный рост)</span>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <strong style="color:var(--orange);">⚠ Важно понимать:</strong> Калькулятор показывает теоретическую модель при фиксированной ежемесячной доходности. Реальная торговля отличается — месяцы с высокой прибылью чередуются с периодами просадок. Ни один алгоритм не гарантирует стабильный процент дохода каждый месяц. Используйте калькулятор как инструмент планирования, а не как прогноз.
+  </div>
+
+  <div class="footer">
+    <p>NovaFX · <a href="https://t.me/DigitalNovaLabs" target="_blank">Telegram канал</a> · <a href="https://fxmonitor.online/g/VHI6xGy4?view=profit" target="_blank">Мониторинг 🕯</a></p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+var STRATS = {
+  cons: { rateDefault: 5,   rateMin: 2,  rateMax: 8,  color: '#22c55e' },
+  mod:  { rateDefault: 8,   rateMin: 5,  rateMax: 12, color: '#3b82f6' },
+  agg:  { rateDefault: 12,  rateMin: 8,  rateMax: 20, color: '#ef4444' },
+};
+
+var stratKey = 'cons';
+var deposit = 5000;
+var monthlyRate = 5;
+var months = 12;
+
+function fmt(n, dec) {
+  dec = dec || 0;
+  return n.toFixed(dec).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+
+function fillSlider(el, color) {
+  var min = parseFloat(el.min), max = parseFloat(el.max), val = parseFloat(el.value);
+  var pct = (val - min) / (max - min) * 100;
+  el.style.background = 'linear-gradient(to right, ' + color + ' 0%, ' + color + ' ' + pct + '%, var(--border) ' + pct + '%, var(--border) 100%)';
+}
+
+function render() {
+  var s = STRATS[stratKey];
+  var tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+
+  var balance = deposit;
+  var totalProfit = 0;
+
+  for (var m = 1; m <= months; m++) {
+    var balanceStart = balance;
+    var profit = balance * (monthlyRate / 100);
+    balance += profit;
+    totalProfit += profit;
+    var growthPct = ((balance - deposit) / deposit * 100);
+    var isYearEnd = (m % 12 === 0 && m < months);
+
+    var tr = document.createElement('tr');
+    tr.className = isYearEnd ? 'row-year' : 'row-profit';
+    tr.innerHTML =
+      '<td>' + m + '</td>' +
+      '<td>' + fmt(balanceStart, 2) + ' $</td>' +
+      '<td>' + monthlyRate.toFixed(1) + '%</td>' +
+      '<td>+' + fmt(profit, 2) + ' $</td>' +
+      '<td>' + fmt(balance, 2) + ' $</td>' +
+      '<td>+' + fmt(totalProfit, 2) + ' $</td>' +
+      '<td>+' + fmt(growthPct, 1) + '%</td>';
+    tbody.appendChild(tr);
+  }
+
+  // Summary cards
+  document.getElementById('s-balance').textContent = fmt(balance, 2) + ' $';
+  document.getElementById('s-profit').textContent = '+' + fmt(totalProfit, 2) + ' $';
+  document.getElementById('s-profit-pct').textContent = '+' + fmt((balance - deposit) / deposit * 100, 1) + '%';
+  document.getElementById('s-avg').textContent = fmt(totalProfit / months, 2) + ' $';
+  renderChart();
+}
+
+var growthChart = null;
+
+function renderChart() {
+  if (typeof Chart === 'undefined') return;
+  var s = STRATS[stratKey];
+  var color = s.color;
+  var labels = [];
+  var dataCompound = [];
+  var dataLinear = [];
+  var bal = deposit;
+  var monthlyProfit = deposit * (monthlyRate / 100);
+
+  for (var m = 0; m <= months; m++) {
+    labels.push(m === 0 ? 'Старт' : m);
+    dataCompound.push(parseFloat(bal.toFixed(2)));
+    dataLinear.push(parseFloat((deposit + monthlyProfit * m).toFixed(2)));
+    if (m < months) bal += bal * (monthlyRate / 100);
+  }
+
+  document.getElementById('leg-compound').style.background = color;
+
+  if (growthChart) {
+    growthChart.data.labels = labels;
+    growthChart.data.datasets[0].data = dataCompound;
+    growthChart.data.datasets[0].borderColor = color;
+    growthChart.data.datasets[0].backgroundColor = color.replace(')', ',0.08)').replace('rgb', 'rgba');
+    growthChart.data.datasets[0].pointBackgroundColor = color;
+    growthChart.data.datasets[1].data = dataLinear;
+    growthChart.update();
+    return;
+  }
+
+  growthChart = new Chart(document.getElementById('growth-chart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'С компаундингом',
+          data: dataCompound,
+          borderColor: color,
+          backgroundColor: 'rgba(59,130,246,0.06)',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointBackgroundColor: color,
+          fill: true,
+          tension: 0.3
+        },
+        {
+          label: 'Без компаундинга',
+          data: dataLinear,
+          borderColor: '#5a6478',
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          fill: false,
+          tension: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: function(ctx) { return ctx[0].label === 'Старт' ? 'Старт' : 'Месяц ' + ctx[0].label; },
+            label: function(ctx) {
+              var label = ctx.dataset.label;
+              var val = ctx.parsed.y.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+              return ' ' + label + ': ' + val + ' $';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Месяцы', color: '#8892a4', font: { size: 12 } },
+          ticks: {
+            color: '#8892a4', font: { size: 11 }, maxRotation: 0,
+            callback: function(v, i) {
+              if (i === 0) return 'Старт';
+              var total = months;
+              if (total <= 12) return i;
+              if (total <= 24) return i % 2 === 0 ? i : '';
+              if (total <= 36) return i % 3 === 0 ? i : '';
+              return i % 6 === 0 ? i : '';
+            }
+          },
+          grid: { color: 'rgba(255,255,255,0.04)' }
+        },
+        y: {
+          title: { display: true, text: 'Баланс (USD)', color: '#8892a4', font: { size: 12 } },
+          ticks: {
+            color: '#8892a4', font: { size: 11 },
+            callback: function(v) {
+              if (v >= 1000000) return (v/1000000).toFixed(1) + 'M';
+              if (v >= 1000) return (v/1000).toFixed(0) + 'K';
+              return v;
+            }
+          },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          beginAtZero: false
+        }
+      }
+    }
+  });
+}
+
+
+// --- Combo mode ---
+var comboDepCons = 2000, comboDepMod = 2000, comboDepAgg = 1000;
+var comboRateCons = 5, comboRateMod = 8, comboRateAgg = 12;
+var comboMonths = 12;
+
+function updateComboPcts() {
+  var total = comboDepCons + comboDepMod + comboDepAgg;
+  if (total > 0) {
+    document.getElementById('combo-pct-cons').textContent = (comboDepCons / total * 100).toFixed(0) + '% от депозита';
+    document.getElementById('combo-pct-mod').textContent = (comboDepMod / total * 100).toFixed(0) + '% от депозита';
+    document.getElementById('combo-pct-agg').textContent = (comboDepAgg / total * 100).toFixed(0) + '% от депозита';
+  }
+}
+
+function splitDepositForCombo() {
+  var total = deposit;
+  comboDepCons = Math.round(total * 0.4);
+  comboDepMod  = Math.round(total * 0.4);
+  comboDepAgg  = total - comboDepCons - comboDepMod;
+  document.getElementById('combo-dep-cons').value = comboDepCons;
+  document.getElementById('combo-dep-mod').value = comboDepMod;
+  document.getElementById('combo-dep-agg').value = comboDepAgg;
+  updateComboPcts();
+}
+
+function renderCombo() {
+  var tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+
+  var balCons = comboDepCons, balMod = comboDepMod, balAgg = comboDepAgg;
+  var totalProfitAll = 0;
+  var startTotal = comboDepCons + comboDepMod + comboDepAgg;
+
+  for (var m = 1; m <= comboMonths; m++) {
+    var pCons = balCons * (comboRateCons / 100);
+    var pMod  = balMod  * (comboRateMod / 100);
+    var pAgg  = balAgg  * (comboRateAgg / 100);
+    var profitMonth = pCons + pMod + pAgg;
+
+    var balStart = balCons + balMod + balAgg;
+    balCons += pCons;
+    balMod  += pMod;
+    balAgg  += pAgg;
+    totalProfitAll += profitMonth;
+    var balEnd = balCons + balMod + balAgg;
+    var growthPct = (balEnd - startTotal) / startTotal * 100;
+
+    var isYearEnd = (m % 12 === 0 && m < comboMonths);
+    var tr = document.createElement('tr');
+    tr.className = isYearEnd ? 'row-year' : 'row-profit';
+    tr.innerHTML =
+      '<td>' + m + '</td>' +
+      '<td>' + fmt(balStart, 2) + ' $</td>' +
+      '<td>' + (balStart > 0 ? (profitMonth / balStart * 100).toFixed(1) : '0.0') + '%</td>' +
+      '<td>+' + fmt(profitMonth, 2) + ' $</td>' +
+      '<td>' + fmt(balEnd, 2) + ' $</td>' +
+      '<td>+' + fmt(totalProfitAll, 2) + ' $</td>' +
+      '<td>+' + fmt(growthPct, 1) + '%</td>';
+    tbody.appendChild(tr);
+  }
+
+  var finalBal = balCons + balMod + balAgg;
+  document.getElementById('s-balance').textContent = fmt(finalBal, 2) + ' $';
+  document.getElementById('s-profit').textContent = '+' + fmt(totalProfitAll, 2) + ' $';
+  document.getElementById('s-profit-pct').textContent = '+' + fmt((finalBal - startTotal) / startTotal * 100, 1) + '%';
+  document.getElementById('s-avg').textContent = fmt(totalProfitAll / comboMonths, 2) + ' $';
+
+  renderComboChart();
+}
+
+function renderComboChart() {
+  if (typeof Chart === 'undefined') return;
+  var labels = [], dataCompound = [], dataLinear = [];
+  var balC = comboDepCons, balM = comboDepMod, balA = comboDepAgg;
+  var startTotal = comboDepCons + comboDepMod + comboDepAgg;
+  var avgRate = 0;
+  if (startTotal > 0) avgRate = (comboDepCons * comboRateCons + comboDepMod * comboRateMod + comboDepAgg * comboRateAgg) / startTotal;
+  var linearMonthly = startTotal * (avgRate / 100);
+
+  for (var m = 0; m <= comboMonths; m++) {
+    labels.push(m === 0 ? 'Старт' : m);
+    dataCompound.push(parseFloat((balC + balM + balA).toFixed(2)));
+    dataLinear.push(parseFloat((startTotal + linearMonthly * m).toFixed(2)));
+    if (m < comboMonths) {
+      balC += balC * (comboRateCons / 100);
+      balM += balM * (comboRateMod / 100);
+      balA += balA * (comboRateAgg / 100);
+    }
+  }
+
+  var color = '#a855f7';
+  document.getElementById('leg-compound').style.background = color;
+
+  if (growthChart) {
+    growthChart.data.labels = labels;
+    growthChart.data.datasets[0].data = dataCompound;
+    growthChart.data.datasets[0].borderColor = color;
+    growthChart.data.datasets[0].pointBackgroundColor = color;
+    growthChart.data.datasets[1].data = dataLinear;
+    growthChart.update();
+    return;
+  }
+  // Chart will be created by render() / renderChart() first time
+}
+
+// Combo deposit inputs
+['cons','mod','agg'].forEach(function(key) {
+  document.getElementById('combo-dep-' + key).addEventListener('input', function(e) {
+    var val = Math.max(0, parseInt(e.target.value) || 0);
+
+    // Считаем сумму двух других стратегий
+    var otherSum = 0;
+    if (key !== 'cons') otherSum += comboDepCons;
+    if (key !== 'mod')  otherSum += comboDepMod;
+    if (key !== 'agg')  otherSum += comboDepAgg;
+
+    // Не даём превысить депозит
+    var maxVal = Math.max(0, deposit - otherSum);
+    if (val > maxVal) {
+      val = maxVal;
+      e.target.value = val;
+    }
+
+    if (key === 'cons') comboDepCons = val;
+    if (key === 'mod')  comboDepMod = val;
+    if (key === 'agg')  comboDepAgg = val;
+    updateComboPcts();
+    renderCombo();
+  });
+});
+
+// Combo rate sliders
+['cons','mod','agg'].forEach(function(key) {
+  document.getElementById('combo-rate-' + key).addEventListener('input', function(e) {
+    var val = parseFloat(e.target.value);
+    if (key === 'cons') comboRateCons = val;
+    if (key === 'mod')  comboRateMod = val;
+    if (key === 'agg')  comboRateAgg = val;
+    document.getElementById('combo-rate-' + key + '-val').textContent = val.toFixed(1) + '%';
+    var colors = { cons: '#22c55e', mod: '#3b82f6', agg: '#ef4444' };
+    fillSlider(e.target, colors[key]);
+    renderCombo();
+  });
+});
+
+// Combo months slider
+document.getElementById('combo-months').addEventListener('input', function(e) {
+  comboMonths = parseInt(e.target.value);
+  document.getElementById('combo-months-val').textContent = comboMonths + ' мес.';
+  fillSlider(e.target, '#a855f7');
+  renderCombo();
+});
+
+function updateSliders() {
+  var s = STRATS[stratKey];
+  var slRate = document.getElementById('sl-rate');
+  slRate.min = s.rateMin;
+  slRate.max = s.rateMax;
+  slRate.step = 0.5;
+  slRate.value = s.rateDefault;
+  monthlyRate = s.rateDefault;
+  document.getElementById('val-rate').textContent = s.rateDefault + '%';
+  document.getElementById('val-rate').style.color = s.color;
+  document.getElementById('val-months').style.color = s.color;
+  document.getElementById('sl-rate-min').textContent = s.rateMin + '%';
+  document.getElementById('sl-rate-max').textContent = s.rateMax + '%';
+
+  fillSlider(slRate, s.color);
+  fillSlider(document.getElementById('sl-months'), s.color);
+}
+
+// Strategy buttons
+document.querySelectorAll('.strat-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    stratKey = btn.dataset.s;
+    document.querySelectorAll('.strat-btn').forEach(function(b) { b.className = 'strat-btn'; });
+    btn.classList.add('active-' + stratKey);
+
+    var singleBlock = document.querySelector('.sliders-block');
+    var comboBlock  = document.getElementById('combo-block');
+
+    if (stratKey === 'combo') {
+      singleBlock.style.display = 'none';
+      comboBlock.classList.add('visible');
+      splitDepositForCombo();
+      // Fill combo sliders
+      fillSlider(document.getElementById('combo-rate-cons'), '#22c55e');
+      fillSlider(document.getElementById('combo-rate-mod'),  '#3b82f6');
+      fillSlider(document.getElementById('combo-rate-agg'),  '#ef4444');
+      fillSlider(document.getElementById('combo-months'),    '#a855f7');
+      renderCombo();
+    } else {
+      singleBlock.style.display = 'block';
+      comboBlock.classList.remove('visible');
+      updateSliders();
+      render();
+    }
+  });
+});
+
+// Deposit
+document.getElementById('in-deposit').addEventListener('input', function(e) {
+  deposit = Math.max(0, Math.min(200000, parseInt(e.target.value) || 0));
+  if (stratKey === 'combo') {
+    splitDepositForCombo();
+    renderCombo();
+  } else {
+    render();
+  }
+});
+
+// Rate slider
+document.getElementById('sl-rate').addEventListener('input', function(e) {
+  monthlyRate = parseFloat(e.target.value);
+  document.getElementById('val-rate').textContent = monthlyRate.toFixed(1) + '%';
+  fillSlider(e.target, STRATS[stratKey].color);
+  render();
+});
+
+// Months slider
+document.getElementById('sl-months').addEventListener('input', function(e) {
+  months = parseInt(e.target.value);
+  document.getElementById('val-months').textContent = months + ' мес.';
+  fillSlider(e.target, STRATS[stratKey].color);
+  render();
+});
+
+document.getElementById('modal-ok-btn').addEventListener('click', function() {
+  document.getElementById('disclaimer-modal').classList.add('hidden');
+});
+
+updateSliders();
+render();
+</script>
+
+<script>
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  var btn = document.getElementById('theme-toggle');
+  if(btn) btn.textContent = t==='light' ? '🌙' : '☀️';
+}
+function toggleTheme(){
+  var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  localStorage.setItem('novafx-theme', cur);
+  applyTheme(cur);
+}
+(function(){
+  var saved = localStorage.getItem('novafx-theme') || 'dark';
+  applyTheme(saved);
+})();
+</script>
+</body>
+</html>
