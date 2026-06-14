@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<script>(function(){var t=localStorage.getItem("novafx-theme")||"dark";document.documentElement.setAttribute("data-theme",t);})();</script>
+<script>(function(){var t=localStorage.getItem("nova-theme")||"dark";document.documentElement.setAttribute("data-theme",t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор доходности — NovaFX</title>
@@ -762,11 +762,11 @@ function applyTheme(t){
 }
 function toggleTheme(){
   var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  localStorage.setItem('novafx-theme', cur);
+  localStorage.setItem('nova-theme', cur);
   applyTheme(cur);
 }
 (function(){
-  var saved = localStorage.getItem('novafx-theme') || 'dark';
+  var saved = localStorage.getItem('nova-theme') || 'dark';
   applyTheme(saved);
 })();
 </script>
