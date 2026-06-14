@@ -98,7 +98,7 @@
   tr:last-child td { border-bottom: none; }
   td:first-child { color: var(--text); font-weight: 500; }
   .row-s1 td { background: var(--bg-card); }
-  .row-s2 td { background: #1a2030; }
+  .row-s2 td { background: var(--row-s2); }
   .row-s3 td { background: rgba(245,158,11,0.05); }
   .row-refill td { background: rgba(34,197,94,0.07) !important; color: var(--green) !important; font-weight: 500 !important; }
   .row-liq td { background: rgba(239,68,68,0.1) !important; color: var(--red) !important; font-weight: 600 !important; }
@@ -121,9 +121,19 @@
     --orange: #d97706; --orange-bg: rgba(217,119,6,0.08); --orange-border: rgba(217,119,6,0.25);
     --red: #dc2626; --red-bg: rgba(220,38,38,0.08); --red-border: rgba(220,38,38,0.25);
   }
+
+  :root {
+    --row-s2: rgba(59,130,246,0.08);
+  }
+  [data-theme="light"] {
+    --row-s2: rgba(59,130,246,0.06);
+    --text: #0f172a;
+    --text-secondary: #334155;
+    --text-tertiary: #64748b;
+  }
 </style>
 </head>
-<body><button id="theme-toggle" onclick="toggleTheme()" style="position:fixed;top:16px;right:130px;z-index:9999;padding:8px 14px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:14px;cursor:pointer;font-family:sans-serif;color:#9ca3af;">&#9728;</button><a onclick="document.querySelector('meta[name=viewport]').content='width=device-width,initial-scale=1.0';setTimeout(()=>window.location.href='/',50);" style="position:fixed;top:16px;right:20px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);color:#9ca3af;border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;font-family:sans-serif;transition:all .2s;;cursor:pointer;">← На сайт</a>
+<body><a onclick="document.querySelector('meta[name=viewport]').content='width=device-width,initial-scale=1.0';setTimeout(()=>window.location.href='/',50);" style="position:fixed;top:16px;right:20px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);color:#9ca3af;border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;font-family:sans-serif;transition:all .2s;;cursor:pointer;">← На сайт</a>
 <div class="container">
   <div class="logo"><div class="logo-dot"></div><span class="logo-text">NovaFX · DigitalNovaLabs</span></div>
   <h1>Калькулятор просадки</h1>
