@@ -257,6 +257,7 @@ function closeMenu() { dropdown.classList.remove('open'); }
 
 var prevBid = null;
 var histHigh = null, histLow = null;
+var lastSpread = 0;
 
 function setStatus(ok, msg) {
   var dot = document.getElementById('status-dot');
@@ -392,6 +393,7 @@ function fetchMT5Price() {
       var t = new Date(d.updated);
       document.getElementById('p-time').textContent = 'MT5 · ' + String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0') + ':' + String(t.getSeconds()).padStart(2,'0');
 
+      lastSpread = spread;
       updateSpread(spread);
       if (histHigh && histLow) {
         updateSentiment(bid, histHigh, histLow, spread);
@@ -421,6 +423,12 @@ function applyHistory(candles) {
   document.getElementById('vol-label').textContent = level;
   document.getElementById('vol-val').style.color = color;
   document.getElementById('vol-marker').style.left = pct + '%';
+
+  // Пересчитываем настроение и уровни если цена уже есть
+  if (prevBid !== null) {
+    updateSentiment(prevBid, histHigh, histLow, lastSpread);
+    updateLevels(prevBid, histHigh, histLow);
+  }
 }
 
 function fetchHistory() {
