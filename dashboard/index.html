@@ -93,6 +93,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 .level-type{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px;}
 .level-val{font-family:var(--font-m);font-size:15px;font-weight:600;}
 
+/* LEVEL TABS */
+.lvl-tab{background:var(--bg-input);border:.5px solid var(--border);border-radius:var(--r-sm);padding:4px 12px;font-size:11px;font-weight:500;color:var(--text-2);cursor:pointer;transition:all .15s;}
+.lvl-tab:hover{color:var(--text);}
+.lvl-tab-active{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+
 /* STATUS BAR */
 .status-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);padding:8px 14px;background:var(--bg-input);border-radius:var(--r-sm);margin-top:4px;}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite;}
@@ -197,23 +202,64 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
   <!-- УРОВНИ -->
   <div class="card">
     <div class="clabel">Ключевые уровни</div>
-    <div class="levels-grid">
-      <div class="level-item">
-        <div class="level-type c-green">Поддержка S1</div>
-        <div class="level-val c-green" id="lvl-s1">—</div>
+
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <button onclick="setLevelsMode('pivot')" id="btn-pivot" class="lvl-tab lvl-tab-active">Pivot</button>
+      <button onclick="setLevelsMode('fib')" id="btn-fib" class="lvl-tab">Fibonacci</button>
+    </div>
+
+    <!-- Pivot уровни -->
+    <div id="levels-pivot">
+      <div class="levels-grid">
+        <div class="level-item">
+          <div class="level-type c-green">Поддержка S1</div>
+          <div class="level-val c-green" id="lvl-s1">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-red">Сопротивление R1</div>
+          <div class="level-val c-red" id="lvl-r1">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-green">Поддержка S2</div>
+          <div class="level-val c-green" id="lvl-s2">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-red">Сопротивление R2</div>
+          <div class="level-val c-red" id="lvl-r2">—</div>
+        </div>
       </div>
-      <div class="level-item">
-        <div class="level-type c-red">Сопротивление R1</div>
-        <div class="level-val c-red" id="lvl-r1">—</div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:8px;">Классический Pivot Point · дневной диапазон</div>
+    </div>
+
+    <!-- Fibonacci уровни -->
+    <div id="levels-fib" style="display:none;">
+      <div class="levels-grid" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="level-item">
+          <div class="level-type c-green">S 23.6%</div>
+          <div class="level-val c-green" id="fib-s236">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-green">S 38.2%</div>
+          <div class="level-val c-green" id="fib-s382">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-amber">50%</div>
+          <div class="level-val c-amber" id="fib-s50">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-green">S 61.8%</div>
+          <div class="level-val c-green" id="fib-s618">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-red">R 38.2%</div>
+          <div class="level-val c-red" id="fib-r382">—</div>
+        </div>
+        <div class="level-item">
+          <div class="level-type c-red">R 61.8%</div>
+          <div class="level-val c-red" id="fib-r618">—</div>
+        </div>
       </div>
-      <div class="level-item">
-        <div class="level-type c-green">Поддержка S2</div>
-        <div class="level-val c-green" id="lvl-s2">—</div>
-      </div>
-      <div class="level-item">
-        <div class="level-type c-red">Сопротивление R2</div>
-        <div class="level-val c-red" id="lvl-r2">—</div>
-      </div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:8px;">Fibonacci Retracement · от дневного диапазона High/Low</div>
     </div>
   </div>
 
@@ -333,14 +379,34 @@ function updateSpread(spread) {
   }
 }
 
+var levelsMode = 'pivot';
+
+function setLevelsMode(mode) {
+  levelsMode = mode;
+  document.getElementById('levels-pivot').style.display = mode === 'pivot' ? '' : 'none';
+  document.getElementById('levels-fib').style.display   = mode === 'fib'   ? '' : 'none';
+  document.getElementById('btn-pivot').className = 'lvl-tab' + (mode === 'pivot' ? ' lvl-tab-active' : '');
+  document.getElementById('btn-fib').className   = 'lvl-tab' + (mode === 'fib'   ? ' lvl-tab-active' : '');
+}
+
 function updateLevels(bid, high, low) {
   if (!high || !low) return;
-  var pivot = (high + low + bid) / 3;
   var range = high - low;
-  document.getElementById('lvl-s1').textContent = (pivot - range * 0.382).toFixed(5);
-  document.getElementById('lvl-r1').textContent = (pivot + range * 0.382).toFixed(5);
-  document.getElementById('lvl-s2').textContent = (pivot - range * 0.618).toFixed(5);
-  document.getElementById('lvl-r2').textContent = (pivot + range * 0.618).toFixed(5);
+
+  // Классический Pivot
+  var pivot = (high + low + bid) / 3;
+  document.getElementById('lvl-s1').textContent = (2 * pivot - high).toFixed(5);
+  document.getElementById('lvl-r1').textContent = (2 * pivot - low).toFixed(5);
+  document.getElementById('lvl-s2').textContent = (pivot - range).toFixed(5);
+  document.getElementById('lvl-r2').textContent = (pivot + range).toFixed(5);
+
+  // Fibonacci Retracement от Low вверх
+  document.getElementById('fib-s236').textContent = (low + range * 0.236).toFixed(5);
+  document.getElementById('fib-s382').textContent = (low + range * 0.382).toFixed(5);
+  document.getElementById('fib-s50').textContent  = (low + range * 0.500).toFixed(5);
+  document.getElementById('fib-s618').textContent = (low + range * 0.618).toFixed(5);
+  document.getElementById('fib-r382').textContent = (high - range * 0.382).toFixed(5);
+  document.getElementById('fib-r618').textContent = (high - range * 0.618).toFixed(5);
 }
 
 function fetchMT5Price() {
