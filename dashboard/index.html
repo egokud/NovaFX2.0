@@ -400,19 +400,26 @@ function fetchMT5Price() {
 }
 
 function fetchHistory() {
-  var today = new Date();
-  var fmt = function(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-  var d30 = new Date(today); d30.setDate(d30.getDate()-30);
-  fetch('https://api.frankfurter.dev/v1/'+fmt(d30)+'..'+fmt(today)+'?base=EUR&symbols=USD')
+  fetch('https://www.novafx.io/api/history')
     .then(function(r){ return r.json(); })
-    .then(function(d) {
-      var rates = Object.values(d.rates).map(function(x){ return x.USD; });
-      histHigh = Math.max.apply(null, rates);
-      histLow = Math.min.apply(null, rates);
+    .then(function(candles) {
+      if (!candles || candles.length === 0) return;
+
+      // Берём последние 30 дней (720 свечей H1)
+      var last = candles.slice(-720);
+      var highs = last.map(function(c){ return c.h; });
+      var lows  = last.map(function(c){ return c.l; });
+      histHigh = Math.max.apply(null, highs);
+      histLow  = Math.min.apply(null, lows);
+
+      // Также храним всю историю для доп. анализа
+      window._allCandles = candles;
+
       var range = Math.round((histHigh - histLow) * 10000);
       document.getElementById('p-high').textContent = histHigh.toFixed(5);
       document.getElementById('p-low').textContent = histLow.toFixed(5);
       document.getElementById('vol-val').textContent = range + ' пп';
+
       var level, color, pct;
       if (range < 150) { level='Низкая'; color='var(--green)'; pct=15; }
       else if (range < 300) { level='Умеренная'; color='var(--amber)'; pct=45; }
@@ -421,7 +428,10 @@ function fetchHistory() {
       document.getElementById('vol-label').textContent = level;
       document.getElementById('vol-val').style.color = color;
       document.getElementById('vol-marker').style.left = pct + '%';
-    }).catch(function(){});
+
+      // После загрузки истории обновляем цену чтобы пересчитать уровни
+      fetchMT5Price();
+    }).catch(function(e){ console.error('history error', e); });
 }
 
 fetchMT5Price();
