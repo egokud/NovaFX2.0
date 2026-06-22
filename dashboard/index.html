@@ -343,7 +343,7 @@ function updateLevels(bid, high, low) {
 }
 
 function fetchMT5Price() {
-  fetch('/api/price')
+  fetch('https://www.novafx.io/api/price')
     .then(function(r){ return r.json(); })
     .then(function(d) {
       if (!d || !d.bid) { setStatus(false, 'Нет данных от MT5'); return; }
