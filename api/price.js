@@ -1,3 +1,5 @@
+export const config = { api: { bodyParser: false } };
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -8,17 +10,19 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      const raw = await new Promise((resolve, reject) => {
+        let data = '';
+        req.on('data', chunk => data += chunk);
+        req.on('end', () => resolve(data));
+        req.on('error', reject);
+      });
+      const body = JSON.parse(raw);
       const { secret, symbol, bid, ask, spread, time } = body;
       if (secret !== process.env.CRON_SECRET) return res.status(403).json({ error: 'forbidden' });
-
       const data = { symbol, bid, ask, spread, time, updated: new Date().toISOString() };
-
-      // Записываем в Upstash Redis через REST API
       await fetch(`${kvUrl}/set/eurusd_price/${encodeURIComponent(JSON.stringify(data))}`, {
         headers: { Authorization: `Bearer ${kvToken}` }
       });
-
       return res.status(200).json({ ok: true, data });
     } catch(e) {
       return res.status(500).json({ error: e.message });
