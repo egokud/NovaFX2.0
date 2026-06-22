@@ -17,12 +17,15 @@ export default async function handler(req, res) {
         req.on('error', reject);
       });
       const body = JSON.parse(raw);
-      const { secret, symbol, bid, ask, spread, time } = body;
+      const { secret, symbol, bid, ask, spread, time, day_high, day_low } = body;
       if (secret !== process.env.CRON_SECRET) return res.status(403).json({ error: 'forbidden' });
-      const data = { symbol, bid, ask, spread, time, updated: new Date().toISOString() };
+
+      const data = { symbol, bid, ask, spread, time, day_high, day_low, updated: new Date().toISOString() };
+
       await fetch(`${kvUrl}/set/eurusd_price/${encodeURIComponent(JSON.stringify(data))}`, {
         headers: { Authorization: `Bearer ${kvToken}` }
       });
+
       return res.status(200).json({ ok: true, data });
     } catch(e) {
       return res.status(500).json({ error: e.message });
