@@ -226,7 +226,7 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
     </div>
     <div class="input-group">
       <span class="input-label">Макс. кол-во ордеров</span>
-      <input class="input-field" id="in-maxorders" type="number" min="1" max="200" step="1" value="200">
+      <input class="input-field" id="in-maxorders" type="number" min="1" max="200" step="1" value="30">
       <span style="font-size:11px;color:#f59e0b;">● Ограничить сетку (1–200, по умолч. 200)</span>
     </div>
     <div class="input-group">
@@ -316,7 +316,7 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 <script>
 const PIP_VAL = 0.01, STOP_OUT = 0.30; // 5-значные котировки EURUSD
 function getMarginPerLot() { return eurusd * 0.752; }
-let userMaxOrders = 200;
+let userMaxOrders = 30;
 const GROUP1 = 5, GROUP2 = 10, MAX_BOOSTED = 14;
 
 const STRATS = {
