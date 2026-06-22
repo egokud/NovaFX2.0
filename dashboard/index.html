@@ -393,12 +393,12 @@ function updateLevels(bid, high, low) {
   if (!high || !low) return;
   var range = high - low;
 
-  // Классический Pivot
+  // Pivot + Fibonacci коэффициенты
   var pivot = (high + low + bid) / 3;
-  document.getElementById('lvl-s1').textContent = (2 * pivot - high).toFixed(5);
-  document.getElementById('lvl-r1').textContent = (2 * pivot - low).toFixed(5);
-  document.getElementById('lvl-s2').textContent = (pivot - range).toFixed(5);
-  document.getElementById('lvl-r2').textContent = (pivot + range).toFixed(5);
+  document.getElementById('lvl-s1').textContent = (pivot - range * 0.382).toFixed(5);
+  document.getElementById('lvl-r1').textContent = (pivot + range * 0.382).toFixed(5);
+  document.getElementById('lvl-s2').textContent = (pivot - range * 0.618).toFixed(5);
+  document.getElementById('lvl-r2').textContent = (pivot + range * 0.618).toFixed(5);
 
   // Fibonacci Retracement от Low вверх
   document.getElementById('fib-s236').textContent = (low + range * 0.236).toFixed(5);
