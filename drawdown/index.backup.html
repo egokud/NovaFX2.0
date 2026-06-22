@@ -219,15 +219,10 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 
   <div class="info-bar">Брокер RoboForex · Плечо 1:1000 · Stop out 30% · Маржа на 1 центовый лот = 0.01 $ · Сетка строится от первоначального депозита · Резерв добавляется по достижении порога просадки от текущего баланса</div>
 
-  <div class="inputs-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+  <div class="inputs-grid" style="grid-template-columns:1fr 1fr 1fr;">
     <div class="input-group">
       <span class="input-label">Первоначальный депозит (USD)</span>
       <input class="input-field" id="in-deposit" type="number" min="500" max="200000" step="500" value="5000">
-    </div>
-    <div class="input-group">
-      <span class="input-label">Макс. кол-во ордеров</span>
-      <input class="input-field" id="in-maxorders" type="number" min="1" max="200" step="1" value="30">
-      <span style="font-size:11px;color:#f59e0b;">● Ограничить сетку (1–200, по умолч. 200)</span>
     </div>
     <div class="input-group">
       <span class="input-label">Курс EUR/USD</span>
@@ -316,8 +311,7 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 <script>
 const PIP_VAL = 0.01, STOP_OUT = 0.30; // 5-значные котировки EURUSD
 function getMarginPerLot() { return eurusd * 0.752; }
-let userMaxOrders = 30;
-const GROUP1 = 5, GROUP2 = 10, MAX_BOOSTED = 14;
+const MAX_ORDERS = 200, GROUP1 = 5, GROUP2 = 10, MAX_BOOSTED = 14;
 
 const STRATS = {
   cons: { vol:0.05, step:200, threshold:0.30, refills:1, volMin:0.01, volMax:0.05, stepMin:195, stepMax:300, color:'#22c55e' },
@@ -372,7 +366,6 @@ function render() {
 
   var bm = { 1:'<span class="badge b1">Серия 1</span>', 2:'<span class="badge b2">Серия 2</span>', 3:'<span class="badge b3">Серия 3</span>' };
 
-  var MAX_ORDERS = userMaxOrders;
   for (var i = 0; i < MAX_ORDERS; i++) {
     var lot = calcLot(startLot, i);
     totalVolume += lot;
@@ -424,16 +417,7 @@ function render() {
       fmt(balance)+' $', '−'+fmt(loss,1)+' $', fmt(equity,1)+' $', fmt(ddPct,1)+'%', fmt(marginLevel,0)+'%', status],
       ['','row-s1','row-s2','row-s3'][series]);
 
-    if (i === MAX_ORDERS-1 && !liquidationOrder) {
-      // Лимит ордеров исчерпан — считаем сколько ещё пройдёт цена до ликвидации
-      // без открытия новых ордеров (суммарный объём фиксирован = totalVolume)
-      // equity = balance - loss - totalVolume * extraPips * PIP_VAL >= balance * STOP_OUT
-      // extraPips = (balance - loss - balance * STOP_OUT) / (totalVolume * PIP_VAL)
-      var extraPips = Math.max(0, (equity - balance * STOP_OUT) / (totalVolume * PIP_VAL));
-      var totalLiqPips = Math.round(pipsNow + extraPips);
-      liquidationOrder = MAX_ORDERS;
-      liquidationPips = totalLiqPips;
-    }
+    if (i === MAX_ORDERS-1 && !liquidationOrder) { liquidationOrder = '>200'; liquidationPips = '>'+pipsNow; }
   }
 
   document.getElementById('s-reserve').textContent = fmt(totalReserveAdded)+' $';
@@ -442,15 +426,14 @@ function render() {
   document.getElementById('s-orders-liq').textContent = liquidationOrder || '>200';
   document.getElementById('s-pips-liq').textContent = liquidationPips || '—';
   // Calculate liquidation price
-  if (liquidationPips) {
-    var pipsNum = parseFloat(String(liquidationPips).replace('>',''));
-    var liqPriceBuy = eurusd - (pipsNum * 0.00001);
-    var liqPriceSell = eurusd + (pipsNum * 0.00001);
+  if (liquidationPips && liquidationPips !== '>200') {
+    var liqPriceBuy = eurusd - (liquidationPips * 0.00001);
+    var liqPriceSell = eurusd + (liquidationPips * 0.00001);
     document.getElementById('s-price-liq').textContent = liqPriceBuy.toFixed(5);
     document.getElementById('s-price-liq-sell').textContent = liqPriceSell.toFixed(5);
   } else {
-    document.getElementById('s-price-liq').textContent = '—';
-    document.getElementById('s-price-liq-sell').textContent = '—';
+    document.getElementById('s-price-liq').textContent = liquidationPips === '>200' ? '< ' + (eurusd - 200*0.00001).toFixed(5) : '—';
+    document.getElementById('s-price-liq-sell').textContent = liquidationPips === '>200' ? '> ' + (eurusd + 200*0.00001).toFixed(5) : '—';
   }
   var usedPct = Math.min(100, (initDeposit+totalReserveAdded)>0 ? totalReserveAdded/(initDeposit+totalReserveAdded)*100 : 0);
 
@@ -524,10 +507,6 @@ document.getElementById('in-deposit').addEventListener('input', function(e) {
 });
 document.getElementById('in-rate').addEventListener('input', function(e) {
   eurusd = Math.max(0.5, Math.min(2.0, parseFloat(e.target.value)||1.18));
-  render();
-});
-document.getElementById('in-maxorders').addEventListener('input', function(e) {
-  userMaxOrders = Math.max(1, Math.min(200, parseInt(e.target.value)||200));
   render();
 });
 document.querySelectorAll('.refill-btn').forEach(function(btn) {
