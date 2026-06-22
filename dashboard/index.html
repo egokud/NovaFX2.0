@@ -403,44 +403,47 @@ function fetchMT5Price() {
     .catch(function(){ setStatus(false, 'Ошибка получения данных от MT5'); });
 }
 
+function applyHistory(candles) {
+  if (!candles || candles.length === 0) return;
+  var last = candles.slice(-720);
+  var highs = last.map(function(c){ return c.h; });
+  var lows  = last.map(function(c){ return c.l; });
+  histHigh = Math.max.apply(null, highs);
+  histLow  = Math.min.apply(null, lows);
+  window._allCandles = candles;
+  var range = Math.round((histHigh - histLow) * 10000);
+  document.getElementById('vol-val').textContent = range + ' пп';
+  var level, color, pct;
+  if (range < 150) { level='Низкая'; color='var(--green)'; pct=15; }
+  else if (range < 300) { level='Умеренная'; color='var(--amber)'; pct=45; }
+  else if (range < 500) { level='Высокая'; color='var(--red)'; pct=75; }
+  else { level='Очень высокая'; color='var(--red)'; pct=92; }
+  document.getElementById('vol-label').textContent = level;
+  document.getElementById('vol-val').style.color = color;
+  document.getElementById('vol-marker').style.left = pct + '%';
+}
+
 function fetchHistory() {
+  // Кеш в localStorage на 1 час — не грузим 500KB каждый раз
+  try {
+    var cached = localStorage.getItem('nova_history');
+    if (cached) {
+      var obj = JSON.parse(cached);
+      if (Date.now() - obj.ts < 3600000) { applyHistory(obj.data); return; }
+    }
+  } catch(e) {}
   fetch('https://www.novafx.io/api/history')
     .then(function(r){ return r.json(); })
     .then(function(candles) {
-      if (!candles || candles.length === 0) return;
-
-      // Берём последние 30 дней (720 свечей H1)
-      var last = candles.slice(-720);
-      var highs = last.map(function(c){ return c.h; });
-      var lows  = last.map(function(c){ return c.l; });
-      histHigh = Math.max.apply(null, highs);
-      histLow  = Math.min.apply(null, lows);
-
-      // Также храним всю историю для доп. анализа
-      window._allCandles = candles;
-
-      var range = Math.round((histHigh - histLow) * 10000);
-      document.getElementById('p-high').textContent = histHigh.toFixed(5);
-      document.getElementById('p-low').textContent = histLow.toFixed(5);
-      document.getElementById('vol-val').textContent = range + ' пп';
-
-      var level, color, pct;
-      if (range < 150) { level='Низкая'; color='var(--green)'; pct=15; }
-      else if (range < 300) { level='Умеренная'; color='var(--amber)'; pct=45; }
-      else if (range < 500) { level='Высокая'; color='var(--red)'; pct=75; }
-      else { level='Очень высокая'; color='var(--red)'; pct=92; }
-      document.getElementById('vol-label').textContent = level;
-      document.getElementById('vol-val').style.color = color;
-      document.getElementById('vol-marker').style.left = pct + '%';
-
-      // После загрузки истории обновляем цену чтобы пересчитать уровни
-      fetchMT5Price();
+      try { localStorage.setItem('nova_history', JSON.stringify({ts: Date.now(), data: candles})); } catch(e) {}
+      applyHistory(candles);
     }).catch(function(e){ console.error('history error', e); });
 }
 
 fetchMT5Price();
-fetchHistory();
 setInterval(fetchMT5Price, 60000);
+// История грузится с задержкой — не блокирует цену
+setTimeout(fetchHistory, 2000);
 setInterval(fetchHistory, 3600000);
 </script>
 </body>
