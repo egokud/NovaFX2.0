@@ -433,14 +433,18 @@ function render() {
   document.getElementById('s-orders-liq').textContent = liquidationOrder || '>200';
   document.getElementById('s-pips-liq').textContent = liquidationPips || '—';
   // Calculate liquidation price
-  if (liquidationPips && liquidationPips !== '>200') {
-    var liqPriceBuy = eurusd - (liquidationPips * 0.00001);
-    var liqPriceSell = eurusd + (liquidationPips * 0.00001);
-    document.getElementById('s-price-liq').textContent = liqPriceBuy.toFixed(5);
-    document.getElementById('s-price-liq-sell').textContent = liqPriceSell.toFixed(5);
+  if (liquidationPips) {
+    var isExact = typeof liquidationPips === 'number' || (typeof liquidationPips === 'string' && !String(liquidationPips).startsWith('>'));
+    var pipsNum = isExact ? parseFloat(liquidationPips) : parseFloat(String(liquidationPips).slice(1));
+    var liqPriceBuy = eurusd - (pipsNum * 0.00001);
+    var liqPriceSell = eurusd + (pipsNum * 0.00001);
+    var prefix = isExact ? '' : '< ';
+    var prefixSell = isExact ? '' : '> ';
+    document.getElementById('s-price-liq').textContent = prefix + liqPriceBuy.toFixed(5);
+    document.getElementById('s-price-liq-sell').textContent = prefixSell + liqPriceSell.toFixed(5);
   } else {
-    document.getElementById('s-price-liq').textContent = liquidationPips === '>200' ? '< ' + (eurusd - 200*0.00001).toFixed(5) : '—';
-    document.getElementById('s-price-liq-sell').textContent = liquidationPips === '>200' ? '> ' + (eurusd + 200*0.00001).toFixed(5) : '—';
+    document.getElementById('s-price-liq').textContent = '—';
+    document.getElementById('s-price-liq-sell').textContent = '—';
   }
   var usedPct = Math.min(100, (initDeposit+totalReserveAdded)>0 ? totalReserveAdded/(initDeposit+totalReserveAdded)*100 : 0);
 
