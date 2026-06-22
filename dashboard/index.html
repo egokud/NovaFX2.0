@@ -363,6 +363,10 @@ function fetchMT5Price() {
       document.getElementById('p-ask').textContent = ask.toFixed(5);
       document.getElementById('p-spread-meta').textContent = spread.toFixed(1);
 
+      // Дневные High/Low от Python скрипта
+      if (d.day_high) document.getElementById('p-high').textContent = d.day_high.toFixed(5);
+      if (d.day_low)  document.getElementById('p-low').textContent  = d.day_low.toFixed(5);
+
       if (prevBid !== null) {
         var diff = bid - prevBid;
         var el = document.getElementById('price-chg');
