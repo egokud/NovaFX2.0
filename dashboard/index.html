@@ -12,7 +12,8 @@
   --border:#2a3245;--border-light:#1e2535;
   --text:#e8eaf0;--text-2:#8892a4;--text-3:#5a6478;
   --green:#22c55e;--green-bg:rgba(34,197,94,0.1);--green-border:rgba(34,197,94,0.25);
-  --red:#ef4444;--r:12px;--r-sm:8px;
+  --red:#ef4444;--red-bg:rgba(239,68,68,0.1);--red-border:rgba(239,68,68,0.25);
+  --amber:#f59e0b;--r:12px;--r-sm:8px;
   --font-d:'Syne',sans-serif;--font-b:'Inter',sans-serif;--font-m:'JetBrains Mono',monospace;
 }
 [data-theme="light"] {
@@ -20,6 +21,7 @@
   --border:#d1d9e8;--border-light:#e4e9f2;
   --text:#111827;--text-2:#4b5563;--text-3:#9ca3af;
   --green-bg:rgba(34,197,94,0.08);--green-border:rgba(34,197,94,0.3);
+  --red-bg:rgba(239,68,68,0.08);--red-border:rgba(239,68,68,0.3);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;}
@@ -29,14 +31,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
 .nav-name{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--text);letter-spacing:.04em;}
-.nav-dashboard{font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:var(--r-sm);border:.5px solid var(--border);transition:all .15s;}
-.nav-dashboard:hover{color:var(--text);border-color:var(--text-3);}
 .nav-right{display:flex;align-items:center;gap:8px;}
 .nav-links{display:flex;align-items:center;gap:4px;}
 .nav-a{padding:6px 12px;border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--text-2);text-decoration:none;transition:all .15s;}
 .nav-a:hover{color:var(--text);background:var(--bg-input);}
 .nav-cta{background:var(--green-bg);color:var(--green)!important;border:.5px solid var(--green-border);}
-.nav-cta:hover{opacity:.85;}
 .theme-btn{width:34px;height:34px;border-radius:50%;background:var(--bg-input);border:.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .2s;flex-shrink:0;}
 .burger-btn{display:none;width:34px;height:34px;border-radius:var(--r-sm);background:var(--bg-input);border:.5px solid var(--border);flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;padding:0;}
 .burger-line{width:16px;height:1.5px;background:var(--text);border-radius:2px;}
@@ -46,24 +45,58 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 .nav-dropdown a:hover{color:var(--text);background:var(--bg-input);}
 .nav-dropdown .dd-tg{color:var(--green);background:var(--green-bg);border:.5px solid var(--green-border);margin-top:4px;}
 .nav-dropdown hr{border:none;border-top:.5px solid var(--border);margin:4px 0;}
-@media(max-width:768px){
-  nav{padding:0 16px;}
-  .nav-links{display:none;}
-  .burger-btn{display:flex;}
-}
+@media(max-width:768px){nav{padding:0 16px;}.nav-links{display:none;}.burger-btn{display:flex;}}
 
 .wrap{max-width:960px;margin:0 auto;padding:80px 20px 32px;display:flex;flex-direction:column;gap:12px;}
 .card{background:var(--bg-card);border:.5px solid var(--border);border-radius:var(--r);padding:14px;}
 .clabel{font-size:9px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
 .auto-tag{background:var(--green-bg);color:var(--green);font-size:9px;padding:2px 6px;border-radius:4px;border:.5px solid var(--green-border);}
+.stale-tag{background:var(--red-bg);color:var(--red);font-size:9px;padding:2px 6px;border-radius:4px;border:.5px solid var(--red-border);}
+
+/* PRICE CARD */
 .price-num{font-family:var(--font-m);font-size:44px;font-weight:600;letter-spacing:-2px;line-height:1;}
 .price-chg{font-size:12px;margin-left:8px;font-family:var(--font-m);}
 .price-meta{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:11px;color:var(--text-2);}
 .price-meta b{color:var(--text);font-weight:500;}
-.c-green{color:var(--green);}.c-red{color:#ef4444;}.c-amber{color:#f59e0b;}
+.c-green{color:var(--green);}.c-red{color:var(--red);}.c-amber{color:var(--amber);}
+
+/* GRID 2 cols */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}}
+
+/* SENTIMENT */
+.sentiment-row{display:flex;align-items:center;gap:12px;margin-top:4px;}
+.sentiment-icon{font-size:40px;line-height:1;}
+.sentiment-label{font-family:var(--font-d);font-size:22px;font-weight:700;}
+.sentiment-sub{font-size:11px;color:var(--text-2);margin-top:2px;}
+
+/* BULL/BEAR BAR */
+.bb-wrap{margin-top:12px;}
+.bb-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;}
+.bb-bar{height:8px;border-radius:4px;background:var(--bg-input);overflow:hidden;display:flex;}
+.bb-bull{height:100%;background:var(--green);border-radius:4px 0 0 4px;transition:width .6s ease;}
+.bb-bear{height:100%;background:var(--red);border-radius:0 4px 4px 0;transition:width .6s ease;}
+.bb-pct{display:flex;justify-content:space-between;font-size:10px;margin-top:4px;font-family:var(--font-m);}
+
+/* VOLATILITY */
 .vol-val{font-family:var(--font-m);font-size:24px;font-weight:600;}
-.vol-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,#f59e0b 50%,#ef4444 100%);margin-top:8px;position:relative;}
+.vol-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,#f59e0b 50%,var(--red) 100%);margin-top:8px;position:relative;}
 .vol-marker{position:absolute;top:-4px;width:3px;height:13px;background:var(--text);border-radius:2px;transition:left .5s;}
+
+/* SPREAD */
+.spread-num{font-family:var(--font-m);font-size:24px;font-weight:600;}
+.spread-status{font-size:11px;margin-top:4px;}
+
+/* LEVELS */
+.levels-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.level-item{background:var(--bg-input);border-radius:var(--r-sm);padding:10px 12px;}
+.level-type{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px;}
+.level-val{font-family:var(--font-m);font-size:15px;font-weight:600;}
+
+/* STATUS BAR */
+.status-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);padding:8px 14px;background:var(--bg-input);border-radius:var(--r-sm);margin-top:4px;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 </style>
 </head>
 <body>
@@ -74,7 +107,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
       <div class="nav-dot"></div>
       <span class="nav-name">NovaFX</span>
     </a>
-    <a href="/dashboard" class="nav-a nav-dashboard">Дашборд</a>
+    <a href="/dashboard" class="nav-a" style="border:.5px solid var(--border);padding:4px 10px;">Дашборд</a>
   </div>
   <div class="nav-right">
     <div class="nav-links">
@@ -85,9 +118,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     </div>
     <button class="theme-btn" id="theme-btn">🌙</button>
     <button class="burger-btn" id="burger-btn" aria-label="Меню">
-      <span class="burger-line"></span>
-      <span class="burger-line"></span>
-      <span class="burger-line"></span>
+      <span class="burger-line"></span><span class="burger-line"></span><span class="burger-line"></span>
     </button>
   </div>
   <div class="nav-dropdown" id="nav-dropdown">
@@ -101,46 +132,104 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 
 <div class="wrap">
 
+  <!-- ЦЕНА -->
   <div class="card">
-    <div class="clabel">EUR/USD · цена <span class="auto-tag">● ECB · каждые 30 сек</span></div>
+    <div class="clabel">EUR/USD · цена <span id="price-tag" class="auto-tag">● MT5 · live</span></div>
     <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:4px">
       <span class="price-num" id="price">—</span>
       <span class="price-chg" id="price-chg"></span>
     </div>
     <div class="price-meta">
-      <span>Open: <b id="p-open">—</b></span>
+      <span>BID: <b class="c-green" id="p-bid">—</b></span>
+      <span>ASK: <b class="c-red" id="p-ask">—</b></span>
+      <span>Спред: <b id="p-spread-meta">—</b> пп</span>
       <span>High: <b class="c-green" id="p-high">—</b></span>
       <span>Low: <b class="c-red" id="p-low">—</b></span>
-      <span>Диапазон 30д: <b id="p-range">—</b></span>
       <span style="margin-left:auto;color:var(--green)" id="p-time">загрузка...</span>
     </div>
   </div>
 
+  <!-- НАСТРОЕНИЕ + БЫКИ/МЕДВЕДИ -->
+  <div class="grid2">
+
+    <div class="card">
+      <div class="clabel">Настроение рынка</div>
+      <div class="sentiment-row">
+        <div class="sentiment-icon" id="sent-icon">⏳</div>
+        <div>
+          <div class="sentiment-label" id="sent-label">—</div>
+          <div class="sentiment-sub" id="sent-sub">вычисляется...</div>
+        </div>
+      </div>
+      <div class="bb-wrap">
+        <div class="bb-label">
+          <span class="c-green">🐂 Быки</span>
+          <span class="c-red">Медведи 🐻</span>
+        </div>
+        <div class="bb-bar">
+          <div class="bb-bull" id="bb-bull" style="width:50%"></div>
+          <div class="bb-bear" id="bb-bear" style="width:50%"></div>
+        </div>
+        <div class="bb-pct">
+          <span class="c-green" id="bull-pct">50%</span>
+          <span class="c-red" id="bear-pct">50%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="clabel">Волатильность · 30 дней</div>
+      <div class="vol-val c-amber" id="vol-val">— пп</div>
+      <div style="font-size:10px;color:var(--text-2);margin-top:3px" id="vol-label">вычисляется...</div>
+      <div class="vol-bar"><div class="vol-marker" id="vol-marker" style="left:50%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-3);margin-top:4px">
+        <span>Низкая</span><span>Средняя</span><span>Высокая</span>
+      </div>
+      <div style="margin-top:12px;">
+        <div class="clabel" style="margin-bottom:6px;">Спред</div>
+        <div class="spread-num" id="spread-num">—</div>
+        <div class="spread-status" id="spread-status"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- УРОВНИ -->
   <div class="card">
-    <div class="clabel">Волатильность <span class="auto-tag">● авто · 30д диапазон</span></div>
-    <div class="vol-val c-amber" id="vol-val">— пп</div>
-    <div style="font-size:10px;color:var(--text-2);margin-top:3px" id="vol-label">вычисляется...</div>
-    <div class="vol-bar"><div class="vol-marker" id="vol-marker" style="left:50%"></div></div>
-    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-3);margin-top:4px">
-      <span>Низкая</span><span>Средняя</span><span>Высокая</span>
+    <div class="clabel">Ключевые уровни</div>
+    <div class="levels-grid">
+      <div class="level-item">
+        <div class="level-type c-green">Поддержка S1</div>
+        <div class="level-val c-green" id="lvl-s1">—</div>
+      </div>
+      <div class="level-item">
+        <div class="level-type c-red">Сопротивление R1</div>
+        <div class="level-val c-red" id="lvl-r1">—</div>
+      </div>
+      <div class="level-item">
+        <div class="level-type c-green">Поддержка S2</div>
+        <div class="level-val c-green" id="lvl-s2">—</div>
+      </div>
+      <div class="level-item">
+        <div class="level-type c-red">Сопротивление R2</div>
+        <div class="level-val c-red" id="lvl-r2">—</div>
+      </div>
     </div>
   </div>
 
+  <!-- СТАТУС -->
+  <div class="status-bar">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Подключение к MT5...</span>
+  </div>
+
+  <!-- НОВОСТИ -->
   <div class="card" style="padding:0;overflow:hidden;">
-    <div class="clabel" style="padding:14px 14px 8px;">Новости EUR/USD <span class="auto-tag">● TradingView · авто</span></div>
+    <div class="clabel" style="padding:14px 14px 8px;">Новости EUR/USD <span class="auto-tag">● TradingView</span></div>
     <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-      {
-        "feedMode": "symbol",
-        "symbol": "FX:EURUSD",
-        "isTransparent": true,
-        "displayMode": "regular",
-        "width": "100%",
-        "height": "600",
-        "colorTheme": "dark",
-        "locale": "en"
-      }
+      {"feedMode":"symbol","symbol":"FX:EURUSD","isTransparent":true,"displayMode":"regular","width":"100%","height":"400","colorTheme":"dark","locale":"en"}
       </script>
     </div>
   </div>
@@ -148,9 +237,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 </div>
 
 <script>
+(function(){var t=localStorage.getItem('nova-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();
+
 var btn = document.getElementById('theme-btn');
 var theme = localStorage.getItem('nova-theme') || 'dark';
-document.documentElement.setAttribute('data-theme', theme);
 btn.textContent = theme === 'dark' ? '☀️' : '🌙';
 btn.addEventListener('click', function() {
   theme = theme === 'dark' ? 'light' : 'dark';
@@ -158,76 +248,185 @@ btn.addEventListener('click', function() {
   localStorage.setItem('nova-theme', theme);
   btn.textContent = theme === 'dark' ? '☀️' : '🌙';
 });
-
 var burgerBtn = document.getElementById('burger-btn');
 var dropdown = document.getElementById('nav-dropdown');
-burgerBtn.addEventListener('click', function(e) {
-  e.stopPropagation();
-  dropdown.classList.toggle('open');
-});
-document.addEventListener('click', function() {
-  dropdown.classList.remove('open');
-});
+burgerBtn.addEventListener('click', function(e) { e.stopPropagation(); dropdown.classList.toggle('open'); });
+document.addEventListener('click', function() { dropdown.classList.remove('open'); });
 dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
 function closeMenu() { dropdown.classList.remove('open'); }
 
-var prevRate = null;
-function fetchPrice() {
-  fetch('https://open.er-api.com/v6/latest/EUR')
+var prevBid = null;
+var histHigh = null, histLow = null;
+
+function setStatus(ok, msg) {
+  var dot = document.getElementById('status-dot');
+  var txt = document.getElementById('status-text');
+  dot.style.background = ok ? 'var(--green)' : '#f59e0b';
+  txt.textContent = msg;
+}
+
+function calcSentiment(bid, high, low, spread) {
+  // Позиция цены в диапазоне дня
+  var range = high - low;
+  var pos = range > 0 ? (bid - low) / range : 0.5;
+
+  // Спред — высокий спред = неопределённость
+  var spreadScore = spread < 3 ? 1 : spread < 6 ? 0 : -1;
+
+  // Итоговый скор
+  var score = pos + spreadScore * 0.1;
+
+  var bullPct, icon, label, sub;
+  if (score > 0.65) {
+    bullPct = Math.round(55 + (score - 0.65) * 100);
+    if (bullPct > 80) bullPct = 80;
+    icon = '🐂'; label = 'Бычий'; sub = 'Покупатели доминируют';
+  } else if (score < 0.35) {
+    bullPct = Math.round(45 - (0.35 - score) * 100);
+    if (bullPct < 20) bullPct = 20;
+    icon = '🐻'; label = 'Медвежий'; sub = 'Продавцы доминируют';
+  } else {
+    bullPct = Math.round(45 + (score - 0.35) * 50);
+    icon = '⚖️'; label = 'Нейтральный'; sub = 'Силы равны';
+  }
+
+  return { bullPct: bullPct, icon: icon, label: label, sub: sub };
+}
+
+function updateSentiment(bid, high, low, spread) {
+  if (!high || !low) return;
+  var s = calcSentiment(bid, high, low, spread);
+  var bearPct = 100 - s.bullPct;
+
+  document.getElementById('sent-icon').textContent = s.icon;
+  document.getElementById('sent-label').textContent = s.label;
+  document.getElementById('sent-sub').textContent = s.sub;
+  document.getElementById('bb-bull').style.width = s.bullPct + '%';
+  document.getElementById('bb-bear').style.width = bearPct + '%';
+  document.getElementById('bull-pct').textContent = s.bullPct + '%';
+  document.getElementById('bear-pct').textContent = bearPct + '%';
+
+  // Цвет метки настроения
+  var lbl = document.getElementById('sent-label');
+  if (s.label === 'Бычий') lbl.style.color = 'var(--green)';
+  else if (s.label === 'Медвежий') lbl.style.color = 'var(--red)';
+  else lbl.style.color = 'var(--amber)';
+}
+
+function updateSpread(spread) {
+  var el = document.getElementById('spread-num');
+  var st = document.getElementById('spread-status');
+  el.textContent = spread.toFixed(1) + ' пп';
+  if (spread < 3) {
+    el.className = 'spread-num c-green';
+    st.textContent = '✓ Узкий — хорошие условия';
+    st.style.color = 'var(--green)';
+  } else if (spread < 7) {
+    el.className = 'spread-num c-amber';
+    st.textContent = '~ Средний';
+    st.style.color = 'var(--amber)';
+  } else {
+    el.className = 'spread-num c-red';
+    st.textContent = '⚠ Широкий — высокая волатильность';
+    st.style.color = 'var(--red)';
+  }
+}
+
+function updateLevels(bid, high, low) {
+  if (!high || !low) return;
+  var pivot = (high + low + bid) / 3;
+  var range = high - low;
+  document.getElementById('lvl-s1').textContent = (pivot - range * 0.382).toFixed(5);
+  document.getElementById('lvl-r1').textContent = (pivot + range * 0.382).toFixed(5);
+  document.getElementById('lvl-s2').textContent = (pivot - range * 0.618).toFixed(5);
+  document.getElementById('lvl-r2').textContent = (pivot + range * 0.618).toFixed(5);
+}
+
+function fetchMT5Price() {
+  fetch('/api/price')
     .then(function(r){ return r.json(); })
     .then(function(d) {
-      var rate = d.rates['USD'];
-      document.getElementById('price').textContent = rate.toFixed(4);
-      if (prevRate !== null) {
-        var diff = rate - prevRate;
-        var pct = (diff / prevRate * 100);
+      if (!d || !d.bid) { setStatus(false, 'Нет данных от MT5'); return; }
+
+      var bid = d.bid;
+      var ask = d.ask;
+      var spread = d.spread;
+      var updTime = d.time || d.updated;
+
+      // Проверка свежести (< 15 мин)
+      var updDate = new Date(d.updated);
+      var ageMin = (Date.now() - updDate.getTime()) / 60000;
+      var fresh = ageMin < 15;
+
+      document.getElementById('price').textContent = bid.toFixed(5);
+      document.getElementById('p-bid').textContent = bid.toFixed(5);
+      document.getElementById('p-ask').textContent = ask.toFixed(5);
+      document.getElementById('p-spread-meta').textContent = spread.toFixed(1);
+
+      if (prevBid !== null) {
+        var diff = bid - prevBid;
         var el = document.getElementById('price-chg');
-        el.textContent = (diff >= 0 ? '▲ +' : '▼ ') + diff.toFixed(4) + ' (' + (diff>=0?'+':'') + pct.toFixed(2) + '%)';
-        el.style.color = diff >= 0 ? 'var(--green)' : '#ef4444';
+        el.textContent = (diff >= 0 ? '▲ +' : '▼ ') + diff.toFixed(5);
+        el.style.color = diff >= 0 ? 'var(--green)' : 'var(--red)';
       } else {
-        document.getElementById('price-chg').textContent = '● live ECB';
+        document.getElementById('price-chg').textContent = '● MT5 live';
         document.getElementById('price-chg').style.color = 'var(--green)';
       }
-      prevRate = rate;
-      var now = new Date();
-      document.getElementById('p-time').textContent = 'обновлено ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-    }).catch(function(){ document.getElementById('p-time').textContent = 'ошибка'; });
+      prevBid = bid;
+
+      // Тег свежести
+      var tag = document.getElementById('price-tag');
+      if (fresh) {
+        tag.className = 'auto-tag';
+        tag.textContent = '● MT5 · live';
+      } else {
+        tag.className = 'stale-tag';
+        tag.textContent = '⚠ MT5 · ' + Math.round(ageMin) + ' мин назад';
+      }
+
+      // Время
+      var t = new Date(d.updated);
+      document.getElementById('p-time').textContent = 'MT5 · ' + String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0') + ':' + String(t.getSeconds()).padStart(2,'0');
+
+      updateSpread(spread);
+      if (histHigh && histLow) {
+        updateSentiment(bid, histHigh, histLow, spread);
+        updateLevels(bid, histHigh, histLow);
+      }
+
+      setStatus(true, 'MT5 подключён · данные получены · обновление каждые 5 мин');
+    })
+    .catch(function(){ setStatus(false, 'Ошибка получения данных от MT5'); });
 }
 
 function fetchHistory() {
   var today = new Date();
   var fmt = function(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
-  var yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
   var d30 = new Date(today); d30.setDate(d30.getDate()-30);
-  fetch('https://api.frankfurter.dev/v1/'+fmt(yesterday)+'?base=EUR&symbols=USD')
-    .then(function(r){ return r.json(); })
-    .then(function(d){ document.getElementById('p-open').textContent = d.rates.USD.toFixed(4); })
-    .catch(function(){});
   fetch('https://api.frankfurter.dev/v1/'+fmt(d30)+'..'+fmt(today)+'?base=EUR&symbols=USD')
     .then(function(r){ return r.json(); })
     .then(function(d) {
       var rates = Object.values(d.rates).map(function(x){ return x.USD; });
-      var high = Math.max.apply(null, rates);
-      var low = Math.min.apply(null, rates);
-      var range = Math.round((high - low) * 10000);
-      document.getElementById('p-high').textContent = high.toFixed(4);
-      document.getElementById('p-low').textContent = low.toFixed(4);
-      document.getElementById('p-range').textContent = range + ' пп';
+      histHigh = Math.max.apply(null, rates);
+      histLow = Math.min.apply(null, rates);
+      var range = Math.round((histHigh - histLow) * 10000);
+      document.getElementById('p-high').textContent = histHigh.toFixed(5);
+      document.getElementById('p-low').textContent = histLow.toFixed(5);
       document.getElementById('vol-val').textContent = range + ' пп';
       var level, color, pct;
       if (range < 150) { level='Низкая'; color='var(--green)'; pct=15; }
-      else if (range < 300) { level='Умеренная'; color='#f59e0b'; pct=45; }
-      else if (range < 500) { level='Высокая'; color='#ef4444'; pct=75; }
-      else { level='Очень высокая'; color='#ef4444'; pct=92; }
+      else if (range < 300) { level='Умеренная'; color='var(--amber)'; pct=45; }
+      else if (range < 500) { level='Высокая'; color='var(--red)'; pct=75; }
+      else { level='Очень высокая'; color='var(--red)'; pct=92; }
       document.getElementById('vol-label').textContent = level;
       document.getElementById('vol-val').style.color = color;
       document.getElementById('vol-marker').style.left = pct + '%';
     }).catch(function(){});
 }
 
-fetchPrice();
+fetchMT5Price();
 fetchHistory();
-setInterval(fetchPrice, 30000);
+setInterval(fetchMT5Price, 60000);
 setInterval(fetchHistory, 3600000);
 </script>
 </body>
