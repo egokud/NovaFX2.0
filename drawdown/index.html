@@ -424,7 +424,16 @@ function render() {
       fmt(balance)+' $', '−'+fmt(loss,1)+' $', fmt(equity,1)+' $', fmt(ddPct,1)+'%', fmt(marginLevel,0)+'%', status],
       ['','row-s1','row-s2','row-s3'][series]);
 
-    if (i === MAX_ORDERS-1 && !liquidationOrder) { liquidationOrder = '>'+MAX_ORDERS; liquidationPips = '>'+pipsNow; }
+    if (i === MAX_ORDERS-1 && !liquidationOrder) {
+      // Лимит ордеров исчерпан — считаем сколько ещё пройдёт цена до ликвидации
+      // без открытия новых ордеров (суммарный объём фиксирован = totalVolume)
+      // equity = balance - loss - totalVolume * extraPips * PIP_VAL >= balance * STOP_OUT
+      // extraPips = (balance - loss - balance * STOP_OUT) / (totalVolume * PIP_VAL)
+      var extraPips = Math.max(0, (equity - balance * STOP_OUT) / (totalVolume * PIP_VAL));
+      var totalLiqPips = Math.round(pipsNow + extraPips);
+      liquidationOrder = MAX_ORDERS;
+      liquidationPips = totalLiqPips;
+    }
   }
 
   document.getElementById('s-reserve').textContent = fmt(totalReserveAdded)+' $';
@@ -434,14 +443,11 @@ function render() {
   document.getElementById('s-pips-liq').textContent = liquidationPips || '—';
   // Calculate liquidation price
   if (liquidationPips) {
-    var isExact = typeof liquidationPips === 'number' || (typeof liquidationPips === 'string' && !String(liquidationPips).startsWith('>'));
-    var pipsNum = isExact ? parseFloat(liquidationPips) : parseFloat(String(liquidationPips).slice(1));
+    var pipsNum = parseFloat(String(liquidationPips).replace('>',''));
     var liqPriceBuy = eurusd - (pipsNum * 0.00001);
     var liqPriceSell = eurusd + (pipsNum * 0.00001);
-    var prefix = isExact ? '' : '< ';
-    var prefixSell = isExact ? '' : '> ';
-    document.getElementById('s-price-liq').textContent = prefix + liqPriceBuy.toFixed(5);
-    document.getElementById('s-price-liq-sell').textContent = prefixSell + liqPriceSell.toFixed(5);
+    document.getElementById('s-price-liq').textContent = liqPriceBuy.toFixed(5);
+    document.getElementById('s-price-liq-sell').textContent = liqPriceSell.toFixed(5);
   } else {
     document.getElementById('s-price-liq').textContent = '—';
     document.getElementById('s-price-liq-sell').textContent = '—';
