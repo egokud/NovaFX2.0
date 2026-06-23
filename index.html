@@ -893,5 +893,14 @@ document.getElementById('theme-btn').addEventListener('click',function(){
 });
 })();
 </script>
+
+<script>
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el){ el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
+</script>
 </body>
 </html>
