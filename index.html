@@ -266,6 +266,19 @@ footer a:hover{color:var(--text);}
 [data-theme="light"] .hero-btns-divider {
   background: rgba(0,0,0,0.1);
 }
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:0;border:.5px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.faq-item{border-bottom:.5px solid var(--border);}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{width:100%;background:transparent;border:none;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;text-align:left;color:var(--text);font-size:15px;font-weight:500;font-family:var(--font-b);transition:background .15s;}
+.faq-q:hover{background:var(--bg-input);}
+.faq-icon{font-size:18px;color:var(--text-3);transition:transform .25s;flex-shrink:0;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.faq-a-inner{padding:0 20px 18px;font-size:14px;color:var(--text-2);line-height:1.7;}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--green);}
+.faq-item.open .faq-q{color:var(--green);}
+.faq-item.open .faq-a{max-height:300px;}
 </style>
 
   <script type="application/ld+json">
@@ -656,6 +669,86 @@ footer a:hover{color:var(--text);}
       <div class="support-item"><div class="support-item-icon">📊</div><div><div class="support-item-title">Разбор ситуаций</div><div class="support-item-sub">Объясняем что происходит на счёте</div></div></div>
       <div class="support-item"><div class="support-item-icon">🔄</div><div><div class="support-item-title">Обновления</div><div class="support-item-sub">Уведомляем о новых версиях советника</div></div></div>
     </div>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="section">
+  <div class="section-title">Вопросы и ответы</div>
+  <p class="section-sub">Отвечаем на самые частые вопросы о NOVA FX и автоматической торговле.</p>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Как работает NOVA FX?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">NOVA FX — это советник (Expert Advisor) для MetaTrader 5. Он автоматически открывает и закрывает сделки по паре EUR/USD по сеточной стратегии с усреднением — без вашего участия в каждой сделке. Советник работает 24 часа в сутки, 5 дней в неделю пока открыта биржа.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Гарантирует ли NOVA FX прибыль?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Нет — торговля на форекс всегда связана с риском и никакой советник не может гарантировать прибыль. Мы публикуем реальные результаты бэктеста и мониторинг живого счёта, включая периоды просадки. Принимайте решение осознанно.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Что нужно для запуска советника?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Нужны: счёт у любого брокера с поддержкой MetaTrader 5, минимальный депозит от $10 000, VPS или компьютер который работает без перебоев. Мы помогаем с настройкой — поддержка доступна в Telegram 24/7.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Какой брокер подойдёт?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Любой брокер с поддержкой MetaTrader 5 и возможностью торговать парой EUR/USD. Мы рекомендуем брокеров с низким спредом и быстрым исполнением ордеров — это напрямую влияет на результат. Можем посоветовать конкретного брокера в поддержке.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Какие риски существуют?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Сеточная стратегия с усреднением показывает высокую стабильность, но в периоды сильного направленного движения рынка возможны просадки. Мы открыто публикуем все периоды просадки в мониторинге. Не инвестируйте средства которые не можете позволить себе потерять.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Чем NOVA FX отличается от других советников?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Мы не продаём обещания — публикуем реальный мониторинг счёта включая просадки, результаты бэктеста на качестве 100% реальных тиков MT5 и открытую статистику. Поддержка реагирует в течение нескольких минут, а не часов.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Как получить советник?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Напишите в Telegram <a href="https://t.me/digitalnovafx" target="_blank" style="color:var(--green);">@digitalnovafx</a> — обсудим условия, поможем с настройкой и запуском. Всё общение и поддержка ведётся напрямую, без посредников.</div>
+      </div>
+    </div>
+
   </div>
 </section>
 
