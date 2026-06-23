@@ -266,6 +266,19 @@ footer a:hover{color:var(--text);}
 [data-theme="light"] .hero-btns-divider {
   background: rgba(0,0,0,0.1);
 }
+
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:0;border:.5px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.faq-item{border-bottom:.5px solid var(--border);}
+.faq-item:last-child{border-bottom:none;}
+.faq-q{width:100%;background:transparent;border:none;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;text-align:left;color:var(--text);font-size:17px;font-weight:500;font-family:var(--font-b);transition:background .15s;}
+.faq-q:hover{background:var(--bg-input);}
+.faq-icon{font-size:18px;color:var(--text-3);transition:transform .25s;flex-shrink:0;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.faq-a-inner{padding:0 20px 18px;font-size:16px;color:var(--text);line-height:1.8;}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--green);}
+.faq-item.open .faq-q{color:var(--green);}
+.faq-item.open .faq-a{max-height:300px;}
 </style>
 
   <script type="application/ld+json">
@@ -358,6 +371,7 @@ footer a:hover{color:var(--text);}
     <!-- Desktop links -->
     <div class="nav-links">
       <a href="#about" class="nav-a">О продукте</a>
+      <a href="#faq" class="nav-a">FAQ</a>
       <a href="#contacts" class="nav-a">Контакты</a>
       <a href="https://t.me/digitalnovafx" target="_blank" class="nav-a">Техподдержка</a>
       <a href="https://t.me/DigitalNovaLabs" target="_blank" class="nav-a nav-cta">Telegram</a>
@@ -374,6 +388,7 @@ footer a:hover{color:var(--text);}
   <!-- Dropdown menu -->
   <div class="nav-dropdown" id="nav-dropdown">
     <a href="#about" onclick="closeMenu()">О продукте</a>
+    <a href="#faq" onclick="closeMenu()">FAQ</a>
     <a href="#contacts" onclick="closeMenu()">Контакты</a>
     <a href="https://t.me/digitalnovafx" target="_blank" onclick="closeMenu()">Техподдержка</a>
     <hr>
@@ -659,6 +674,120 @@ footer a:hover{color:var(--text);}
   </div>
 </section>
 
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-title">Вопросы и ответы</div>
+  <p class="section-sub">Отвечаем на самые частые вопросы о NOVA FX и автоматической торговле.</p>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Как работает NOVA FX?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">NOVA FX — торговый советник для MetaTrader 5, который работает полностью автоматически. Советник устанавливается на VPS-сервер и подключается к вашему брокерскому счёту — счёт зарегистрирован на вас, вы сохраняете полный контроль над средствами. Система сама открывает и закрывает сделки по паре EUR/USD 24/5 — с понедельника по пятницу, пока открыт рынок. От вас требуется только периодически проверять мониторинг счёта.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Гарантирует ли NOVA FX прибыль?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Торговля на финансовых рынках всегда сопряжена с риском — это важно понимать до старта. NOVA FX построен на алгоритме сеточной стратегии с усреднением: каждая сетка ордеров закрывается только в плюс, однако в периоды сильного направленного движения рынка возможны просадки по открытым позициям. Мы публикуем реальный мониторинг счёта без купюр — чтобы вы принимали решение осознанно.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Что нужно для запуска советника?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Для комфортной работы с NOVA FX рекомендуем:<br><br>
+        — ознакомиться с инструкцией по установке и настройке советника<br>
+        — следовать рекомендациям технической поддержки — мы на связи 24/7 и помогаем на каждом этапе<br>
+        — следить за обновлениями и новостями в нашем Telegram-канале<br>
+        — начать можно с любого депозита — минимальный порог не установлен, размер влияет только на объём торговли</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Какой брокер подойдёт?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">NOVA FX работает с любым брокером поддерживающим MetaTrader 5. Однако мы рекомендуем RoboForex — Digital Nova Labs является официальным партнёром этого брокера.<br><br>
+        Почему RoboForex:<br>
+        — центовые счета — можно начать с небольшого депозита<br>
+        — низкий спред и быстрое исполнение ордеров<br>
+        — удобный ввод и вывод средств<br>
+        — надёжная репутация и многолетняя история на рынке<br><br>
+        Регистрация происходит по партнёрской ссылке компании Digital Nova Labs — это даёт вам доступ к лучшим условиям и нашей поддержке на всех этапах.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Какие риски существуют?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Торговля на финансовых рынках никогда не бывает без риска — это важно принять до начала работы. Что нужно понимать:<br><br>
+        — рынок непредсказуем — результат зависит от рыночной ситуации, которую не контролирует ни один алгоритм<br>
+        — в периоды сильного направленного движения возможна просадка по открытым позициям — это нормальная часть работы сеточной стратегии<br>
+        — итоговый результат зависит в том числе от настроек советника и соблюдения рекомендаций поддержки<br><br>
+        NOVA FX разработан с учётом управления рисками — каждая сетка закрывается только в плюс. Мы публикуем открытый мониторинг счёта и всегда на связи чтобы помочь вам торговать осознанно.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Чем NOVA FX отличается от других советников?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Главное отличие — это живой развивающийся продукт, а не статичный алгоритм. Что за этим стоит:<br><br>
+        — текущая версия NOVA FX 2.0 прошла путь через 37 итераций — каждая версия улучшалась на основе реальных результатов торговли<br>
+        — алгоритм постоянно адаптируется под текущие условия рынка — мы не останавливаемся на достигнутом<br>
+        — каждое обновление проходит проверку бэктестом на исторических данных с качеством тиков 100%<br>
+        — уникальный механизм отторговки просадки при смене тренда — позволяет быстро выйти в плюс без ручного вмешательства<br>
+        — открытый мониторинг счёта в реальном времени — показываем всё как есть<br>
+        — поддержка отвечает в течение часа, а не дней</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Как получить советник?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Все условия подключения, актуальные предложения и акции обсуждаются индивидуально. Если вас интересует NOVA FX — просто напишите нам в Telegram, мы ответим на все вопросы, поможем с выбором условий и проведём через все этапы запуска.<br><br>
+        📩 <a href="https://t.me/digitalnovafx" target="_blank" style="color:var(--green);">@digitalnovafx</a></div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Можно ли получать вознаграждение за рекомендации?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        <div class="faq-a-inner">Да, есть два варианта:<br><br>
+        — партнёрская программа RoboForex — многоуровневая система вознаграждений за привлечение клиентов к брокеру, до 10 уровней рефералов<br>
+        — вознаграждение от Digital Nova Labs — за рекомендации NOVA FX знакомым и партнёрам<br><br>
+        Подробности узнавайте в Telegram — условия обсуждаются индивидуально.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <hr class="divider">
 
 <!-- CONTACTS -->
@@ -765,6 +894,15 @@ document.getElementById('theme-btn').addEventListener('click',function(){
   },50);
 });
 })();
+</script>
+
+<script>
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el){ el.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
+}
 </script>
 </body>
 </html>
