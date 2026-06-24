@@ -590,7 +590,7 @@ function renderCalendar(events, cached, ageMin) {
 }
 
 function fetchCalendar() {
-  fetch('https://www.novafx.io/api/calendar')
+  fetch('/api/calendar')
     .then(function(r){ return r.json(); })
     .then(function(d){
       renderCalendar(d.events, d.cached, d.age_minutes || 0);
