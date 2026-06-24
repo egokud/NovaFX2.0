@@ -566,18 +566,42 @@ function renderCalendar(events, source, ageMin) {
 
   var keys = Object.keys(groups).sort();
 
+  // Форматирование чисел: 580000 → 580K, -226828000000 → -226.83B
+  function formatCalNum(val) {
+    if (val === null || val === undefined || val === '') return '—';
+    var s = String(val).trim();
+    if (s === '') return '—';
+    // Уже отформатированные: проценты, K/M/B/T суффиксы — оставляем
+    if (/[%]$/.test(s)) return s;
+    if (/[KMBTkmbt]$/.test(s)) return s;
+    var num = parseFloat(s);
+    if (isNaN(num)) return s;
+    var abs = Math.abs(num);
+    if (abs >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+    if (abs >= 1e9)  return (num / 1e9).toFixed(2)  + 'B';
+    if (abs >= 1e6)  return (num / 1e6).toFixed(2)  + 'M';
+    if (abs >= 1e4)  return (num / 1e3).toFixed(0)  + 'K';
+    if (abs >= 1e3)  return (num / 1e3).toFixed(1)  + 'K';
+    if (abs >= 10)   return num.toFixed(1);
+    if (abs >= 1)    return num.toFixed(2);
+    return num.toFixed(3);
+  }
+
   function eventHtml(ev){
     var t = new Date(ev.date);
     var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
     var impactCls = ev.impact === 'High' ? 'cal-impact-h' : 'cal-impact-m';
-    var actualHtml = ev.actual ? '<span class="actual">' + ev.actual + '</span>' : '—';
+    var actualF   = formatCalNum(ev.actual);
+    var forecastF = formatCalNum(ev.forecast);
+    var prevF     = formatCalNum(ev.previous);
+    var actualHtml = (actualF !== '—') ? '<span class="actual">' + actualF + '</span>' : '—';
     return '<div class="cal-event ' + impactCls + '">' +
       '<div class="cal-event-time">' + time + '</div>' +
       '<div class="cal-event-flag">' + ev.flag + '</div>' +
       '<div class="cal-event-name">' + ev.name + '</div>' +
       '<div class="cal-event-val cal-event-meta"><small>Факт</small><b>' + actualHtml + '</b></div>' +
-      '<div class="cal-event-val cal-event-meta"><small>Прогноз</small><b>' + (ev.forecast || '—') + '</b></div>' +
-      '<div class="cal-event-val cal-event-meta"><small>Пред.</small>' + (ev.previous || '—') + '</div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Прогноз</small><b>' + forecastF + '</b></div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Пред.</small>' + prevF + '</div>' +
     '</div>';
   }
 
