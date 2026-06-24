@@ -1,7 +1,7 @@
 export const config = { api: { bodyParser: false } };
 
 const JB_API_KEY = process.env.JB_API_KEY || 'xgj3wKJfTtWZ6cBGvns01UFIWaATrF51';
-const JB_URL = 'https://www.jblanked.com/news/api/mql5/calendar/week/';
+const JB_URL = 'https://www.jblanked.com/news/api/mql5/calendar/today/';
 
 // Перевод названий валют в флаги
 const FLAGS = {
