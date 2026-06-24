@@ -105,6 +105,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 
 /* CALENDAR */
 .cal-day{font-size:10px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin:10px 0 4px;padding-top:8px;border-top:.5px solid var(--border);}
+.cal-day-today{color:var(--green);font-weight:600;}
+.cal-past-toggle{font-size:11px;color:var(--text-2);padding:8px 10px;background:var(--bg-input);border-radius:var(--r-sm);cursor:pointer;text-align:center;margin-bottom:8px;transition:background .15s;user-select:none;}
+.cal-past-toggle:hover{background:rgba(255,255,255,0.05);color:var(--text);}
 .cal-day:first-child{border-top:none;margin-top:0;padding-top:0;}
 .cal-event{display:grid;grid-template-columns:54px 30px 1fr 80px 80px 80px;gap:10px;align-items:center;padding:8px 10px;border-radius:var(--r-sm);background:var(--bg-input);font-size:12px;transition:background .15s;}
 .cal-event:hover{background:rgba(255,255,255,0.04);}
@@ -544,49 +547,95 @@ function renderCalendar(events, cached, ageMin) {
   var tagEl = document.getElementById('cal-tag');
   if (!listEl || !tagEl) return;
 
-  if (!events || events.length === 0) {
-    listEl.innerHTML = '<div style="text-align:center;color:var(--text-3);padding:20px;font-size:13px;">На этой неделе нет важных событий</div>';
-    tagEl.innerHTML = '● Forex Factory';
-    return;
-  }
+  var monthNames = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  var dayNames = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 
-  // Группируем по дням
+  // Сегодняшний день (UTC, нормализованный)
+  var nowDate = new Date();
+  var todayKey = nowDate.getFullYear() + '-' + String(nowDate.getMonth()+1).padStart(2,'0') + '-' + String(nowDate.getDate()).padStart(2,'0');
+
+  // Собираем все ключи дат из событий + сегодня обязательно
   var groups = {};
-  events.forEach(function(ev){
+  groups[todayKey] = [];
+  (events || []).forEach(function(ev){
     var d = new Date(ev.date);
-    var key = d.toISOString().slice(0,10);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     if (!groups[key]) groups[key] = [];
     groups[key].push(ev);
   });
 
   var keys = Object.keys(groups).sort();
-  var monthNames = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
-  var dayNames = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 
-  var html = '';
-  keys.forEach(function(key){
+  function eventHtml(ev){
+    var t = new Date(ev.date);
+    var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+    var impactCls = ev.impact === 'High' ? 'cal-impact-h' : 'cal-impact-m';
+    var actualHtml = ev.actual ? '<span class="actual">' + ev.actual + '</span>' : '—';
+    return '<div class="cal-event ' + impactCls + '">' +
+      '<div class="cal-event-time">' + time + '</div>' +
+      '<div class="cal-event-flag">' + ev.flag + '</div>' +
+      '<div class="cal-event-name">' + ev.name + '</div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Факт</small><b>' + actualHtml + '</b></div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Прогноз</small><b>' + (ev.forecast || '—') + '</b></div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Пред.</small>' + (ev.previous || '—') + '</div>' +
+    '</div>';
+  }
+
+  function dayLabel(key, isToday){
     var d = new Date(key + 'T00:00:00');
     var label = dayNames[d.getDay()] + ' · ' + d.getDate() + ' ' + monthNames[d.getMonth()];
-    html += '<div class="cal-day">' + label + '</div>';
-    groups[key].forEach(function(ev){
-      var t = new Date(ev.date);
-      var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-      var impactCls = ev.impact === 'High' ? 'cal-impact-h' : 'cal-impact-m';
-      var actualHtml = ev.actual ? '<span class="actual">' + ev.actual + '</span>' : '—';
-      html += '<div class="cal-event ' + impactCls + '">' +
-        '<div class="cal-event-time">' + time + '</div>' +
-        '<div class="cal-event-flag">' + ev.flag + '</div>' +
-        '<div class="cal-event-name">' + ev.name + '</div>' +
-        '<div class="cal-event-val cal-event-meta"><small>Факт</small><b>' + actualHtml + '</b></div>' +
-        '<div class="cal-event-val cal-event-meta"><small>Прогноз</small><b>' + (ev.forecast || '—') + '</b></div>' +
-        '<div class="cal-event-val cal-event-meta"><small>Пред.</small>' + (ev.previous || '—') + '</div>' +
+    return isToday ? label + ' · сегодня' : label;
+  }
+
+  // Разделяем на прошедшие и текущие/будущие
+  var pastKeys = keys.filter(function(k){ return k < todayKey; });
+  var todayAndFuture = keys.filter(function(k){ return k >= todayKey; });
+
+  var html = '';
+
+  // Кнопка прошедших
+  if (pastKeys.length > 0) {
+    var pastCount = 0;
+    pastKeys.forEach(function(k){ pastCount += groups[k].length; });
+    html += '<div class="cal-past-toggle" onclick="toggleCalPast()">' +
+      '<span id="cal-past-arrow">▾</span> Прошедшие события (' + pastCount + ')' +
       '</div>';
+    html += '<div id="cal-past-block" style="display:none;">';
+    pastKeys.forEach(function(key){
+      html += '<div class="cal-day">' + dayLabel(key, false) + '</div>';
+      groups[key].forEach(function(ev){
+        html += eventHtml(ev);
+      });
     });
+    html += '</div>';
+  }
+
+  // Текущие и будущие
+  todayAndFuture.forEach(function(key){
+    var isToday = (key === todayKey);
+    html += '<div class="cal-day' + (isToday ? ' cal-day-today' : '') + '">' + dayLabel(key, isToday) + '</div>';
+    if (groups[key].length === 0) {
+      html += '<div style="text-align:center;color:var(--text-3);padding:14px;font-size:12px;background:var(--bg-input);border-radius:var(--r-sm);">На сегодня важных событий нет</div>';
+    } else {
+      groups[key].forEach(function(ev){
+        html += eventHtml(ev);
+      });
+    }
   });
 
   listEl.innerHTML = html;
   var status = cached ? ('● Forex Factory · кеш ' + ageMin + ' мин') : '● Forex Factory · обновлено';
   tagEl.innerHTML = status;
+}
+
+// Тогл прошедших событий
+function toggleCalPast() {
+  var el = document.getElementById('cal-past-block');
+  var arrow = document.getElementById('cal-past-arrow');
+  if (!el) return;
+  var open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.textContent = open ? '▾' : '▴';
 }
 
 function fetchCalendar() {
