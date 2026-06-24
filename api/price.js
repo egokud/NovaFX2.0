@@ -33,6 +33,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
+    res.setHeader('Cache-Control', 's-maxage=20, stale-while-revalidate=60');
     const r = await fetch(`${kvUrl}/get/eurusd_price`, {
       headers: { Authorization: `Bearer ${kvToken}` }
     });
