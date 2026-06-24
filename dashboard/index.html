@@ -518,52 +518,40 @@ function applyHistory(candles) {
   histLow  = Math.min.apply(null, lows);
   window._allCandles = candles;
 
-  // Гибкий парсер времени: number(ms), number(s), ISO-строка
-  function parseT(t) {
-    if (typeof t === 'number') return t > 1e12 ? t : t * 1000;
-    if (typeof t === 'string') {
-      var n = Number(t);
-      if (!isNaN(n) && n > 0) return n > 1e12 ? n : n * 1000;
-      return new Date(t).getTime();
-    }
-    return NaN;
-  }
-
-  // Однократная диагностика (видна в F12 → Console)
-  if (!window._candleDebugLogged) {
-    window._candleDebugLogged = true;
-    console.log('[NovaFX] candles total =', candles.length,
-      '| first =', candles[0],
-      '| last =', candles[candles.length - 1],
-      '| parseT(first.t) =', new Date(parseT(candles[0].t)).toISOString());
-  }
-
   // === ATR(14) на дневках ===
+  // Группируем H1-свечи по дню. ВАЖНО: НЕ используем new Date(c.t) — MT5 отдаёт
+  // "YYYY.MM.DD HH:MM:SS" (с точками). Этот формат не входит в стандарт ECMAScript:
+  // Firefox и Safari (включая iPhone) возвращают Invalid Date → getUTCFullYear()=NaN
+  // → все свечи валятся в один "день NaN-NaN-NaN" → ATR не считается и блок мёртв.
+  // Берём день прямо из строки: формат YYYY.MM.DD сортируется лексикографически = хронологически.
   var byDay = {};
   for (var i = 0; i < candles.length; i++) {
     var c = candles[i];
-    var tms = parseT(c.t);
-    if (isNaN(tms)) continue;
-    var d = new Date(tms);
-    var key = d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
-    if (!byDay[key]) byDay[key] = { h: c.h, l: c.l, o: c.o, c: c.c, t: tms };
+    var key = (c.t || '').substring(0, 10);   // "2026.06.23"
+    if (key.length !== 10) continue;
+    if (!byDay[key]) byDay[key] = { h: c.h, l: c.l, o: c.o, c: c.c, t: c.t };
     else {
       if (c.h > byDay[key].h) byDay[key].h = c.h;
       if (c.l < byDay[key].l) byDay[key].l = c.l;
       byDay[key].c = c.c;
-      if (tms > byDay[key].t) byDay[key].t = tms;
+      if (c.t > byDay[key].t) byDay[key].t = c.t;
     }
   }
-  var days = Object.keys(byDay).sort(function(a,b){ return byDay[a].t - byDay[b].t; })
+  // Сортируем по ключу (строки YYYY.MM.DD сравниваются корректно как строки)
+  var days = Object.keys(byDay).sort()
                                .map(function(k){ return byDay[k]; });
 
+  // True Range: max(H-L, |H-prevClose|, |L-prevClose|)
+  // Нужно ≥16 дней: slice(-15,-1) даёт 14 завершённых TR только если TRs.length≥15,
+  // т.е. days.length≥16 (TR начинается со 2-го дня, поэтому TRs = days-1).
   var atrVal = null;
-  if (days.length >= 15) {
+  if (days.length >= 16) {
     var TRs = [];
     for (var j = 1; j < days.length; j++) {
       var H = days[j].h, L = days[j].l, pC = days[j-1].c;
       TRs.push(Math.max(H - L, Math.abs(H - pC), Math.abs(L - pC)));
     }
+    // Берём ATR последних 14 завершённых дней (исключая сегодняшний — он ещё формируется)
     var lastTRs = TRs.slice(-15, -1); // 14 завершённых TR
     if (lastTRs.length === 14) {
       var sum = 0;
@@ -574,9 +562,10 @@ function applyHistory(candles) {
   window._currentATR = atrVal;
 
   if (atrVal !== null) {
-    // === ATR метрика ===
     var atrPips = Math.round(atrVal * 10000);
     document.getElementById('vol-val').textContent = atrPips + ' пп';
+
+    // Шкала для EUR/USD: <60 / 60-100 / >100
     var level, color, pct;
     if      (atrPips < 60)  { level='Низкая';        color='var(--green)'; pct=15; }
     else if (atrPips < 100) { level='Умеренная';     color='var(--amber)'; pct=50; }
@@ -586,22 +575,11 @@ function applyHistory(candles) {
     document.getElementById('vol-val').style.color = color;
     document.getElementById('vol-marker').style.left = pct + '%';
   } else {
-    // === Fallback: 30-дневный диапазон ===
-    var range = Math.round((histHigh - histLow) * 10000);
-    document.getElementById('vol-val').textContent = range + ' пп';
-    var levelF, colorF, pctF;
-    if      (range < 150) { levelF='Низкая';        colorF='var(--green)'; pctF=15; }
-    else if (range < 300) { levelF='Умеренная';     colorF='var(--amber)'; pctF=45; }
-    else if (range < 500) { levelF='Высокая';       colorF='var(--red)';   pctF=75; }
-    else                  { levelF='Очень высокая'; colorF='var(--red)';   pctF=92; }
-    document.getElementById('vol-label').textContent = levelF + ' · диапазон 30 дней';
-    document.getElementById('vol-val').style.color = colorF;
-    document.getElementById('vol-marker').style.left = pctF + '%';
-    // Прячем "сегодня от среднего" — нет ATR
-    var todayEl = document.getElementById('vol-today');
-    if (todayEl) todayEl.style.display = 'none';
+    document.getElementById('vol-val').textContent = '—';
+    document.getElementById('vol-label').textContent = 'недостаточно данных';
   }
 
+  // Пересчитываем настроение и уровни если цена уже есть
   if (prevBid !== null) {
     updateSentiment(prevBid, histHigh, histLow, lastSpread);
     updateLevels(prevBid, histHigh, histLow);
