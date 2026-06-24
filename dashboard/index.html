@@ -65,9 +65,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 @media(max-width:600px){.grid2{grid-template-columns:1fr;}}
 
 /* SENTIMENT */
-.sentiment-row{display:flex;align-items:center;gap:12px;margin-top:4px;}
-.sentiment-icon{font-size:40px;line-height:1;}
-.sentiment-label{font-family:var(--font-d);font-size:22px;font-weight:700;}
+.sentiment-row{display:flex;align-items:baseline;gap:10px;margin-top:4px;}
+.sentiment-icon{font-size:26px;line-height:1;font-family:monospace;}
+.sentiment-label{font-size:22px;font-weight:500;letter-spacing:1px;text-transform:uppercase;}
 .sentiment-sub{font-size:11px;color:var(--text-2);margin-top:2px;}
 
 /* BULL/BEAR BAR */
@@ -191,7 +191,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     <div class="card">
       <div class="clabel">Настроение рынка</div>
       <div class="sentiment-row">
-        <div class="sentiment-icon" id="sent-icon">⏳</div>
+        <div class="sentiment-icon" id="sent-icon">◆</div>
         <div>
           <div class="sentiment-label" id="sent-label">—</div>
           <div class="sentiment-sub" id="sent-sub">вычисляется...</div>
@@ -199,8 +199,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
       </div>
       <div class="bb-wrap">
         <div class="bb-label">
-          <span class="c-green">🐂 Быки</span>
-          <span class="c-red">Медведи 🐻</span>
+          <span class="c-green">БЫКИ</span>
+          <span class="c-red">МЕДВЕДИ</span>
         </div>
         <div class="bb-bar">
           <div class="bb-bull" id="bb-bull" style="width:50%"></div>
@@ -360,14 +360,14 @@ function calcSentiment(bid, high, low, spread) {
   if (score > 0.65) {
     bullPct = Math.round(55 + (score - 0.65) * 100);
     if (bullPct > 80) bullPct = 80;
-    icon = '🐂'; label = 'Бычий'; sub = 'Покупатели доминируют';
+    icon = '▲'; label = 'Бычий'; sub = 'Покупатели доминируют';
   } else if (score < 0.35) {
     bullPct = Math.round(45 - (0.35 - score) * 100);
     if (bullPct < 20) bullPct = 20;
-    icon = '🐻'; label = 'Медвежий'; sub = 'Продавцы доминируют';
+    icon = '▼'; label = 'Медвежий'; sub = 'Продавцы доминируют';
   } else {
     bullPct = Math.round(45 + (score - 0.35) * 50);
-    icon = '⚖️'; label = 'Нейтральный'; sub = 'Силы равны';
+    icon = '◆'; label = 'Нейтральный'; sub = 'Силы равны';
   }
 
   return { bullPct: bullPct, icon: icon, label: label, sub: sub };
@@ -386,11 +386,12 @@ function updateSentiment(bid, high, low, spread) {
   document.getElementById('bull-pct').textContent = s.bullPct + '%';
   document.getElementById('bear-pct').textContent = bearPct + '%';
 
-  // Цвет метки настроения
+  // Цвет иконки и метки настроения
   var lbl = document.getElementById('sent-label');
-  if (s.label === 'Бычий') lbl.style.color = 'var(--green)';
-  else if (s.label === 'Медвежий') lbl.style.color = 'var(--red)';
-  else lbl.style.color = 'var(--amber)';
+  var ico = document.getElementById('sent-icon');
+  if (s.label === 'Бычий')       { lbl.style.color = 'var(--green)'; ico.style.color = 'var(--green)'; }
+  else if (s.label === 'Медвежий') { lbl.style.color = 'var(--red)';   ico.style.color = 'var(--red)'; }
+  else                             { lbl.style.color = 'var(--amber)'; ico.style.color = 'var(--amber)'; }
 }
 
 function updateSpread(spread) {
