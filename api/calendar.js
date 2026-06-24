@@ -179,6 +179,7 @@ export default async function handler(req, res) {
       }
     }
 
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=900');
     try {
       var r = await fetch(kvUrl + '/get/calendar_events', {
         headers: { Authorization: 'Bearer ' + kvToken }
