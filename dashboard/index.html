@@ -518,25 +518,45 @@ function applyHistory(candles) {
   histLow  = Math.min.apply(null, lows);
   window._allCandles = candles;
 
+  // Гибкий парсер времени: number(ms), number(s), ISO-строка
+  function parseT(t) {
+    if (typeof t === 'number') return t > 1e12 ? t : t * 1000;
+    if (typeof t === 'string') {
+      var n = Number(t);
+      if (!isNaN(n) && n > 0) return n > 1e12 ? n : n * 1000;
+      return new Date(t).getTime();
+    }
+    return NaN;
+  }
+
+  // Однократная диагностика (видна в F12 → Console)
+  if (!window._candleDebugLogged) {
+    window._candleDebugLogged = true;
+    console.log('[NovaFX] candles total =', candles.length,
+      '| first =', candles[0],
+      '| last =', candles[candles.length - 1],
+      '| parseT(first.t) =', new Date(parseT(candles[0].t)).toISOString());
+  }
+
   // === ATR(14) на дневках ===
-  // Группируем H1-свечи по дню (по UTC)
   var byDay = {};
   for (var i = 0; i < candles.length; i++) {
     var c = candles[i];
-    var d = new Date(c.t);
+    var tms = parseT(c.t);
+    if (isNaN(tms)) continue;
+    var d = new Date(tms);
     var key = d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
-    if (!byDay[key]) byDay[key] = { h: c.h, l: c.l, o: c.o, c: c.c, t: c.t };
+    if (!byDay[key]) byDay[key] = { h: c.h, l: c.l, o: c.o, c: c.c, t: tms };
     else {
       if (c.h > byDay[key].h) byDay[key].h = c.h;
       if (c.l < byDay[key].l) byDay[key].l = c.l;
       byDay[key].c = c.c;
-      if (c.t > byDay[key].t) byDay[key].t = c.t;
+      if (tms > byDay[key].t) byDay[key].t = tms;
     }
   }
   var days = Object.keys(byDay).sort(function(a,b){ return byDay[a].t - byDay[b].t; })
                                .map(function(k){ return byDay[k]; });
 
-  // True Range: max(H-L, |H-prevClose|, |L-prevClose|)
   var atrVal = null;
   if (days.length >= 15) {
     var TRs = [];
@@ -544,7 +564,6 @@ function applyHistory(candles) {
       var H = days[j].h, L = days[j].l, pC = days[j-1].c;
       TRs.push(Math.max(H - L, Math.abs(H - pC), Math.abs(L - pC)));
     }
-    // Берём ATR последних 14 завершённых дней (исключая сегодняшний — он ещё формируется)
     var lastTRs = TRs.slice(-15, -1); // 14 завершённых TR
     if (lastTRs.length === 14) {
       var sum = 0;
@@ -555,10 +574,9 @@ function applyHistory(candles) {
   window._currentATR = atrVal;
 
   if (atrVal !== null) {
+    // === ATR метрика ===
     var atrPips = Math.round(atrVal * 10000);
     document.getElementById('vol-val').textContent = atrPips + ' пп';
-
-    // Шкала для EUR/USD: <60 / 60-100 / >100
     var level, color, pct;
     if      (atrPips < 60)  { level='Низкая';        color='var(--green)'; pct=15; }
     else if (atrPips < 100) { level='Умеренная';     color='var(--amber)'; pct=50; }
@@ -568,11 +586,22 @@ function applyHistory(candles) {
     document.getElementById('vol-val').style.color = color;
     document.getElementById('vol-marker').style.left = pct + '%';
   } else {
-    document.getElementById('vol-val').textContent = '—';
-    document.getElementById('vol-label').textContent = 'недостаточно данных';
+    // === Fallback: 30-дневный диапазон ===
+    var range = Math.round((histHigh - histLow) * 10000);
+    document.getElementById('vol-val').textContent = range + ' пп';
+    var levelF, colorF, pctF;
+    if      (range < 150) { levelF='Низкая';        colorF='var(--green)'; pctF=15; }
+    else if (range < 300) { levelF='Умеренная';     colorF='var(--amber)'; pctF=45; }
+    else if (range < 500) { levelF='Высокая';       colorF='var(--red)';   pctF=75; }
+    else                  { levelF='Очень высокая'; colorF='var(--red)';   pctF=92; }
+    document.getElementById('vol-label').textContent = levelF + ' · диапазон 30 дней';
+    document.getElementById('vol-val').style.color = colorF;
+    document.getElementById('vol-marker').style.left = pctF + '%';
+    // Прячем "сегодня от среднего" — нет ATR
+    var todayEl = document.getElementById('vol-today');
+    if (todayEl) todayEl.style.display = 'none';
   }
 
-  // Пересчитываем настроение и уровни если цена уже есть
   if (prevBid !== null) {
     updateSentiment(prevBid, histHigh, histLow, lastSpread);
     updateLevels(prevBid, histHigh, histLow);
