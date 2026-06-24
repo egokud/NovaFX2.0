@@ -315,7 +315,7 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 
 <script>
 const PIP_VAL = 0.01, STOP_OUT = 0.30; // 5-значные котировки EURUSD
-function getMarginPerLot() { return eurusd * 0.752; }
+function getMarginPerLot() { return eurusd; } // центовый счёт 1:1000 — margin = price USD на 1 цент. лот
 let userMaxOrders = 30;
 const GROUP1 = 5, GROUP2 = 10, MAX_BOOSTED = 14;
 
@@ -427,9 +427,11 @@ function render() {
     if (i === MAX_ORDERS-1 && !liquidationOrder) {
       // Лимит ордеров исчерпан — считаем сколько ещё пройдёт цена до ликвидации
       // без открытия новых ордеров (суммарный объём фиксирован = totalVolume)
-      // equity = balance - loss - totalVolume * extraPips * PIP_VAL >= balance * STOP_OUT
-      // extraPips = (balance - loss - balance * STOP_OUT) / (totalVolume * PIP_VAL)
-      var extraPips = Math.max(0, (equity - balance * STOP_OUT) / (totalVolume * PIP_VAL));
+      // Stop out срабатывает когда margin level <= 30%, т.е. equity <= margin × 0.30
+      // equity - totalVolume × extraPips × PIP_VAL = margin × STOP_OUT
+      // extraPips = (equity - margin × STOP_OUT) / (totalVolume × PIP_VAL)
+      var marginCur = totalVolume * getMarginPerLot();
+      var extraPips = Math.max(0, (equity - marginCur * STOP_OUT) / (totalVolume * PIP_VAL));
       var totalLiqPips = Math.round(pipsNow + extraPips);
       liquidationOrder = MAX_ORDERS;
       liquidationPips = totalLiqPips;
