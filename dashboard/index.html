@@ -104,6 +104,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
 /* CALENDAR */
+.cal-h2{font-size:22px;font-weight:600;color:var(--text);margin:0 0 6px;letter-spacing:-0.02em;line-height:1.2;}
+.cal-sub{font-size:12px;color:var(--text-2);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+@media(max-width:700px){
+  .cal-h2{font-size:19px;}
+}
 .cal-day{font-size:10px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin:10px 0 4px;padding-top:8px;border-top:.5px solid var(--border);}
 .cal-day-today{color:var(--green);font-weight:600;}
 .cal-past-toggle{font-size:11px;color:var(--text-2);padding:8px 10px;background:var(--bg-input);border-radius:var(--r-sm);cursor:pointer;text-align:center;margin-bottom:8px;transition:background .15s;user-select:none;}
@@ -292,10 +297,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     <span id="status-text">Подключение к MT5...</span>
   </div>
 
-  <!-- КАЛЕНДАРЬ СОБЫТИЙ -->
+  <!-- ЭКОНОМИЧЕСКИЙ КАЛЕНДАРЬ -->
   <div class="card">
-    <div class="clabel">Календарь событий · EUR/USD · неделя <span class="auto-tag" id="cal-tag">● Загружаем...</span></div>
-    <div id="cal-list" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+    <h2 class="cal-h2">Экономический календарь</h2>
+    <div class="cal-sub">EUR/USD · неделя · только важные события <span class="auto-tag" id="cal-tag">● Загружаем...</span></div>
+    <div id="cal-list" style="display:flex;flex-direction:column;gap:6px;margin-top:12px;">
       <div style="text-align:center;color:var(--text-3);padding:20px;font-size:13px;">Загрузка событий...</div>
     </div>
   </div>
