@@ -1,19 +1,28 @@
 export const config = { api: { bodyParser: false } };
 
-const JB_API_KEY = process.env.JB_API_KEY || 'xgj3wKJfTtWZ6cBGvns01UFIWaATrF51';
-const JB_URL = 'https://www.jblanked.com/news/api/mql5/calendar/today/';
+const FF_URL = 'https://nfs.faireconomy.media/ff_calendar_thisweek.json';
 
-// Перевод названий валют в флаги
 const FLAGS = {
   USD: '🇺🇸', EUR: '🇪🇺', GBP: '🇬🇧', JPY: '🇯🇵',
   CHF: '🇨🇭', CAD: '🇨🇦', AUD: '🇦🇺', NZD: '🇳🇿', CNY: '🇨🇳'
 };
 
-// Только эти валюты показываем (фокус на EUR/USD)
+// Только эти валюты (фокус на EUR/USD)
 const ALLOWED_CURRENCIES = ['USD', 'EUR'];
 
-// Только важные события — High и Medium
+// Перевод названий важности
+const IMPACT_MAP = {
+  'High': 'High',
+  'Medium': 'Medium',
+  'Low': 'Low',
+  'Holiday': 'Holiday'
+};
+
+// Только важные
 const ALLOWED_IMPACT = ['High', 'Medium'];
+
+// Кеш в Redis на 1 час
+const CACHE_TTL_MS = 3600000;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,7 +32,7 @@ export default async function handler(req, res) {
   const kvUrl = process.env.KV_REST_API_URL;
   const kvToken = process.env.KV_REST_API_TOKEN;
 
-  // Если есть кеш в Redis — отдаём
+  // Читаем кеш
   if (req.method === 'GET' && req.query.fresh !== '1') {
     try {
       const r = await fetch(`${kvUrl}/get/calendar_events`, {
@@ -33,8 +42,7 @@ export default async function handler(req, res) {
       if (d.result) {
         const cached = JSON.parse(d.result);
         const age = Date.now() - cached.ts;
-        // Кеш на 1 час
-        if (age < 3600000) {
+        if (age < CACHE_TTL_MS) {
           return res.status(200).json({
             ...cached,
             cached: true,
@@ -47,64 +55,41 @@ export default async function handler(req, res) {
     }
   }
 
-  // Загружаем свежие данные из JBlanked
+  // Загружаем свежие из Forex Factory
   try {
-    const r = await fetch(JB_URL, {
+    const r = await fetch(FF_URL, {
       headers: {
-        'Authorization': `Api-Key ${JB_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 NovaFX Calendar Bot'
       }
     });
 
     if (!r.ok) {
-      const errText = await r.text();
-      return res.status(500).json({ error: 'JBlanked API error', status: r.status, body: errText });
+      return res.status(500).json({ error: 'FF error', status: r.status });
     }
 
     const raw = await r.json();
 
-    // Debug mode — возвращаем сырые данные
+    // Debug
     if (req.query.debug === '1') {
-      return res.status(200).json({ rawSample: Array.isArray(raw) ? raw.slice(0, 5) : raw, total: Array.isArray(raw) ? raw.length : 'not array' });
+      return res.status(200).json({ sample: raw.slice(0, 5), total: raw.length });
     }
 
-
     // Фильтруем и нормализуем
-    const events = (Array.isArray(raw) ? raw : []).map(ev => {
-      const currency = ev.Currency || ev.currency || '';
-      const name = ev.Name || ev.name || '';
-      const dateStr = ev.Date || ev.date || '';
-      const actual = ev.Actual ?? ev.actual ?? null;
-      const forecast = ev.Forecast ?? ev.forecast ?? null;
-      const previous = ev.Previous ?? ev.previous ?? null;
-      const strength = ev.Strength || ev.strength || ev.Impact || ev.impact || '';
-
-      // Определяем важность
-      let impact = 'Low';
-      if (typeof strength === 'string') {
-        if (strength.toLowerCase().includes('high')) impact = 'High';
-        else if (strength.toLowerCase().includes('medium') || strength.toLowerCase().includes('moderate')) impact = 'Medium';
-      } else if (typeof strength === 'number') {
-        if (strength >= 3) impact = 'High';
-        else if (strength >= 2) impact = 'Medium';
-      }
-
-      return {
-        currency,
-        flag: FLAGS[currency] || '🌐',
-        name,
-        date: dateStr,
-        actual,
-        forecast,
-        previous,
-        impact
-      };
-    }).filter(ev => {
-      // Только USD и EUR, только High и Medium
-      return ALLOWED_CURRENCIES.includes(ev.currency)
-          && ALLOWED_IMPACT.includes(ev.impact)
-          && ev.name && ev.date;
-    });
+    const events = (Array.isArray(raw) ? raw : [])
+      .map(ev => ({
+        currency: ev.country || '',
+        flag: FLAGS[ev.country] || '🌐',
+        name: ev.title || '',
+        date: ev.date || '',
+        actual: ev.actual ?? null,
+        forecast: ev.forecast ?? null,
+        previous: ev.previous ?? null,
+        impact: IMPACT_MAP[ev.impact] || 'Low'
+      }))
+      .filter(ev => ALLOWED_CURRENCIES.includes(ev.currency)
+                  && ALLOWED_IMPACT.includes(ev.impact)
+                  && ev.name && ev.date);
 
     const payload = {
       events,
