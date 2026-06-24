@@ -711,40 +711,7 @@ document.getElementById('in-maxorders').addEventListener('input', function(e) {
 
 document.getElementById('in-current-balance').addEventListener('input', render);
 document.getElementById('in-current-price').addEventListener('input', render);
-
-// Автозагрузка текущей цены из MT5
-function loadLivePrice() {
-  fetch('https://www.novafx.io/api/price')
-    .then(function(r){ return r.json(); })
-    .then(function(d) {
-      if (d && d.bid) {
-        var input = document.getElementById('in-current-price');
-        // Если пользователь сам не вводил, заполняем
-        if (!input.dataset.userEdited) {
-          input.value = d.bid.toFixed(5);
-          render();
-        }
-        var t = new Date(d.updated || Date.now());
-        var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
-        document.getElementById('price-status').innerHTML = '<span style="color:#22c55e">●</span> Из MT5 · BID ' + d.bid.toFixed(5) + ' · ' + time;
-        document.getElementById('price-status').style.color = 'var(--text-tertiary)';
-      } else {
-        document.getElementById('price-status').textContent = '● Нет данных от MT5 — введите вручную';
-      }
-    })
-    .catch(function(){
-      document.getElementById('price-status').textContent = '● Не удалось загрузить — введите вручную';
-    });
-}
-
-// Отметить что пользователь сам ввёл значение
-document.getElementById('in-current-price').addEventListener('focus', function(){
-  this.dataset.userEdited = '1';
-});
-
-loadLivePrice();
-// Обновляем каждые 60 сек
-setInterval(loadLivePrice, 60000);  render();
+  render();
 });
 document.querySelectorAll('.refill-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
@@ -779,6 +746,46 @@ function toggleTheme(){
 (function(){
   var saved = localStorage.getItem('nova-theme') || 'dark';
   applyTheme(saved);
+})();
+
+
+// Автозагрузка текущей цены из MT5
+(function() {
+  function loadLivePrice() {
+    fetch('https://www.novafx.io/api/price')
+      .then(function(r){ return r.json(); })
+      .then(function(d) {
+        var statusEl = document.getElementById('price-status');
+        var input = document.getElementById('in-current-price');
+        if (!statusEl || !input) return;
+        if (d && d.bid) {
+          if (!input.dataset.userEdited) {
+            input.value = d.bid.toFixed(5);
+            if (typeof render === 'function') render();
+          }
+          var t = new Date(d.updated || Date.now());
+          var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+          statusEl.innerHTML = '<span style="color:#22c55e">●</span> Из MT5 · BID ' + d.bid.toFixed(5) + ' · ' + time;
+          statusEl.style.color = 'var(--text-tertiary)';
+        } else {
+          statusEl.textContent = '● Нет данных от MT5 — введите вручную';
+        }
+      })
+      .catch(function(e){
+        var statusEl = document.getElementById('price-status');
+        if (statusEl) statusEl.textContent = '● Не удалось загрузить — введите вручную';
+      });
+  }
+
+  var input = document.getElementById('in-current-price');
+  if (input) {
+    input.addEventListener('focus', function(){
+      this.dataset.userEdited = '1';
+    });
+  }
+
+  loadLivePrice();
+  setInterval(loadLivePrice, 60000);
 })();
 </script>
 </body>
