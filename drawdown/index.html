@@ -102,6 +102,19 @@
   .row-s2 td { background: var(--row-s2); }
   .row-s3 td { background: rgba(245,158,11,0.05); }
   .row-refill td { background: rgba(34,197,94,0.07) !important; color: var(--green) !important; font-weight: 500 !important; }
+  .live-metrics { display: none; margin-bottom: 16px; padding: 14px 16px; background: var(--bg-secondary); border: 0.5px solid var(--blue-border); border-radius: var(--radius); }
+  .live-metrics.active { display: block; }
+  .live-metrics-title { font-size: 12px; font-weight: 600; color: var(--blue); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 10px; }
+  .live-metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 700px) { .live-metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+  .live-metric { display: flex; flex-direction: column; gap: 2px; }
+  .live-metric-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
+  .live-metric-value { font-size: 16px; font-weight: 600; color: var(--text-primary); font-family: 'JetBrains Mono', monospace; }
+  .live-metric-value.green { color: var(--green); }
+  .live-metric-value.red { color: var(--red); }
+  .live-metric-value.amber { color: #f59e0b; }
+  .live-metric-sub { font-size: 10px; color: var(--text-tertiary); }
+  .row-current td { background: rgba(59,130,246,0.12) !important; color: var(--blue) !important; font-weight: 600 !important; }
   .row-liq td { background: rgba(239,68,68,0.1) !important; color: var(--red) !important; font-weight: 600 !important; }
   .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 6px; font-weight: 500; }
   .b1 { background: var(--blue-bg); color: var(--blue); border: 0.5px solid var(--blue-border); }
@@ -219,7 +232,7 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 
   <div class="info-bar">Брокер RoboForex · Плечо 1:1000 · Stop out 30% · Маржа на 1 центовый лот = 0.01 $ · Сетка строится от первоначального депозита · Резерв добавляется по достижении порога просадки от текущего баланса</div>
 
-  <div class="inputs-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+  <div class="inputs-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;">
     <div class="input-group">
       <span class="input-label">Первоначальный депозит (USD)</span>
       <input class="input-field" id="in-deposit" type="number" min="500" max="200000" step="500" value="5000">
@@ -246,6 +259,11 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
       <span class="input-label">Текущий баланс (опц.)</span>
       <input class="input-field" id="in-current-balance" type="number" min="0" step="100" placeholder="—">
       <span style="font-size:11px;color:#f59e0b;">● Реальный баланс счёта в USD, если отличается от депозита</span>
+    </div>
+    <div class="input-group">
+      <span class="input-label">Текущая цена (опц.)</span>
+      <input class="input-field" id="in-current-price" type="number" min="0.5" max="2" step="0.00001" placeholder="—">
+      <span style="font-size:11px;color:#f59e0b;">● Введите чтобы увидеть метрики на момент этой цены</span>
     </div>
   </div>
 
@@ -446,7 +464,109 @@ function render() {
     }
   }
 
-  document.getElementById('s-reserve').textContent = fmt(totalReserveAdded)+' $';
+  // Расчёт метрик для введённой текущей цены
+  var curPriceEl = document.getElementById('in-current-price');
+  var curPrice = curPriceEl ? parseFloat(curPriceEl.value) : NaN;
+  var liveBlock = document.getElementById('live-metrics');
+
+  if (curPrice && curPrice > 0 && eurusd > 0) {
+    var pipsFromStart = Math.max(0, Math.round((eurusd - curPrice) * 100000));
+    // Количество открытых ордеров: ордер k открыт когда пипсов >= (k-1)*step
+    var openOrders = Math.min(MAX_ORDERS, Math.floor(pipsFromStart / customStep) + 1);
+    if (openOrders < 1) openOrders = 1;
+
+    // Считаем заново открытый объём и убыток с учётом доливов
+    var liveBalance = startBalance, liveReserves = 0, liveRefillsLeft = actualRefills;
+    var liveVolume = 0, liveLoss = 0;
+    for (var k = 0; k < openOrders; k++) {
+      var kLot = calcLot(startLot, k);
+      liveVolume += kLot;
+      // Проверяем долив
+      var lossSoFar = calcTotalLoss(startLot, customStep, k+1);
+      // Применяем долив если порог пройден
+      if (liveRefillsLeft > 0 && lossSoFar >= liveBalance * s.threshold) {
+        liveBalance += initDeposit;
+        liveReserves += initDeposit;
+        liveRefillsLeft--;
+      }
+    }
+    // Текущий убыток исходя из фактической цены (не attached к шагам)
+    liveLoss = 0;
+    for (var m = 0; m < openOrders; m++) {
+      var mLot = calcLot(startLot, m);
+      var mPriceOpen = m * customStep; // в пипсах от первой
+      if (pipsFromStart > mPriceOpen) {
+        liveLoss += mLot * (pipsFromStart - mPriceOpen) * PIP_VAL;
+      }
+    }
+
+    var liveEquity = liveBalance - liveLoss;
+    var liveMargin = liveVolume * getMarginPerLot();
+    var liveML = liveMargin > 0 ? liveEquity / liveMargin * 100 : 0;
+    var liveDD = liveBalance > 0 ? liveLoss / liveBalance * 100 : 0;
+
+    // До stop out
+    var toStopOutDollars = liveEquity - liveMargin * STOP_OUT;
+    var toStopOutPips = liveVolume > 0 ? Math.max(0, Math.round(toStopOutDollars / (liveVolume * PIP_VAL))) : 0;
+    var liqPrice = curPrice - (toStopOutPips * 0.00001);
+
+    document.getElementById('lm-price').textContent = curPrice.toFixed(5);
+    document.getElementById('lm-pips').textContent = pipsFromStart + ' пипсов от старта';
+    document.getElementById('lm-orders').textContent = openOrders + ' / ' + MAX_ORDERS;
+    document.getElementById('lm-volume').textContent = 'объём ' + fmt(liveVolume,2) + ' лотов';
+    document.getElementById('lm-loss').textContent = '−' + fmt(liveLoss,1) + ' $';
+    document.getElementById('lm-dd').textContent = fmt(liveDD,1) + ' % просадки';
+    document.getElementById('lm-equity').textContent = fmt(liveEquity,1) + ' $';
+    var mlEl = document.getElementById('lm-ml');
+    mlEl.textContent = 'уровень маржи ' + fmt(liveML,0) + ' %';
+    document.getElementById('lm-tosout').textContent = toStopOutPips + ' пипсов';
+    document.getElementById('lm-tosout-price').textContent = 'цена ' + liqPrice.toFixed(5);
+    document.getElementById('lm-balance').textContent = fmt(liveBalance,0) + ' $';
+    document.getElementById('lm-reserves').textContent = 'резервов добавлено ' + fmt(liveReserves,0) + ' $';
+    document.getElementById('lm-startlot').textContent = fmt(startLot,2);
+
+    // Статус
+    var statusEl = document.getElementById('lm-status');
+    var statusSub = document.getElementById('lm-status-sub');
+    if (liveML <= STOP_OUT * 100) {
+      statusEl.textContent = '⛔ Ликвидация';
+      statusEl.className = 'live-metric-value red';
+      statusSub.textContent = 'маржин-колл сработал';
+    } else if (liveML <= 100) {
+      statusEl.textContent = '🔴 Критично';
+      statusEl.className = 'live-metric-value red';
+      statusSub.textContent = 'близко к stop out';
+    } else if (liveDD >= 40) {
+      statusEl.textContent = '🟡 Внимание';
+      statusEl.className = 'live-metric-value amber';
+      statusSub.textContent = 'высокая просадка';
+    } else {
+      statusEl.textContent = '🟢 Норма';
+      statusEl.className = 'live-metric-value green';
+      statusSub.textContent = 'в безопасной зоне';
+    }
+
+    liveBlock.classList.add('active');
+
+    // Подсветка строки в таблице
+    var rows = tbody.querySelectorAll('tr');
+    rows.forEach(function(r){ r.classList.remove('row-current'); });
+    // Найдём строку соответствующего ордера (учитываем что могут быть refill rows)
+    var orderCount = 0;
+    for (var rr = 0; rr < rows.length; rr++) {
+      if (rows[rr].innerHTML.indexOf('Резерв') === -1 && rows[rr].innerHTML.indexOf('Ордер') !== -1) {
+        orderCount++;
+        if (orderCount === openOrders) {
+          rows[rr].classList.add('row-current');
+          break;
+        }
+      }
+    }
+  } else {
+    liveBlock.classList.remove('active');
+  }
+
+    document.getElementById('s-reserve').textContent = fmt(totalReserveAdded)+' $';
   var actualRef = (stratKey === 'mod' || stratKey === 'cons' || stratKey === 'agg') ? customRefills : STRATS[stratKey].refills;
   document.getElementById('s-reserve-sub').textContent = '+' + (actualRef * 100) + '% резерв';
   document.getElementById('s-orders-liq').textContent = liquidationOrder || '>200';
@@ -539,7 +659,8 @@ document.getElementById('in-rate').addEventListener('input', function(e) {
 document.getElementById('in-maxorders').addEventListener('input', function(e) {
   userMaxOrders = Math.max(1, Math.min(200, parseInt(e.target.value)||200));
 
-document.getElementById('in-current-balance').addEventListener('input', render);  render();
+document.getElementById('in-current-balance').addEventListener('input', render);
+document.getElementById('in-current-price').addEventListener('input', render);  render();
 });
 document.querySelectorAll('.refill-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
