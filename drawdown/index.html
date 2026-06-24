@@ -311,6 +311,52 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 
 
 
+  <div class="live-metrics" id="live-metrics">
+    <div class="live-metrics-title">📍 Метрики на момент текущей цены</div>
+    <div class="live-metrics-grid">
+      <div class="live-metric">
+        <span class="live-metric-label">Текущая цена</span>
+        <span class="live-metric-value" id="lm-price">—</span>
+        <span class="live-metric-sub" id="lm-pips">— пипсов от старта</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">Открыто ордеров</span>
+        <span class="live-metric-value" id="lm-orders">—</span>
+        <span class="live-metric-sub" id="lm-volume">объём — лотов</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">Плавающий убыток</span>
+        <span class="live-metric-value red" id="lm-loss">—</span>
+        <span class="live-metric-sub" id="lm-dd">— % просадки</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">Equity</span>
+        <span class="live-metric-value" id="lm-equity">—</span>
+        <span class="live-metric-sub" id="lm-ml">уровень маржи —</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">До stop out</span>
+        <span class="live-metric-value amber" id="lm-tosout">— пипсов</span>
+        <span class="live-metric-sub" id="lm-tosout-price">цена —</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">Баланс счёта</span>
+        <span class="live-metric-value" id="lm-balance">—</span>
+        <span class="live-metric-sub" id="lm-reserves">резервов добавлено —</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">Статус позиции</span>
+        <span class="live-metric-value" id="lm-status">—</span>
+        <span class="live-metric-sub" id="lm-status-sub">—</span>
+      </div>
+      <div class="live-metric">
+        <span class="live-metric-label">Стартовый лот</span>
+        <span class="live-metric-value" id="lm-startlot">—</span>
+        <span class="live-metric-sub">центовых лотов</span>
+      </div>
+    </div>
+  </div>
+
   <div class="section-label">Развитие просадки по ордерам</div>
   <div class="table-wrap">
     <table>
