@@ -6,7 +6,7 @@ const FLAGS = {
 };
 
 const ALLOWED_CURRENCIES = ['USD', 'EUR'];
-const ALLOWED_IMPACT = ['High', 'Medium'];
+const ALLOWED_IMPACT = ['High'];
 const CRON_SECRET = process.env.CRON_SECRET || 'novafx2026';
 
 // CP1251 → Unicode map (только верхние байты 0x80-0xFF)
