@@ -80,7 +80,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 
 /* VOLATILITY */
 .vol-val{font-family:var(--font-m);font-size:24px;font-weight:600;}
-.vol-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,#f59e0b 50%,var(--red) 100%);margin-top:8px;position:relative;}
+.vol-sub{font-size:11px;color:var(--text-2);margin-top:6px;display:flex;align-items:center;gap:6px;}
+.vol-prog-bar{flex:1;height:4px;border-radius:2px;background:var(--bg-input);overflow:hidden;}
+.vol-prog-fill{height:100%;background:var(--text);border-radius:2px;transition:width .5s ease;}
+.vol-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green) 0%,#f59e0b 50%,var(--red) 100%);margin-top:10px;position:relative;}
 .vol-marker{position:absolute;top:-4px;width:3px;height:13px;background:var(--text);border-radius:2px;transition:left .5s;}
 
 /* SPREAD */
@@ -211,12 +214,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     </div>
 
     <div class="card">
-      <div class="clabel">Волатильность · 30 дней</div>
+      <div class="clabel">Волатильность · ATR(14) дневной</div>
       <div class="vol-val c-amber" id="vol-val">— пп</div>
       <div style="font-size:10px;color:var(--text-2);margin-top:3px" id="vol-label">вычисляется...</div>
       <div class="vol-bar"><div class="vol-marker" id="vol-marker" style="left:50%"></div></div>
       <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-3);margin-top:4px">
         <span>Низкая</span><span>Средняя</span><span>Высокая</span>
+      </div>
+      <div class="vol-sub" id="vol-today">
+        <span>Сегодня: <b id="vol-today-pct">—</b> от среднего</span>
+        <div class="vol-prog-bar"><div class="vol-prog-fill" id="vol-today-fill" style="width:0%"></div></div>
       </div>
       <div style="margin-top:12px;">
         <div class="clabel" style="margin-bottom:6px;">Спред</div>
@@ -459,6 +466,7 @@ function fetchMT5Price() {
       // Дневные High/Low от Python скрипта
       if (d.day_high) document.getElementById('p-high').textContent = d.day_high.toFixed(5);
       if (d.day_low)  document.getElementById('p-low').textContent  = d.day_low.toFixed(5);
+      updateTodayProgress(d.day_high, d.day_low);
 
       if (prevBid !== null) {
         var diff = bid - prevBid;
@@ -505,22 +513,87 @@ function applyHistory(candles) {
   histHigh = Math.max.apply(null, highs);
   histLow  = Math.min.apply(null, lows);
   window._allCandles = candles;
-  var range = Math.round((histHigh - histLow) * 10000);
-  document.getElementById('vol-val').textContent = range + ' пп';
-  var level, color, pct;
-  if (range < 150) { level='Низкая'; color='var(--green)'; pct=15; }
-  else if (range < 300) { level='Умеренная'; color='var(--amber)'; pct=45; }
-  else if (range < 500) { level='Высокая'; color='var(--red)'; pct=75; }
-  else { level='Очень высокая'; color='var(--red)'; pct=92; }
-  document.getElementById('vol-label').textContent = level;
-  document.getElementById('vol-val').style.color = color;
-  document.getElementById('vol-marker').style.left = pct + '%';
+
+  // === ATR(14) на дневках ===
+  // Группируем H1-свечи по дню (по UTC)
+  var byDay = {};
+  for (var i = 0; i < candles.length; i++) {
+    var c = candles[i];
+    var d = new Date(c.t);
+    var key = d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
+    if (!byDay[key]) byDay[key] = { h: c.h, l: c.l, o: c.o, c: c.c, t: c.t };
+    else {
+      if (c.h > byDay[key].h) byDay[key].h = c.h;
+      if (c.l < byDay[key].l) byDay[key].l = c.l;
+      byDay[key].c = c.c;
+      if (c.t > byDay[key].t) byDay[key].t = c.t;
+    }
+  }
+  var days = Object.keys(byDay).sort(function(a,b){ return byDay[a].t - byDay[b].t; })
+                               .map(function(k){ return byDay[k]; });
+
+  // True Range: max(H-L, |H-prevClose|, |L-prevClose|)
+  var atrVal = null;
+  if (days.length >= 15) {
+    var TRs = [];
+    for (var j = 1; j < days.length; j++) {
+      var H = days[j].h, L = days[j].l, pC = days[j-1].c;
+      TRs.push(Math.max(H - L, Math.abs(H - pC), Math.abs(L - pC)));
+    }
+    // Берём ATR последних 14 завершённых дней (исключая сегодняшний — он ещё формируется)
+    var lastTRs = TRs.slice(-15, -1); // 14 завершённых TR
+    if (lastTRs.length === 14) {
+      var sum = 0;
+      for (var k = 0; k < lastTRs.length; k++) sum += lastTRs[k];
+      atrVal = sum / 14;
+    }
+  }
+  window._currentATR = atrVal;
+
+  if (atrVal !== null) {
+    var atrPips = Math.round(atrVal * 10000);
+    document.getElementById('vol-val').textContent = atrPips + ' пп';
+
+    // Шкала для EUR/USD: <60 / 60-100 / >100
+    var level, color, pct;
+    if      (atrPips < 60)  { level='Низкая';        color='var(--green)'; pct=15; }
+    else if (atrPips < 100) { level='Умеренная';     color='var(--amber)'; pct=50; }
+    else if (atrPips < 150) { level='Высокая';       color='var(--red)';   pct=78; }
+    else                    { level='Очень высокая'; color='var(--red)';   pct=92; }
+    document.getElementById('vol-label').textContent = level + ' · средний дневной ход';
+    document.getElementById('vol-val').style.color = color;
+    document.getElementById('vol-marker').style.left = pct + '%';
+  } else {
+    document.getElementById('vol-val').textContent = '—';
+    document.getElementById('vol-label').textContent = 'недостаточно данных';
+  }
 
   // Пересчитываем настроение и уровни если цена уже есть
   if (prevBid !== null) {
     updateSentiment(prevBid, histHigh, histLow, lastSpread);
     updateLevels(prevBid, histHigh, histLow);
   }
+}
+
+// Обновляет блок "сегодня прошёл X% от среднего" — вызывается при каждом тике цены
+function updateTodayProgress(dayHigh, dayLow) {
+  var atr = window._currentATR;
+  var pctEl  = document.getElementById('vol-today-pct');
+  var fillEl = document.getElementById('vol-today-fill');
+  if (!pctEl || !fillEl) return;
+  if (!atr || !dayHigh || !dayLow) {
+    pctEl.textContent = '—';
+    fillEl.style.width = '0%';
+    return;
+  }
+  var todayRange = dayHigh - dayLow;
+  var pct = Math.round((todayRange / atr) * 100);
+  pctEl.textContent = pct + '%';
+  fillEl.style.width = Math.min(pct, 100) + '%';
+  // Цвет fill: <50% — нейтральный, 50-90 — янтарный, >90 — красный (диапазон почти исчерпан)
+  if      (pct < 50) fillEl.style.background = 'var(--text)';
+  else if (pct < 90) fillEl.style.background = 'var(--amber)';
+  else               fillEl.style.background = 'var(--red)';
 }
 
 function fetchHistory() {
