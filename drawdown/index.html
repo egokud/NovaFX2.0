@@ -219,7 +219,7 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
 
   <div class="info-bar">Брокер RoboForex · Плечо 1:1000 · Stop out 30% · Маржа на 1 центовый лот = 0.01 $ · Сетка строится от первоначального депозита · Резерв добавляется по достижении порога просадки от текущего баланса</div>
 
-  <div class="inputs-grid" style="grid-template-columns:1fr 1fr 1fr 1fr;">
+  <div class="inputs-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
     <div class="input-group">
       <span class="input-label">Первоначальный депозит (USD)</span>
       <input class="input-field" id="in-deposit" type="number" min="500" max="200000" step="500" value="5000">
@@ -241,6 +241,11 @@ html[data-theme="light"] th { background: #f1f5f9 !important; color: #475569 !im
         <button class="strat-btn active-mod" data-s="mod">Умеренная</button>
         <button class="strat-btn" data-s="agg">Агрессив.</button>
       </div>
+    </div>
+    <div class="input-group">
+      <span class="input-label">Текущий баланс (опц.)</span>
+      <input class="input-field" id="in-current-balance" type="number" min="0" step="100" placeholder="—">
+      <span style="font-size:11px;color:#f59e0b;">● Реальный баланс счёта в USD, если отличается от депозита</span>
     </div>
   </div>
 
@@ -358,7 +363,10 @@ function render() {
   document.getElementById('s-lot').textContent = fmt(startLot, 2);
 
   var actualRefills = (stratKey === 'mod' || stratKey === 'cons' || stratKey === 'agg') ? customRefills : s.refills;
-  var balance = initDeposit, totalReserveAdded = 0, refillsLeft = actualRefills;
+  var customBalanceEl = document.getElementById('in-current-balance');
+  var customBalance = customBalanceEl ? parseFloat(customBalanceEl.value) : NaN;
+  var startBalance = (customBalance && customBalance > 0) ? customBalance : initDeposit;
+  var balance = startBalance, totalReserveAdded = 0, refillsLeft = actualRefills;
   var liquidationOrder = null, liquidationPips = null, totalVolume = 0;
   var tbody = document.getElementById('orders-body');
   tbody.innerHTML = '';
@@ -530,7 +538,8 @@ document.getElementById('in-rate').addEventListener('input', function(e) {
 });
 document.getElementById('in-maxorders').addEventListener('input', function(e) {
   userMaxOrders = Math.max(1, Math.min(200, parseInt(e.target.value)||200));
-  render();
+
+document.getElementById('in-current-balance').addEventListener('input', render);  render();
 });
 document.querySelectorAll('.refill-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
