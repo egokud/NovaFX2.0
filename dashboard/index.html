@@ -542,7 +542,7 @@ setInterval(fetchHistory, 3600000);
 
 
 // КАЛЕНДАРЬ СОБЫТИЙ
-function renderCalendar(events, cached, ageMin) {
+function renderCalendar(events, source, ageMin) {
   var listEl = document.getElementById('cal-list');
   var tagEl = document.getElementById('cal-tag');
   if (!listEl || !tagEl) return;
@@ -624,8 +624,9 @@ function renderCalendar(events, cached, ageMin) {
   });
 
   listEl.innerHTML = html;
-  var status = cached ? ('● Forex Factory · кеш ' + ageMin + ' мин') : '● Forex Factory · обновлено';
-  tagEl.innerHTML = status;
+  var srcLabel = source === 'mt5' ? 'MT5 Календарь' : (source === 'empty' ? 'Нет данных' : 'Календарь');
+  var ageLabel = ageMin > 0 ? ' · ' + (ageMin < 60 ? ageMin + ' мин' : Math.round(ageMin/60) + ' ч') + ' назад' : ' · обновлено';
+  tagEl.innerHTML = '● ' + srcLabel + ageLabel;
 }
 
 // Тогл прошедших событий
@@ -642,7 +643,7 @@ function fetchCalendar() {
   fetch('https://www.novafx.io/api/calendar')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      renderCalendar(d.events, d.cached, d.age_minutes || 0);
+      renderCalendar(d.events, d.source, d.age_minutes || 0);
     })
     .catch(function(e){
       console.error('Calendar error:', e);
