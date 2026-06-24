@@ -102,6 +102,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
 .status-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);padding:8px 14px;background:var(--bg-input);border-radius:var(--r-sm);margin-top:4px;}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* CALENDAR */
+.cal-day{font-size:10px;letter-spacing:.1em;color:var(--text-3);text-transform:uppercase;margin:10px 0 4px;padding-top:8px;border-top:.5px solid var(--border);}
+.cal-day-today{color:var(--green);font-weight:600;}
+.cal-past-toggle{font-size:11px;color:var(--text-2);padding:8px 10px;background:var(--bg-input);border-radius:var(--r-sm);cursor:pointer;text-align:center;margin-bottom:8px;transition:background .15s;user-select:none;}
+.cal-past-toggle:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+.cal-day:first-child{border-top:none;margin-top:0;padding-top:0;}
+.cal-event{display:grid;grid-template-columns:54px 30px 1fr 80px 80px 80px;gap:10px;align-items:center;padding:8px 10px;border-radius:var(--r-sm);background:var(--bg-input);font-size:12px;transition:background .15s;}
+.cal-event:hover{background:rgba(255,255,255,0.04);}
+.cal-event-time{font-family:var(--font-m);font-size:11px;color:var(--text);}
+.cal-event-flag{font-size:18px;text-align:center;}
+.cal-event-name{font-size:12px;color:var(--text);line-height:1.3;}
+.cal-event-val{font-family:var(--font-m);font-size:11px;text-align:right;color:var(--text-2);}
+.cal-event-val b{color:var(--text);font-weight:500;}
+.cal-event-val.actual{color:var(--green);}
+.cal-impact-h{border-left:2px solid var(--red);}
+.cal-impact-m{border-left:2px solid var(--amber);}
+.cal-event-meta{display:flex;flex-direction:column;}
+.cal-event-meta small{font-size:9px;color:var(--text-3);letter-spacing:.05em;text-transform:uppercase;}
+@media(max-width:700px){
+  .cal-event{grid-template-columns:50px 26px 1fr;gap:8px;font-size:11px;}
+  .cal-event-val{display:none;}
+}
 </style>
 </head>
 <body>
@@ -269,14 +292,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:99;height:56px;padding:0 32px;di
     <span id="status-text">Подключение к MT5...</span>
   </div>
 
-  <!-- НОВОСТИ -->
-  <div class="card" style="padding:0;overflow:hidden;">
-    <div class="clabel" style="padding:14px 14px 8px;">Новости EUR/USD <span class="auto-tag">● TradingView</span></div>
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-      {"feedMode":"symbol","symbol":"FX:EURUSD","isTransparent":true,"displayMode":"regular","width":"100%","height":"400","colorTheme":"dark","locale":"en"}
-      </script>
+  <!-- КАЛЕНДАРЬ СОБЫТИЙ -->
+  <div class="card">
+    <div class="clabel">Календарь событий · EUR/USD · неделя <span class="auto-tag" id="cal-tag">● Загружаем...</span></div>
+    <div id="cal-list" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+      <div style="text-align:center;color:var(--text-3);padding:20px;font-size:13px;">Загрузка событий...</div>
     </div>
   </div>
 
@@ -519,6 +539,120 @@ setInterval(fetchMT5Price, 60000);
 // История грузится с задержкой — не блокирует цену
 setTimeout(fetchHistory, 2000);
 setInterval(fetchHistory, 3600000);
+
+
+// КАЛЕНДАРЬ СОБЫТИЙ
+function renderCalendar(events, cached, ageMin) {
+  var listEl = document.getElementById('cal-list');
+  var tagEl = document.getElementById('cal-tag');
+  if (!listEl || !tagEl) return;
+
+  var monthNames = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  var dayNames = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+
+  // Сегодняшний день (UTC, нормализованный)
+  var nowDate = new Date();
+  var todayKey = nowDate.getFullYear() + '-' + String(nowDate.getMonth()+1).padStart(2,'0') + '-' + String(nowDate.getDate()).padStart(2,'0');
+
+  // Собираем все ключи дат из событий + сегодня обязательно
+  var groups = {};
+  groups[todayKey] = [];
+  (events || []).forEach(function(ev){
+    var d = new Date(ev.date);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(ev);
+  });
+
+  var keys = Object.keys(groups).sort();
+
+  function eventHtml(ev){
+    var t = new Date(ev.date);
+    var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+    var impactCls = ev.impact === 'High' ? 'cal-impact-h' : 'cal-impact-m';
+    var actualHtml = ev.actual ? '<span class="actual">' + ev.actual + '</span>' : '—';
+    return '<div class="cal-event ' + impactCls + '">' +
+      '<div class="cal-event-time">' + time + '</div>' +
+      '<div class="cal-event-flag">' + ev.flag + '</div>' +
+      '<div class="cal-event-name">' + ev.name + '</div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Факт</small><b>' + actualHtml + '</b></div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Прогноз</small><b>' + (ev.forecast || '—') + '</b></div>' +
+      '<div class="cal-event-val cal-event-meta"><small>Пред.</small>' + (ev.previous || '—') + '</div>' +
+    '</div>';
+  }
+
+  function dayLabel(key, isToday){
+    var d = new Date(key + 'T00:00:00');
+    var label = dayNames[d.getDay()] + ' · ' + d.getDate() + ' ' + monthNames[d.getMonth()];
+    return isToday ? label + ' · сегодня' : label;
+  }
+
+  // Разделяем на прошедшие и текущие/будущие
+  var pastKeys = keys.filter(function(k){ return k < todayKey; });
+  var todayAndFuture = keys.filter(function(k){ return k >= todayKey; });
+
+  var html = '';
+
+  // Кнопка прошедших
+  if (pastKeys.length > 0) {
+    var pastCount = 0;
+    pastKeys.forEach(function(k){ pastCount += groups[k].length; });
+    html += '<div class="cal-past-toggle" onclick="toggleCalPast()">' +
+      '<span id="cal-past-arrow">▾</span> Прошедшие события (' + pastCount + ')' +
+      '</div>';
+    html += '<div id="cal-past-block" style="display:none;">';
+    pastKeys.forEach(function(key){
+      html += '<div class="cal-day">' + dayLabel(key, false) + '</div>';
+      groups[key].forEach(function(ev){
+        html += eventHtml(ev);
+      });
+    });
+    html += '</div>';
+  }
+
+  // Текущие и будущие
+  todayAndFuture.forEach(function(key){
+    var isToday = (key === todayKey);
+    html += '<div class="cal-day' + (isToday ? ' cal-day-today' : '') + '">' + dayLabel(key, isToday) + '</div>';
+    if (groups[key].length === 0) {
+      html += '<div style="text-align:center;color:var(--text-3);padding:14px;font-size:12px;background:var(--bg-input);border-radius:var(--r-sm);">На сегодня важных событий нет</div>';
+    } else {
+      groups[key].forEach(function(ev){
+        html += eventHtml(ev);
+      });
+    }
+  });
+
+  listEl.innerHTML = html;
+  var status = cached ? ('● Forex Factory · кеш ' + ageMin + ' мин') : '● Forex Factory · обновлено';
+  tagEl.innerHTML = status;
+}
+
+// Тогл прошедших событий
+function toggleCalPast() {
+  var el = document.getElementById('cal-past-block');
+  var arrow = document.getElementById('cal-past-arrow');
+  if (!el) return;
+  var open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  if (arrow) arrow.textContent = open ? '▾' : '▴';
+}
+
+function fetchCalendar() {
+  fetch('https://www.novafx.io/api/calendar')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      renderCalendar(d.events, d.cached, d.age_minutes || 0);
+    })
+    .catch(function(e){
+      console.error('Calendar error:', e);
+      var listEl = document.getElementById('cal-list');
+      if (listEl) listEl.innerHTML = '<div style="text-align:center;color:var(--red);padding:20px;font-size:13px;">Ошибка загрузки календаря</div>';
+    });
+}
+
+fetchCalendar();
+setInterval(fetchCalendar, 1800000); // обновляем раз в 30 минут
 </script>
 </body>
 </html>
