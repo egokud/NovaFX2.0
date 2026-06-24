@@ -63,6 +63,12 @@ export default async function handler(req, res) {
 
     const raw = await r.json();
 
+    // Debug mode — возвращаем сырые данные
+    if (req.query.debug === '1') {
+      return res.status(200).json({ rawSample: Array.isArray(raw) ? raw.slice(0, 5) : raw, total: Array.isArray(raw) ? raw.length : 'not array' });
+    }
+
+
     // Фильтруем и нормализуем
     const events = (Array.isArray(raw) ? raw : []).map(ev => {
       const currency = ev.Currency || ev.currency || '';
