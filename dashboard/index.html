@@ -447,7 +447,13 @@ function fetchMT5Price() {
     .then(function(r){ return r.json(); })
     .then(function(d) {
       if (!d || !d.bid) { setStatus(false, 'Нет данных от MT5'); return; }
+      try { localStorage.setItem('nova_price', JSON.stringify({ts: Date.now(), data: d})); } catch(e) {}
+      applyPriceData(d);
+    })
+    .catch(function(){ setStatus(false, 'Ошибка получения данных от MT5'); });
+}
 
+function applyPriceData(d) {
       var bid = d.bid;
       var ask = d.ask;
       var spread = d.spread;
@@ -501,8 +507,6 @@ function fetchMT5Price() {
       }
 
       setStatus(true, 'MT5 подключён · данные получены · обновление каждые 5 мин');
-    })
-    .catch(function(){ setStatus(false, 'Ошибка получения данных от MT5'); });
 }
 
 function applyHistory(candles) {
@@ -618,6 +622,24 @@ setInterval(fetchMT5Price, 60000);
 // История грузится с задержкой — не блокирует цену
 setTimeout(fetchHistory, 2000);
 setInterval(fetchHistory, 3600000);
+
+// Мгновенный рендер из localStorage пока сеть отвечает (stale-while-revalidate)
+(function bootFromCache(){
+  try {
+    var cp = localStorage.getItem('nova_price');
+    if (cp) {
+      var p = JSON.parse(cp);
+      if (Date.now() - p.ts < 600000 && p.data && p.data.bid) applyPriceData(p.data);
+    }
+  } catch(e) {}
+  try {
+    var ch = localStorage.getItem('nova_history');
+    if (ch) {
+      var h = JSON.parse(ch);
+      if (h.data && h.data.length) applyHistory(h.data);
+    }
+  } catch(e) {}
+})();
 
 
 // КАЛЕНДАРЬ СОБЫТИЙ
