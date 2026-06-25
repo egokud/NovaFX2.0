@@ -698,7 +698,7 @@ function renderCalendar(events, source, ageMin) {
 
   function eventHtml(ev){
     var t = new Date(ev.date);
-    var time = String(t.getHours()).padStart(2,'0') + ':' + String(t.getMinutes()).padStart(2,'0');
+    var time = String(t.getUTCHours()).padStart(2,'0') + ':' + String(t.getUTCMinutes()).padStart(2,'0');
     var impactCls = ev.impact === 'High' ? 'cal-impact-h' : 'cal-impact-m';
     var actualF   = formatCalNum(ev.actual);
     var forecastF = formatCalNum(ev.forecast);
