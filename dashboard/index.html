@@ -659,16 +659,16 @@ function renderCalendar(events, source, ageMin) {
   var monthNames = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
   var dayNames = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 
-  // Сегодняшний день (UTC, нормализованный)
+  // Сегодняшний день (UTC — согласовано с событиями, которые приходят в UTC)
   var nowDate = new Date();
-  var todayKey = nowDate.getFullYear() + '-' + String(nowDate.getMonth()+1).padStart(2,'0') + '-' + String(nowDate.getDate()).padStart(2,'0');
+  var todayKey = nowDate.getUTCFullYear() + '-' + String(nowDate.getUTCMonth()+1).padStart(2,'0') + '-' + String(nowDate.getUTCDate()).padStart(2,'0');
 
   // Собираем все ключи дат из событий + сегодня обязательно
   var groups = {};
   groups[todayKey] = [];
   (events || []).forEach(function(ev){
     var d = new Date(ev.date);
-    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    var key = d.getUTCFullYear() + '-' + String(d.getUTCMonth()+1).padStart(2,'0') + '-' + String(d.getUTCDate()).padStart(2,'0');
     if (!groups[key]) groups[key] = [];
     groups[key].push(ev);
   });
